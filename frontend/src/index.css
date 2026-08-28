@@ -1,0 +1,234 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", "Noto Sans Devanagari", "Noto Sans Gujarati", "Noto Sans Tamil",
+    "Noto Sans Telugu", "Noto Sans Kannada", "Noto Sans Bengali", "Noto Sans Gurmukhi",
+    "Noto Sans Malayalam", ui-sans-serif, system-ui, sans-serif;
+  --font-heading: "Manrope", "Noto Sans Devanagari", "Noto Sans Gujarati", "Noto Sans Tamil",
+    "Noto Sans Telugu", "Noto Sans Kannada", "Noto Sans Bengali", "Noto Sans Gurmukhi",
+    "Noto Sans Malayalam", ui-sans-serif, system-ui, sans-serif;
+  --font-telemetry: "Space Grotesk", "Noto Sans Devanagari", "Noto Sans Gujarati", "Noto Sans Tamil",
+    "Noto Sans Telugu", "Noto Sans Kannada", "Noto Sans Bengali", "Noto Sans Gurmukhi",
+    "Noto Sans Malayalam", ui-monospace, monospace;
+
+  /* Verdant Intelligence — dark agri-tech command center palette.
+     Ramp direction is inverted from a light-mode scale: 50/100 are dark, near-surface
+     tints (used for pale-chip-on-dark badges); 400/500 are the bright signal colors;
+     900 is near-black, used as text sitting on top of a bright-filled control. */
+  --color-brand-50: #10231a;
+  --color-brand-100: #16311f;
+  --color-brand-200: #24372b;
+  --color-brand-300: #4c8a54;
+  --color-brand-400: #6bc24a;
+  --color-brand-500: #7be05b;
+  --color-brand-600: #7be05b;
+  --color-brand-700: #a8f06b;
+  --color-brand-800: #0f3d22;
+  --color-brand-900: #071008;
+
+  /* Harvest gold — warnings, temperature, harvest accents */
+  --color-gold-50: #241a0d;
+  --color-gold-100: #33240f;
+  --color-gold-200: #4a3315;
+  --color-gold-300: #a97a2e;
+  --color-gold-400: #f6c85f;
+  --color-gold-500: #ffd97a;
+  --color-gold-600: #f6c85f;
+  --color-gold-700: #ffd97a;
+
+  --color-sun-400: #f6c85f;
+  --color-sun-500: #ffd97a;
+
+  /* Rain/water — irrigation, humidity, rainfall */
+  --color-water-50: #0d1f2b;
+  --color-water-100: #122a3a;
+  --color-water-200: #1b3a4f;
+  --color-water-300: #3f7ea8;
+  --color-water-400: #62b6ff;
+  --color-water-500: #8ccaff;
+  --color-water-600: #62b6ff;
+  --color-water-700: #8ccaff;
+
+  /* AI — a distinct cyan reserved for AI-generated content and the assistant */
+  --color-ai-100: #0d2622;
+  --color-ai-300: #2e6b60;
+  --color-ai-400: #5de2d0;
+  --color-ai-500: #8ceee0;
+
+  --color-sky-tint: #0d1f2b;
+}
+
+:root {
+  color-scheme: dark;
+  --bg-app: #08110d;
+  --bg-surface: #0e1a14;
+  --bg-surface-muted: #14251b;
+  --border-subtle: #24372b;
+  --border-glass: rgba(160, 240, 140, 0.08);
+  --text-primary: #eaf6ec;
+  --text-secondary: #93a99b;
+  --shadow-card: 0 20px 60px rgba(0, 0, 0, 0.35);
+  --chart-grid: rgba(234, 246, 236, 0.06);
+}
+
+/* Verdant Intelligence — light mode.
+   Dark mode is the default (no attribute needed); this block only applies when
+   data-theme="light" is set explicitly. Brand/gold/water/ai signature values (the
+   ones used as a bright self-contained chip paired with near-black text, e.g.
+   bg-brand-500 text-brand-900) are kept identical to dark mode by design — the
+   brand color should read the same in both themes. Every other step is re-tuned
+   for legibility against a light surface instead of a dark one. */
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg-app: #f5f9f4;
+  --bg-surface: #ffffff;
+  --bg-surface-muted: #eef4ec;
+  --border-subtle: #dde7db;
+  --border-glass: rgba(15, 61, 34, 0.08);
+  --text-primary: #10221a;
+  --text-secondary: #5b7367;
+  --shadow-card: 0 10px 30px rgba(16, 35, 26, 0.08);
+  --chart-grid: rgba(16, 35, 26, 0.08);
+
+  --color-brand-50: #eafbe6;
+  --color-brand-100: #d7f3ca;
+  --color-brand-200: #b7e69f;
+  --color-brand-300: #8ed36a;
+  --color-brand-400: #5cc247;
+  --color-brand-500: #7be05b;
+  --color-brand-600: #4a9e2f;
+  --color-brand-700: #2f7d1e;
+  --color-brand-800: #1c5b12;
+  --color-brand-900: #071008;
+
+  --color-gold-50: #fdf3e0;
+  --color-gold-100: #fbe7c0;
+  --color-gold-200: #f3cf85;
+  --color-gold-300: #e0aa42;
+  --color-gold-400: #f6c85f;
+  --color-gold-500: #ffd97a;
+  --color-gold-600: #b8791a;
+  --color-gold-700: #8a5a13;
+
+  --color-sun-400: #f6c85f;
+  --color-sun-500: #ffd97a;
+
+  --color-water-50: #eaf6ff;
+  --color-water-100: #d3ecff;
+  --color-water-200: #a8d9ff;
+  --color-water-300: #6cbdff;
+  --color-water-400: #62b6ff;
+  --color-water-500: #8ccaff;
+  --color-water-600: #2e79c7;
+  --color-water-700: #1c5490;
+
+  --color-ai-100: #d7f5f0;
+  --color-ai-300: #7dd9c8;
+  --color-ai-400: #0d8a76;
+  --color-ai-500: #0a6b5c;
+
+  --color-sky-tint: #eaf6ff;
+
+  /* Stock Tailwind steps that were tuned bright for the dark background and need
+     a light-mode-safe counterpart. Every other stock amber/slate/red step already
+     used in this app (100/600/700/800 etc.) is a conventional pale-bg/dark-text
+     pairing that works unchanged on a light surface. */
+  --color-amber-400: #b45309;
+  --color-slate-400: #64748b;
+  --color-slate-500: #475569;
+  --color-red-400: #b91c1c;
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  background-color: var(--bg-app);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, .font-heading {
+  font-family: var(--font-heading);
+}
+
+.font-telemetry {
+  font-family: var(--font-telemetry);
+  font-feature-settings: "tnum" 1;
+}
+
+button, a, [role="button"], summary {
+  cursor: pointer;
+}
+
+button:disabled, [role="button"][aria-disabled="true"] {
+  cursor: not-allowed;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-brand-500);
+  outline-offset: 2px;
+}
+
+::selection {
+  background-color: rgba(123, 224, 91, 0.35);
+  color: #071008;
+}
+
+/* Subtle agricultural field-grid texture — a signature background motif, never a visual anchor. */
+.field-grid {
+  background-image:
+    linear-gradient(rgba(160, 240, 140, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(160, 240, 140, 0.05) 1px, transparent 1px);
+  background-size: 42px 42px;
+}
+
+/* Dark glass card surface with a thin luminous top edge. */
+.glass-panel {
+  background: linear-gradient(180deg, var(--bg-surface) 0%, var(--bg-surface) 100%);
+  border: 1px solid var(--border-glass);
+  box-shadow: var(--shadow-card);
+  position: relative;
+}
+.glass-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(168, 240, 107, 0.45), transparent);
+  border-radius: inherit;
+}
+
+@keyframes pulse-ring {
+  0% { box-shadow: 0 0 0 0 rgba(123, 224, 91, 0.4); }
+  100% { box-shadow: 0 0 0 8px rgba(123, 224, 91, 0); }
+}
+.live-pulse {
+  animation: pulse-ring 1.8s ease-out infinite;
+}
+
+@keyframes ai-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(93, 226, 208, 0.25); }
+  50% { box-shadow: 0 0 0 6px rgba(93, 226, 208, 0); }
+}
+.ai-glow {
+  animation: ai-glow 2.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background-color: var(--border-subtle);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover { background-color: var(--color-brand-300); }

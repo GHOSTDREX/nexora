@@ -1,0 +1,53 @@
+{
+  "model_name": "Tuned Decision Tree",
+  "algorithm": "DecisionTreeClassifier",
+  "model_type": "Pipeline(ColumnTransformer + OneHotEncoder + DecisionTreeClassifier)",
+  "model_version": "v1.0-prototype",
+  "sklearn_version": "1.9.0",
+  "python_version": "3.14.3",
+  "training_date": "2026-08-20",
+  "supported_crops": [
+    "Rice",
+    "Sugarcane"
+  ],
+  "feature_list": [
+    "Crop_Type",
+    "Soil_Type",
+    "Crop_Growth_Stage",
+    "Soil_pH",
+    "Nitrogen_Level",
+    "Phosphorus_Level",
+    "Potassium_Level",
+    "Electrical_Conductivity"
+  ],
+  "target": "Recommended_Fertilizer",
+  "fertilizer_classes": [
+    "Compost",
+    "DAP",
+    "MOP",
+    "NPK",
+    "SSP",
+    "Urea",
+    "Zinc Sulphate"
+  ],
+  "training_rows": 2857,
+  "crop_counts": {
+    "Rice": 1429,
+    "Sugarcane": 1428
+  },
+  "metrics": {
+    "accuracy": 0.8934,
+    "balanced_accuracy": 0.856,
+    "macro_f1": 0.807,
+    "weighted_f1": 0.9283
+  },
+  "dataset_disclaimer": "Structured or synthetic-like recommendation dataset; held-out metrics are not field accuracy.",
+  "field_validation_status": "Required before real fertilizer application.",
+  "ssp_limitation": "47 SSP records in the Rice + Sugarcane subset; predicted SSP results require additional agronomic validation.",
+  "known_limitations": [
+    "Structured or synthetic-like dataset",
+    "SSP is a low-support class",
+    "Category prediction only; no validated dosage",
+    "Field validation required"
+  ]
+}

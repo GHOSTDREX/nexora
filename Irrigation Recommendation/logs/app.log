@@ -1,0 +1,143 @@
+2026-08-17 22:48:44,495 [INFO] Decision Tree pipeline model loaded successfully from C:\Users\admin\Desktop\Smart-Agriculture-AI\Irrigation Recommendation\models\irrigation_prediction_model.pkl
+2026-08-17 22:48:44,514 [INFO] Feature importance exported to C:\Users\admin\Desktop\Smart-Agriculture-AI\Irrigation Recommendation\outputs\feature_importance.csv
+2026-08-17 22:48:44,559 [WARNING]  * Debugger is active!
+2026-08-17 22:48:44,569 [INFO]  * Debugger PIN: 739-006-871
+2026-08-17 22:48:47,747 [INFO] Decision Tree pipeline model loaded successfully from C:\Users\admin\Desktop\Smart-Agriculture-AI\Irrigation Recommendation\models\irrigation_prediction_model.pkl
+2026-08-17 22:48:47,762 [INFO] Feature importance exported to C:\Users\admin\Desktop\Smart-Agriculture-AI\Irrigation Recommendation\outputs\feature_importance.csv
+2026-08-17 22:48:47,782 [INFO] Prediction successful: Class=Medium, Confidence=100.00%
+2026-08-17 22:49:01,534 [INFO]  * Detected change in 'C:\\Users\\admin\\Desktop\\Smart-Agriculture-AI\\Irrigation Recommendation\\app\\irrigation_app.py', reloading
+2026-08-17 22:49:01,536 [INFO]  * Detected change in 'C:\\Users\\admin\\Desktop\\Smart-Agriculture-AI\\Irrigation Recommendation\\app\\irrigation_app.py', reloading
+2026-08-17 22:49:01,538 [INFO]  * Detected change in 'C:\\Users\\admin\\Desktop\\Smart-Agriculture-AI\\Irrigation Recommendation\\app\\irrigation_app.py', reloading
+2026-08-17 22:49:07,855 [INFO] Decision Tree pipeline model loaded successfully from C:\Users\admin\Desktop\Smart-Agriculture-AI\Irrigation Recommendation\models\irrigation_prediction_model.pkl
+2026-08-17 22:49:07,867 [INFO] Feature importance exported to C:\Users\admin\Desktop\Smart-Agriculture-AI\Irrigation Recommendation\outputs\feature_importance.csv
+2026-08-17 22:49:07,905 [INFO] Prediction successful: Class=Medium, Confidence=100.00%
+2026-08-17 22:49:15,169 [INFO] Decision Tree pipeline model loaded successfully from C:\Users\admin\Desktop\Smart-Agriculture-AI\Irrigation Recommendation\models\irrigation_prediction_model.pkl
+2026-08-17 22:49:15,178 [INFO] Feature importance exported to C:\Users\admin\Desktop\Smart-Agriculture-AI\Irrigation Recommendation\outputs\feature_importance.csv
+2026-08-17 22:49:21,298 [INFO] Decision Tree pipeline model loaded successfully from C:\Users\admin\Desktop\Smart-Agriculture-AI\Irrigation Recommendation\models\irrigation_prediction_model.pkl
+2026-08-17 22:49:21,312 [INFO] Feature importance exported to C:\Users\admin\Desktop\Smart-Agriculture-AI\Irrigation Recommendation\outputs\feature_importance.csv
+2026-08-17 22:49:35,529 [INFO] Decision Tree pipeline model loaded successfully from C:\Users\admin\Desktop\Smart-Agriculture-AI\Irrigation Recommendation\models\irrigation_prediction_model.pkl
+2026-08-17 22:49:35,538 [INFO] Feature importance exported to C:\Users\admin\Desktop\Smart-Agriculture-AI\Irrigation Recommendation\outputs\feature_importance.csv
+2026-08-17 22:49:35,579 [INFO] Prediction successful: Class=Medium, Confidence=100.00%
+2026-08-17 22:49:46,564 [INFO] Prediction successful: Class=Medium, Confidence=100.00%
+2026-08-17 22:49:52,835 [INFO] Prediction successful: Class=Medium, Confidence=100.00%
+2026-08-17 22:49:59,125 [INFO] Prediction successful: Class=Medium, Confidence=100.00%
+2026-08-17 22:50:00,571 [INFO] Prediction successful: Class=Medium, Confidence=100.00%
+2026-08-17 22:50:02,346 [INFO] Prediction successful: Class=Low, Confidence=100.00%
+2026-08-17 22:52:26,509 [INFO] Prediction successful: Class=Low, Confidence=100.00%
+2026-08-17 22:52:26,900 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 22:52:28,147 [INFO] Prediction successful: Class=Medium, Confidence=100.00%
+2026-08-17 22:52:30,246 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 22:52:32,907 [INFO] Prediction successful: Class=Low, Confidence=100.00%
+2026-08-17 22:52:36,214 [INFO] Prediction successful: Class=Low, Confidence=100.00%
+2026-08-17 22:55:06,452 [INFO] Decision Tree pipeline model loaded successfully from C:\Users\admin\Desktop\Smart-Agriculture-AI\Irrigation Recommendation\models\irrigation_prediction_model.pkl
+2026-08-17 22:55:06,464 [INFO] Feature importance exported to C:\Users\admin\Desktop\Smart-Agriculture-AI\Irrigation Recommendation\outputs\feature_importance.csv
+2026-08-17 22:55:24,481 [INFO] Decision Tree pipeline model loaded successfully from C:\Users\admin\Desktop\Smart-Agriculture-AI\Irrigation Recommendation\models\irrigation_prediction_model.pkl
+2026-08-17 22:55:24,493 [INFO] Feature importance exported to C:\Users\admin\Desktop\Smart-Agriculture-AI\Irrigation Recommendation\outputs\feature_importance.csv
+2026-08-17 22:55:25,011 [WARNING] Input validation failed with errors: ["Invalid category 'Maharashtra' for Region. Expected one of: ['North', 'South', 'East', 'West', 'Central']"]
+2026-08-17 22:55:35,973 [INFO] Decision Tree pipeline model loaded successfully from C:\Users\admin\Desktop\Smart-Agriculture-AI\Irrigation Recommendation\models\irrigation_prediction_model.pkl
+2026-08-17 22:55:35,989 [INFO] Feature importance exported to C:\Users\admin\Desktop\Smart-Agriculture-AI\Irrigation Recommendation\outputs\feature_importance.csv
+2026-08-17 22:55:36,100 [WARNING] Input validation failed with errors: ["Invalid category 'Maharashtra' for Region. Expected one of: ['North', 'South', 'East', 'West', 'Central']"]
+2026-08-17 22:55:57,568 [INFO] Decision Tree pipeline model loaded successfully from C:\Users\admin\Desktop\Smart-Agriculture-AI\Irrigation Recommendation\models\irrigation_prediction_model.pkl
+2026-08-17 22:55:57,579 [INFO] Feature importance exported to C:\Users\admin\Desktop\Smart-Agriculture-AI\Irrigation Recommendation\outputs\feature_importance.csv
+2026-08-17 22:55:58,760 [WARNING] Input validation failed with errors: ["Invalid category 'Maharashtra' for Region. Expected one of: ['North', 'South', 'East', 'West', 'Central']"]
+2026-08-17 22:56:09,807 [INFO] Decision Tree pipeline model loaded successfully from C:\Users\admin\Desktop\Smart-Agriculture-AI\Irrigation Recommendation\models\irrigation_prediction_model.pkl
+2026-08-17 22:56:09,820 [INFO] Feature importance exported to C:\Users\admin\Desktop\Smart-Agriculture-AI\Irrigation Recommendation\outputs\feature_importance.csv
+2026-08-17 22:56:10,664 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 22:56:22,021 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 22:57:08,252 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 22:57:09,292 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 22:57:24,130 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 22:57:29,876 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 22:57:30,444 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 22:57:30,810 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 22:57:31,045 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 22:57:32,112 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 22:57:33,356 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 22:57:34,181 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 22:57:34,566 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 22:57:35,614 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 22:57:36,636 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 22:57:37,232 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 22:57:37,867 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 22:57:39,200 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 22:57:40,006 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 22:57:41,485 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 22:57:41,971 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 22:57:54,488 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 22:57:55,685 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 22:57:56,131 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 22:57:56,703 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 22:57:57,205 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 22:57:58,114 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 22:57:58,982 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 22:58:00,379 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 22:58:01,329 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 22:58:02,514 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 22:58:03,580 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 22:58:04,181 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 22:58:04,649 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 22:58:05,450 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 22:58:05,710 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 22:58:06,201 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 22:58:07,094 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 22:58:07,618 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 22:58:08,384 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 22:58:09,211 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 22:58:10,472 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 22:58:20,387 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 23:01:55,880 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 23:01:58,835 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 23:01:59,220 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 23:01:59,751 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 23:02:00,482 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 23:02:01,605 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 23:02:02,357 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 23:02:03,135 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 23:02:03,974 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 23:02:06,293 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 23:02:07,542 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 23:02:08,765 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 23:02:09,726 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 23:02:10,493 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 23:02:11,456 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 23:02:11,693 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 23:02:12,688 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 23:02:13,131 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 23:02:13,764 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 23:02:14,756 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 23:02:14,951 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 23:02:16,158 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 23:02:16,535 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 23:02:28,268 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 23:02:51,946 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 23:09:30,362 [INFO] Decision Tree pipeline model loaded successfully from C:\Users\admin\Desktop\Smart-Agriculture-AI\Irrigation Recommendation\models\irrigation_prediction_model.pkl
+2026-08-17 23:09:30,373 [INFO] Feature importance exported to C:\Users\admin\Desktop\Smart-Agriculture-AI\Irrigation Recommendation\outputs\feature_importance.csv
+2026-08-17 23:10:38,911 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 23:10:39,130 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 23:10:40,021 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 23:10:47,448 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 23:10:51,318 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 23:10:52,840 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 23:11:00,595 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 23:11:04,610 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 23:11:10,937 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 23:14:07,271 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 23:14:08,128 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 23:14:08,905 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 23:14:09,408 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 23:15:05,540 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 23:15:43,809 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-17 23:25:17,325 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-18 00:13:43,087 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-18 00:13:47,888 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-26 18:41:02,424 [INFO] Decision Tree pipeline model loaded successfully from C:\Users\shubh\OneDrive\Desktop\nexora\Irrigation Recommendation\models\irrigation_prediction_model.pkl
+2026-08-26 18:41:02,488 [INFO] Feature importance exported to C:\Users\shubh\OneDrive\Desktop\nexora\Irrigation Recommendation\outputs\feature_importance.csv
+2026-08-26 18:41:03,237 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-26 18:41:03,248 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-26 18:41:22,446 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-26 18:41:28,130 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-26 18:42:58,793 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-26 18:42:59,987 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-26 18:43:04,291 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-26 18:43:19,563 [INFO] Prediction successful: Class=High, Confidence=100.00%
+2026-08-26 18:43:23,393 [INFO] Prediction successful: Class=High, Confidence=100.00%

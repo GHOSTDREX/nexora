@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Smart Agriculture AI | Precision Irrigation System & AI Agronomist</title>
+    <meta name="description" content="AI-Powered Precision Irrigation Recommendation System & Interactive AI Agronomist for Farmers.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <!-- Top Decorative Gradient Glow -->
+    <div class="ambient-glow"></div>
+
+    <!-- Navigation Header -->
+    <header class="navbar">
+        <div class="nav-container">
+            <div class="brand">
+                <div class="logo-icon">
+                    <i class="fa-solid fa-droplet-degree"></i>
+                </div>
+                <div class="brand-text">
+                    <h1>SmartAgri <span class="highlight">AI</span></h1>
+                    <p class="tagline">Precision Irrigation & Agronomist Agent</p>
+                </div>
+            </div>
+
+            <!-- Model Status Pill -->
+            <div class="model-status-pill">
+                <span class="pulse-dot"></span>
+                <span class="status-label"><i class="fa-solid fa-microchip"></i> ML Engine Active (DecisionTree Pipeline)</span>
+            </div>
+
+            <!-- Nav Tabs -->
+            <nav class="nav-tabs">
+                <button class="tab-btn active" data-tab="single-predict">
+                    <i class="fa-solid fa-sliders"></i> Field Predictor
+                </button>
+                <button class="tab-btn" data-tab="batch-predict">
+                    <i class="fa-solid fa-file-csv"></i> Batch CSV
+                </button>
+                <button class="tab-btn" data-tab="model-analytics">
+                    <i class="fa-solid fa-chart-pie"></i> Model Analytics
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="main-content">
+
+        <!-- Client Preset Scenarios Bar -->
+        <section class="preset-section card-glass">
+            <div class="preset-header">
+                <h3><i class="fa-solid fa-bolt-lightning"></i> Quick Client Demonstration Presets:</h3>
+                <p>Click any scenario below to instant-load real-world farm conditions:</p>
+            </div>
+            <div class="preset-grid" id="preset-container">
+                <button class="preset-chip" onclick="loadScenario('drought_cotton')">
+                    <span class="chip-icon">🔥</span>
+                    <span class="chip-info">
+                        <strong>Drought Risk</strong>
+                        <small>Cotton • Arid • 11.2% Moisture</small>
+                    </span>
+                </button>
+
+                <button class="preset-chip" onclick="loadScenario('optimum_wheat')">
+                    <span class="chip-icon">🌾</span>
+                    <span class="chip-info">
+                        <strong>Optimal Field</strong>
+                        <small>Wheat • Loamy • 42% Moisture</small>
+                    </span>
+                </button>
+
+                <button class="preset-chip" onclick="loadScenario('monsoon_rice')">
+                    <span class="chip-icon">🌧️</span>
+                    <span class="chip-info">
+                        <strong>Monsoon Paddy</strong>
+                        <small>Rice • Clay • 58.5% Moisture</small>
+                    </span>
+                </button>
+
+                <button class="preset-chip" onclick="loadScenario('high_demand_sugarcane')">
+                    <span class="chip-icon">🌱</span>
+                    <span class="chip-info">
+                        <strong>Peak Sugarcane</strong>
+                        <small>Sugarcane • 24.5% Moisture</small>
+                    </span>
+                </button>
+            </div>
+        </section>
+
+        <!-- TAB 1: Single Field Predictor -->
+        <div class="tab-pane active" id="pane-single-predict">
+            <div class="dashboard-grid">
+                
+                <!-- Left Column: Inputs Form -->
+                <div class="form-container card-glass">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-seedling"></i> Farm Sensor Inputs</h2>
+                        <span class="badge-outline">16 Trained Features</span>
+                    </div>
+
+                    <form id="irrigation-form">
+                        
+                        <!-- Group 1: Soil Health -->
+                        <div class="form-group-card">
+                            <div class="group-title"><i class="fa-solid fa-mountain-sun"></i> Soil Health Profile</div>
+                            
+                            <div class="input-grid">
+                                <div class="field">
+                                    <label for="Soil_Type">Soil Type</label>
+                                    <select id="Soil_Type" class="input-select">
+                                        <option value="Clay">Clay</option>
+                                        <option value="Loamy" selected>Loamy</option>
+                                        <option value="Sandy">Sandy</option>
+                                        <option value="Silt">Silt</option>
+                                    </select>
+                                </div>
+
+                                <div class="field">
+                                    <label for="Soil_Moisture">Soil Moisture (%) <span class="val-display" id="val-Soil_Moisture">25</span>%</label>
+                                    <input type="range" id="Soil_Moisture" class="input-slider" min="5" max="70" step="0.5" value="25">
+                                </div>
+
+                                <div class="field">
+                                    <label for="Soil_pH">Soil pH <span class="val-display" id="val-Soil_pH">6.5</span></label>
+                                    <input type="range" id="Soil_pH" class="input-slider" min="4.0" max="9.0" step="0.1" value="6.5">
+                                </div>
+
+                                <div class="field">
+                                    <label for="Organic_Carbon">Organic Carbon (%) <span class="val-display" id="val-Organic_Carbon">0.85</span>%</label>
+                                    <input type="range" id="Organic_Carbon" class="input-slider" min="0.1" max="2.0" step="0.05" value="0.85">
+                                </div>
+
+                                <div class="field">
+                                    <label for="Electrical_Conductivity">EC (dS/m) <span class="val-display" id="val-Electrical_Conductivity">1.5</span></label>
+                                    <input type="range" id="Electrical_Conductivity" class="input-slider" min="0.1" max="4.0" step="0.1" value="1.5">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Group 2: Weather & Environment -->
+                        <div class="form-group-card">
+                            <div class="group-title"><i class="fa-solid fa-cloud-sun-rain"></i> Weather & Micro-Climate</div>
+                            
+                            <div class="input-grid">
+                                <div class="field">
+                                    <label for="Temperature_C">Temperature (°C) <span class="val-display" id="val-Temperature_C">28</span>°C</label>
+                                    <input type="range" id="Temperature_C" class="input-slider" min="10" max="45" step="0.5" value="28">
+                                </div>
+
+                                <div class="field">
+                                    <label for="Humidity">Air Humidity (%) <span class="val-display" id="val-Humidity">55</span>%</label>
+                                    <input type="range" id="Humidity" class="input-slider" min="20" max="98" step="1" value="55">
+                                </div>
+
+                                <div class="field">
+                                    <label for="Rainfall_mm">Annual Rainfall (mm) <span class="val-display" id="val-Rainfall_mm">650</span> mm</label>
+                                    <input type="range" id="Rainfall_mm" class="input-slider" min="0" max="2500" step="10" value="650">
+                                </div>
+
+                                <div class="field">
+                                    <label for="Sunlight_Hours">Sunlight Hours <span class="val-display" id="val-Sunlight_Hours">7.5</span> hrs</label>
+                                    <input type="range" id="Sunlight_Hours" class="input-slider" min="3.0" max="12.0" step="0.5" value="7.5">
+                                </div>
+
+                                <div class="field">
+                                    <label for="Wind_Speed_kmh">Wind Speed (km/h) <span class="val-display" id="val-Wind_Speed_kmh">10</span> km/h</label>
+                                    <input type="range" id="Wind_Speed_kmh" class="input-slider" min="0" max="25" step="0.5" value="10">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Group 3: Crop & Field Setup -->
+                        <div class="form-group-card">
+                            <div class="group-title"><i class="fa-solid fa-wheat-awn"></i> Crop & Farm Configuration</div>
+                            
+                            <div class="input-grid">
+                                <div class="field">
+                                    <label for="Crop_Type">Crop Type</label>
+                                    <select id="Crop_Type" class="input-select">
+                                        <option value="Rice">Rice (Paddy)</option>
+                                        <option value="Wheat" selected>Wheat</option>
+                                        <option value="Maize">Maize (Corn)</option>
+                                        <option value="Cotton">Cotton</option>
+                                        <option value="Sugarcane">Sugarcane</option>
+                                        <option value="Potato">Potato</option>
+                                    </select>
+                                </div>
+
+                                <div class="field">
+                                    <label for="Crop_Growth_Stage">Growth Stage</label>
+                                    <select id="Crop_Growth_Stage" class="input-select">
+                                        <option value="Sowing">Sowing / Germination</option>
+                                        <option value="Vegetative" selected>Vegetative Stage</option>
+                                        <option value="Flowering">Flowering / Grain Fill</option>
+                                        <option value="Harvest">Maturity / Harvest</option>
+                                    </select>
+                                </div>
+
+                                <div class="field">
+                                    <label for="Season">Season</label>
+                                    <select id="Season" class="input-select">
+                                        <option value="Kharif">Kharif (Monsoon)</option>
+                                        <option value="Rabi" selected>Rabi (Winter)</option>
+                                        <option value="Zaid">Zaid (Summer)</option>
+                                    </select>
+                                </div>
+
+                                <div class="field">
+                                    <label for="Field_Area_hectare">Field Area (Hectares) <span class="val-display" id="val-Field_Area_hectare">2.5</span> ha</label>
+                                    <input type="range" id="Field_Area_hectare" class="input-slider" min="0.5" max="15.0" step="0.5" value="2.5">
+                                </div>
+
+                                <div class="field">
+                                    <label for="Mulching_Used">Mulching Used</label>
+                                    <select id="Mulching_Used" class="input-select">
+                                        <option value="Yes">Yes (Mulch Active)</option>
+                                        <option value="No" selected>No (Bare Soil)</option>
+                                    </select>
+                                </div>
+
+                                <div class="field">
+                                    <label for="Region">Geographic Region</label>
+                                    <select id="Region" class="input-select">
+                                        <option value="North" selected>North Zone</option>
+                                        <option value="South">South Zone</option>
+                                        <option value="East">East Zone</option>
+                                        <option value="West">West Zone</option>
+                                        <option value="Central">Central Zone</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn-primary" id="btn-submit-predict">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i> Calculate Recommendation
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Right Column: Results Dashboard -->
+                <div class="results-container">
+
+                    <!-- Primary Recommendation Badge Card -->
+                    <div class="card-glass result-card-primary" id="result-badge-container">
+                        <div class="result-header-row">
+                            <span class="prediction-label">IRRIGATION REQUIREMENT</span>
+                            <span class="confidence-tag" id="res-confidence"><i class="fa-solid fa-shield-check"></i> 100% Confidence</span>
+                        </div>
+
+                        <div class="badge-main" id="res-badge-main">
+                            <div class="badge-icon-wrap" id="res-badge-icon">
+                                <i class="fa-solid fa-water-ladder"></i>
+                            </div>
+                            <div class="badge-text-wrap">
+                                <h1 class="badge-value" id="res-prediction-text">MEDIUM</h1>
+                                <p class="badge-sub" id="res-status-msg">Scheduled top-up of 10.5 mm recommended.</p>
+                            </div>
+                        </div>
+
+                        <!-- Class Probabilities Bar -->
+                        <div class="probability-box">
+                            <div class="prob-title">ML Model Confidence Distribution</div>
+                            <div class="prob-bars">
+                                <div class="prob-item">
+                                    <span class="p-name">Low</span>
+                                    <div class="p-track"><div class="p-fill fill-low" id="prob-bar-low" style="width: 0%"></div></div>
+                                    <span class="p-val" id="prob-val-low">0%</span>
+                                </div>
+                                <div class="prob-item">
+                                    <span class="p-name">Medium</span>
+                                    <div class="p-track"><div class="p-fill fill-medium" id="prob-bar-medium" style="width: 100%"></div></div>
+                                    <span class="p-val" id="prob-val-medium">100%</span>
+                                </div>
+                                <div class="prob-item">
+                                    <span class="p-name">High</span>
+                                    <div class="p-track"><div class="p-fill fill-high" id="prob-bar-high" style="width: 0%"></div></div>
+                                    <span class="p-val" id="prob-val-high">0%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Plan & Decision Support Card -->
+                    <div class="card-glass action-plan-card">
+                        <div class="card-header-sm">
+                            <i class="fa-solid fa-clipboard-check"></i> Agricultural Decision Support Indicators
+                        </div>
+                        <div class="plan-body">
+                            <div class="plan-row">
+                                <div class="plan-icon"><i class="fa-solid fa-clock"></i></div>
+                                <div class="plan-detail">
+                                    <strong>Optimal Watering Schedule</strong>
+                                    <p id="res-timing">Early Morning (5:00 AM - 8:00 AM)</p>
+                                    <small id="res-timing-note">Prevents severe evaporation loss during midday heat peak.</small>
+                                </div>
+                            </div>
+
+                            <div class="plan-row">
+                                <div class="plan-icon"><i class="fa-solid fa-droplet"></i></div>
+                                <div class="plan-detail">
+                                    <strong>Recommended System</strong>
+                                    <p id="res-rec-method">Micro-Sprinkler / Pivot System</p>
+                                </div>
+                            </div>
+
+                            <div class="plan-alerts" id="res-alerts-list">
+                                <!-- Dynamic alerts -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Live Radar / Chart Card -->
+                    <div class="card-glass chart-card">
+                        <div class="card-header-sm">
+                            <i class="fa-solid fa-chart-radar"></i> Sensor Profile vs Optimal Benchmarks
+                        </div>
+                        <div class="chart-wrapper">
+                            <canvas id="sensorRadarChart"></canvas>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <!-- TAB 2: Batch CSV Upload -->
+        <div class="tab-pane" id="pane-batch-predict">
+            <div class="card-glass batch-section">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-file-csv"></i> Batch Prediction & CSV File Analysis</h2>
+                    <button class="btn-outline-sm" onclick="downloadSampleCSV()">
+                        <i class="fa-solid fa-download"></i> Download Sample CSV
+                    </button>
+                </div>
+
+                <div class="upload-dropzone" id="csv-dropzone">
+                    <i class="fa-solid fa-cloud-arrow-up drop-icon"></i>
+                    <h3>Drag & Drop Farm Sensor CSV File Here</h3>
+                    <p>Or click to browse from local computer</p>
+                    <input type="file" id="csv-file-input" accept=".csv" class="file-hidden">
+                </div>
+
+                <div class="batch-summary-bar hidden" id="batch-summary">
+                    <div class="summary-stat"><span id="batch-count-total">0</span> Total Fields Analyzed</div>
+                    <div class="summary-stat text-low"><span id="batch-count-low">0</span> Low Need</div>
+                    <div class="summary-stat text-medium"><span id="batch-count-medium">0</span> Medium Need</div>
+                    <div class="summary-stat text-high"><span id="batch-count-high">0</span> High Need</div>
+                </div>
+
+                <!-- Table Container -->
+                <div class="table-wrapper hidden" id="batch-table-container">
+                    <table class="data-table" id="batch-results-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Crop</th>
+                                <th>Soil Type</th>
+                                <th>Moisture</th>
+                                <th>Temp</th>
+                                <th>Rainfall</th>
+                                <th>Area (ha)</th>
+                                <th>Recommendation</th>
+                                <th>Confidence</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Dynamic Rows -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: Model Analytics & Insights -->
+        <div class="tab-pane" id="pane-model-analytics">
+            <div class="analytics-grid">
+                
+                <div class="card-glass analytics-card">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-network-wired"></i> Trained Model Architecture</h2>
+                    </div>
+                    <div class="info-list">
+                        <div class="info-item"><strong>Algorithm:</strong> <span>DecisionTreeClassifier Pipeline</span></div>
+                        <div class="info-item"><strong>Preprocessing:</strong> <span>ColumnTransformer (OneHotEncoder + Passthrough)</span></div>
+                        <div class="info-item"><strong>Training Dataset:</strong> <span>3,389 Prepared Farm Records</span></div>
+                        <div class="info-item"><strong>Test-Set Accuracy:</strong> <span>98.38%</span></div>
+                        <div class="info-item"><strong>Target Classes:</strong> <span>Low, Medium, High Irrigation Requirement</span></div>
+                    </div>
+                </div>
+
+                <div class="card-glass analytics-card">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-chart-bar"></i> Feature Importance Breakdown</h2>
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="featureImportanceChart"></canvas>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Floating AI Agronomist Chat Widget -->
+    <div class="agronomist-chat-widget">
+        <!-- Floating Toggle Button -->
+        <button class="chat-toggle-btn" id="chat-toggle-btn" title="Open AI Agronomist Assistant">
+            <i class="fa-solid fa-robot"></i>
+            <span class="toggle-badge">AI Agronomist</span>
+        </button>
+
+        <!-- Chat Drawer Container -->
+        <div class="chat-drawer card-glass hidden" id="chat-drawer">
+            <div class="chat-drawer-header">
+                <div class="agent-avatar">
+                    <i class="fa-solid fa-user-doctor-hair-long"></i>
+                    <span class="online-dot"></span>
+                </div>
+                <div class="agent-info">
+                    <h4>AI Agronomist Assistant</h4>
+                    <small>Context-Aware Field Advisory</small>
+                </div>
+                <button class="chat-close-btn" id="chat-close-btn">&times;</button>
+            </div>
+
+            <!-- Quick Question Prompt Pills -->
+            <div class="chat-prompts-bar" id="chat-prompts-bar">
+                <button class="prompt-pill" onclick="sendPrompt('💧 How much soil moisture does my crop need right now?')">💧 Moisture Deficit?</button>
+                <button class="prompt-pill" onclick="sendPrompt('⏰ When is the best time of day to irrigate?')">⏰ Best Timing?</button>
+                <button class="prompt-pill" onclick="sendPrompt('🌡️ How does current temperature and weather affect my farm?')">🌡️ Heat Risk?</button>
+                <button class="prompt-pill" onclick="sendPrompt('🧪 What soil treatment should I apply for my pH and EC?')">🧪 Soil pH/EC?</button>
+            </div>
+
+            <!-- Messages Area -->
+            <div class="chat-messages-area" id="chat-messages-area">
+                <div class="chat-msg msg-agent">
+                    <div class="msg-bubble">
+                        🌾 Hello! I am your <strong>AI Agronomist</strong>. I analyze your live sensor values and farm setup to give you honest farming suggestions. How can I help your crop today?
+                    </div>
+                </div>
+            </div>
+
+            <!-- Input Bar -->
+            <form class="chat-input-form" id="chat-input-form">
+                <input type="text" id="chat-input-text" placeholder="Ask your AI Agronomist..." autocomplete="off" required>
+                <button type="submit" class="chat-send-btn" id="chat-send-btn">
+                    <i class="fa-solid fa-paper-plane"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <p>Smart Agriculture AI &copy; 2026 • Precision Irrigation Recommendation & AI Agronomist Platform</p>
+        </div>
+    </footer>
+
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+# Python
+**/__pycache__/
+**/*.py[cod]
+**/venv/
+**/.venv/
+**/.env
+
+# Node
+**/node_modules/
+**/dist/
+**/dist-ssr/
+
+# Runtime data (regenerated automatically, never source)
+backend/data/*.db
+backend/logs/*.log
+
+# Trained model artifacts too large for GitHub (100MB hard limit) —
+# regenerate with `python "Yield Prediction/src/train_model.py"`
+backend/app/ml/yield_prediction/models/final_yield_prediction_model.pkl
+Yield Prediction/model/final_yield_prediction_model.pkl
+
+# Claude Code local tooling (skills, agent config) — not app source
+.claude/
+.agents/
+
+# OS / editor junk
+.DS_Store
+Thumbs.db
+*.swp
