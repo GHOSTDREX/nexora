@@ -27,3 +27,7 @@ Yield Prediction/model/final_yield_prediction_model.pkl
 .DS_Store
 Thumbs.db
 *.swp
+
+
+# SQLite journal files
+backend/data/*.db-journal
