@@ -167,6 +167,11 @@ void processSeedMovement() {
 
       seedPosition -= dt;
 
+      // A large dt (loop() blocked by another command's delay()) can
+      // overshoot past 0 in one step; clamp so it settles at center
+      // instead of flipping into the opposite branch and oscillating.
+      if (seedPosition < 0) seedPosition = 0;
+
     }
 
     else if (seedPosition < -10) {
@@ -175,6 +180,8 @@ void processSeedMovement() {
       digitalWrite(SEED_IN4, LOW);
 
       seedPosition += dt;
+
+      if (seedPosition > 0) seedPosition = 0;
 
     }
 
