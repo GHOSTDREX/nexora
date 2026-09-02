@@ -11,7 +11,7 @@ export default defineConfig({
     },
   },
   server: {
-    host: '127.0.0.1',
+    host: true, // listen on 0.0.0.0 so phones on the same LAN can reach it
     port: 5173,
     strictPort: true,
   },

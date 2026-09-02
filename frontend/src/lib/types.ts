@@ -129,7 +129,7 @@ export interface RobotStatus {
   robot_connected: boolean
   robot_battery_pct: number
   pump_on: boolean
-  lid_open: boolean
+  motor_speed: number
   irrigation_mode: string
   camera_pan_deg: number
   camera_tilt_deg: number

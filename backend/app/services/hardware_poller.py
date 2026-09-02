@@ -117,7 +117,7 @@ async def _poll_farm(client: httpx.AsyncClient, db: Session, farm: Farm):
     db.refresh(reading)
 
     await manager.broadcast(farm.id, build_sensor_update_message(
-        reading, state.pump_on, state.lid_open, state.robot_connected, new_alerts,
+        reading, state.pump_on, state.robot_connected, new_alerts,
     ))
 
 

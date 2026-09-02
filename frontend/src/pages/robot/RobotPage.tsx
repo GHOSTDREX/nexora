@@ -1,9 +1,9 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
 import {
   ArrowUp, ArrowDown, ArrowLeft, ArrowRight, Square, Camera as CameraIcon,
-  Sprout, Wheat as WheatIcon, Power, PowerOff, DoorOpen, DoorClosed,
+  Sprout, Power, PowerOff, ArrowDownToLine, ArrowUpFromLine,
   RotateCcw, RotateCw, ChevronUp, ChevronDown, Crosshair, Battery, Bot, Images,
 } from 'lucide-react'
 import { api, apiErrorMessage } from '@/lib/api'
@@ -28,6 +28,8 @@ export default function RobotPage() {
   const [snapshots, setSnapshots] = useState<CameraSnapshot[]>([])
   const [busy, setBusy] = useState<string | null>(null)
   const [error, setError] = useState('')
+  const [speed, setSpeed] = useState(100)
+  const speedDebounce = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const loadStatus = useCallback(() => {
     api.get<RobotStatus>('/api/robot/status').then(({ data }) => setStatus(data)).catch(() => {})
@@ -52,6 +54,22 @@ export default function RobotPage() {
     return () => clearInterval(interval)
   }, [loadStatus, loadFrame, loadSnapshots])
 
+  useEffect(() => {
+    if (status?.motor_speed != null) setSpeed(status.motor_speed)
+  }, [status?.motor_speed])
+
+  useEffect(() => () => {
+    if (speedDebounce.current) clearTimeout(speedDebounce.current)
+  }, [])
+
+  function onSpeedChange(value: number) {
+    setSpeed(value)
+    if (speedDebounce.current) clearTimeout(speedDebounce.current)
+    speedDebounce.current = setTimeout(() => {
+      api.post('/api/robot/action', { action_type: 'set_speed', value }).catch(() => {})
+    }, 250)
+  }
+
   async function doAction(action_type: string) {
     setError('')
     setBusy(action_type)
@@ -66,29 +84,34 @@ export default function RobotPage() {
   }
 
   async function doMove(direction: string) {
+    setError('')
     setBusy(direction)
     try {
       const { data } = await api.post('/api/camera/move', { direction })
       setCameraFrame(data.image_data_url)
+    } catch (err) {
+      setError(apiErrorMessage(err, t('common.error_generic')))
     } finally {
       setBusy(null)
     }
   }
 
   async function doCapture() {
+    setError('')
     setBusy('capture')
     try {
       await api.post('/api/camera/capture')
       loadSnapshots()
+    } catch (err) {
+      setError(apiErrorMessage(err, t('common.error_generic')))
     } finally {
       setBusy(null)
     }
   }
 
   const pumpOn = robotLive?.pump_on ?? status?.pump_on ?? false
-  const lidOpen = robotLive?.lid_open ?? status?.lid_open ?? false
   const connected = robotLive?.robot_connected ?? status?.robot_connected ?? true
-  const isManual = farm?.irrigation_mode === 'Manual'
+  const isManual = farm?.irrigation_mode === 'Manual' || farm?.sensor_mode === 'Manual'
 
   return (
     <div className="space-y-6">
@@ -96,7 +119,7 @@ export default function RobotPage() {
         <h1 className="text-xl font-bold text-[var(--text-primary)]">{t('robot.title')}</h1>
       </div>
 
-      <motion.div variants={staggerContainer} initial="hidden" animate="show" className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+      <motion.div variants={staggerContainer} initial="hidden" animate="show" className="grid grid-cols-2 gap-3 sm:grid-cols-3">
         <motion.div variants={staggerItem}>
           <Card interactive className="flex items-center gap-3 p-4">
             <span className={`h-2.5 w-2.5 shrink-0 rounded-full ${connected ? 'bg-brand-500 live-pulse' : 'bg-red-500'}`} aria-hidden="true" />
@@ -121,15 +144,6 @@ export default function RobotPage() {
             <div>
               <p className="text-xs text-[var(--text-secondary)]">{t('irrigation.pump')}</p>
               <p className="text-sm font-semibold text-[var(--text-primary)]">{pumpOn ? t('common.on') : t('common.off')}</p>
-            </div>
-          </Card>
-        </motion.div>
-        <motion.div variants={staggerItem}>
-          <Card interactive className="flex items-center gap-3 p-4">
-            <IconBadge icon={lidOpen ? <DoorOpen size={18} aria-hidden="true" /> : <DoorClosed size={18} aria-hidden="true" />} tone={lidOpen ? 'water' : 'neutral'} />
-            <div>
-              <p className="text-xs text-[var(--text-secondary)]">{t('rainwater.lid_status')}</p>
-              <p className="text-sm font-semibold text-[var(--text-primary)]">{lidOpen ? t('common.open') : t('common.closed')}</p>
             </div>
           </Card>
         </motion.div>
@@ -215,6 +229,22 @@ export default function RobotPage() {
 
             <div>
               <p className="mb-2 flex items-center justify-between text-xs font-semibold text-[var(--text-secondary)]">
+                {t('robot.speed')}
+                <span className="text-[var(--text-primary)]">{speed}</span>
+              </p>
+              <input
+                type="range"
+                min={0}
+                max={255}
+                value={speed}
+                onChange={(e) => onSpeedChange(Number(e.target.value))}
+                className="w-full accent-brand-600"
+                aria-label={t('robot.speed')}
+              />
+            </div>
+
+            <div>
+              <p className="mb-2 flex items-center justify-between text-xs font-semibold text-[var(--text-secondary)]">
                 {t('irrigation.pump')}
                 {!isManual && <Badge tone="neutral">{t('robot.manual_required')}</Badge>}
               </p>
@@ -229,25 +259,25 @@ export default function RobotPage() {
             </div>
 
             <div>
-              <p className="mb-2 text-xs font-semibold text-[var(--text-secondary)]">{t('rainwater.lid_status')}</p>
+              <p className="mb-2 text-xs font-semibold text-[var(--text-secondary)]">{t('robot.seed_dispenser')}</p>
               <div className="flex gap-2">
-                <Button variant="secondary" size="sm" onClick={() => doAction('lid_open')} isLoading={busy === 'lid_open'}>
-                  <DoorOpen size={14} aria-hidden="true" /> {t('robot.lid_open')}
+                <Button variant="secondary" size="sm" onClick={() => doAction('seed_on')} isLoading={busy === 'seed_on'}>
+                  <Sprout size={14} aria-hidden="true" /> {t('robot.seed_on')}
                 </Button>
-                <Button variant="secondary" size="sm" onClick={() => doAction('lid_close')} isLoading={busy === 'lid_close'}>
-                  <DoorClosed size={14} aria-hidden="true" /> {t('robot.lid_close')}
+                <Button variant="secondary" size="sm" onClick={() => doAction('seed_off')} isLoading={busy === 'seed_off'}>
+                  <Sprout size={14} aria-hidden="true" /> {t('robot.seed_off')}
                 </Button>
               </div>
             </div>
 
             <div>
-              <p className="mb-2 text-xs font-semibold text-[var(--text-secondary)]">{t('robot.dispense_seed')} / {t('robot.dispense_fertilizer')}</p>
+              <p className="mb-2 text-xs font-semibold text-[var(--text-secondary)]">{t('robot.plow')}</p>
               <div className="flex gap-2">
-                <Button variant="secondary" size="sm" onClick={() => doAction('dispense_seed')} isLoading={busy === 'dispense_seed'}>
-                  <Sprout size={14} aria-hidden="true" /> {t('robot.dispense_seed')}
+                <Button variant="secondary" size="sm" onClick={() => doAction('plow_on')} isLoading={busy === 'plow_on'}>
+                  <ArrowDownToLine size={14} aria-hidden="true" /> {t('robot.plow_on')}
                 </Button>
-                <Button variant="secondary" size="sm" onClick={() => doAction('dispense_fertilizer')} isLoading={busy === 'dispense_fertilizer'}>
-                  <WheatIcon size={14} aria-hidden="true" /> {t('robot.dispense_fertilizer')}
+                <Button variant="secondary" size="sm" onClick={() => doAction('plow_off')} isLoading={busy === 'plow_off'}>
+                  <ArrowUpFromLine size={14} aria-hidden="true" /> {t('robot.plow_off')}
                 </Button>
               </div>
             </div>

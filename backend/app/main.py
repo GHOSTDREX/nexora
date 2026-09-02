@@ -6,6 +6,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import CORS_ORIGINS
+from app.core.security_headers import BodySizeLimitMiddleware, SecurityHeadersMiddleware
 from app.db.database import init_db
 from app.routers import alerts, auth, camera, chat, crop, farms, fertilizer, irrigation, robot, sensors, soil_health, weather, ws, yield_prediction
 from app.services.hardware_poller import run_hardware_poller_loop
@@ -30,12 +31,18 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="AgriNova API", version="1.0.0", lifespan=lifespan)
 
+app.add_middleware(BodySizeLimitMiddleware)
+app.add_middleware(SecurityHeadersMiddleware)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=CORS_ORIGINS,
+    # Also allow any device on the same private LAN (e.g. a phone hitting
+    # the dev machine's 192.168.x.x:5173 address) without hardcoding an IP
+    # that changes across networks/DHCP renewals.
+    allow_origin_regex=r"http://(192\.168|10\.\d{1,3}|172\.(1[6-9]|2\d|3[0-1]))\.\d{1,3}\.\d{1,3}:5173",
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "PUT", "PATCH", "OPTIONS"],
+    allow_headers=["Authorization", "Content-Type"],
 )
 
 app.include_router(auth.router)

@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import desc
 from sqlalchemy.orm import Session
+from starlette.concurrency import run_in_threadpool
 
 from app.db.database import get_db
 from app.db.models import Farm, FarmState, SensorReading
@@ -54,43 +55,46 @@ async def submit_manual_reading(
             detail="Farm is in Auto sensor mode — switch to Manual mode before submitting a reading.",
         )
 
-    last = (
-        db.query(SensorReading)
-        .filter(SensorReading.farm_id == farm.id)
-        .order_by(desc(SensorReading.id))
-        .first()
-    )
-    sunlight = last.sunlight if last else 8.0
-    if payload.rain_detected:
-        rainfall = last.rainfall if (last and last.rainfall > 5) else 20.0
-    else:
-        rainfall = 0.0
+    def _save() -> tuple[SensorReading, FarmState | None]:
+        last = (
+            db.query(SensorReading)
+            .filter(SensorReading.farm_id == farm.id)
+            .order_by(desc(SensorReading.id))
+            .first()
+        )
+        sunlight = last.sunlight if last else 8.0
+        if payload.rain_detected:
+            rainfall = last.rainfall if (last and last.rainfall > 5) else 20.0
+        else:
+            rainfall = 0.0
 
-    reading = SensorReading(
-        farm_id=farm.id,
-        device_id=last.device_id if last else "ESP32_FIELD_01",
-        soil_moisture=payload.soil_moisture,
-        temperature=payload.temperature,
-        humidity=payload.humidity,
-        rainfall=rainfall,
-        sunlight=sunlight,
-        wind_speed=payload.wind_speed,
-        nitrogen=payload.nitrogen,
-        phosphorus=payload.phosphorus,
-        potassium=payload.potassium,
-        rain_detected=payload.rain_detected,
-        status="MANUAL",
-    )
-    db.add(reading)
-    db.commit()
-    db.refresh(reading)
+        reading = SensorReading(
+            farm_id=farm.id,
+            device_id=last.device_id if last else "ESP32_FIELD_01",
+            soil_moisture=payload.soil_moisture,
+            temperature=payload.temperature,
+            humidity=payload.humidity,
+            rainfall=rainfall,
+            sunlight=sunlight,
+            wind_speed=payload.wind_speed,
+            nitrogen=payload.nitrogen,
+            phosphorus=payload.phosphorus,
+            potassium=payload.potassium,
+            rain_detected=payload.rain_detected,
+            status="MANUAL",
+        )
+        db.add(reading)
+        db.commit()
+        db.refresh(reading)
 
-    state = db.query(FarmState).filter(FarmState.farm_id == farm.id).first()
+        state = db.query(FarmState).filter(FarmState.farm_id == farm.id).first()
+        return reading, state
+
+    reading, state = await run_in_threadpool(_save)
 
     await manager.broadcast(farm.id, build_sensor_update_message(
         reading,
         state.pump_on if state else False,
-        state.lid_open if state else False,
         state.robot_connected if state else True,
     ))
 

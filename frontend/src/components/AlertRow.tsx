@@ -6,7 +6,7 @@ import type { AlertItem } from '@/lib/types'
 const severityIcon = { info: Info, warning: AlertTriangle, critical: XCircle }
 const severityColor = {
   info: 'text-water-600 bg-water-50',
-  warning: 'text-amber-600 bg-amber-50',
+  warning: 'text-gold-600 bg-gold-50',
   critical: 'text-red-600 bg-red-50',
 }
 

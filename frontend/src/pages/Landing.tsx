@@ -5,7 +5,6 @@ import {
   Leaf,
   Sprout,
   Droplets,
-  CloudRain,
   Bot,
   MessageCircle,
   Bell,
@@ -33,7 +32,6 @@ const featureDefs = [
   { icon: Sprout, tone: 'brand', key: 'monitoring' },
   { icon: Wheat, tone: 'gold', key: 'crop' },
   { icon: Droplets, tone: 'water', key: 'irrigation' },
-  { icon: CloudRain, tone: 'water', key: 'rainwater' },
   { icon: Bot, tone: 'amber', key: 'robot' },
   { icon: MessageCircle, tone: 'brand', key: 'assistant' },
   { icon: Bell, tone: 'amber', key: 'alerts' },
@@ -77,7 +75,7 @@ export default function Landing() {
             </div>
             <div>
               <p className="font-heading text-sm font-bold leading-tight">{t('app_name')}</p>
-              <p className="text-[11px] leading-tight text-[var(--text-secondary)]">{t('tagline')}</p>
+              <p className="hidden text-[11px] leading-tight text-[var(--text-secondary)] sm:block">{t('tagline')}</p>
             </div>
           </div>
 
@@ -92,9 +90,7 @@ export default function Landing() {
 
           <div className="flex items-center gap-2">
             <ThemeToggle compact />
-            <div className="hidden sm:block">
-              <LanguageDropdown compact />
-            </div>
+            <LanguageDropdown compact />
             {signedIn ? (
               <Link to="/dashboard">
                 <Button size="sm">
@@ -104,7 +100,7 @@ export default function Landing() {
               </Link>
             ) : (
               <>
-                <Link to="/login">
+                <Link to="/login" className="hidden sm:block">
                   <Button variant="ghost" size="sm">
                     {t('auth.sign_in_link')}
                   </Button>
@@ -203,7 +199,7 @@ export default function Landing() {
         </section>
 
         <section className="border-y border-[var(--border-subtle)] bg-[var(--bg-surface)]">
-          <div className="mx-auto grid max-w-6xl grid-cols-3 divide-x divide-[var(--border-subtle)] px-4 py-8 sm:px-6">
+          <div className="mx-auto grid max-w-6xl grid-cols-1 gap-4 divide-x-0 px-4 py-8 sm:grid-cols-3 sm:gap-0 sm:divide-x sm:divide-[var(--border-subtle)] sm:px-6">
             {stats.map((s) => (
               <div key={s.label} className="text-center">
                 <p className="font-heading text-2xl font-bold text-brand-600 sm:text-3xl">{s.value}</p>

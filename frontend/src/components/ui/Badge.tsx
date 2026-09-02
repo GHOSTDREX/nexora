@@ -6,7 +6,7 @@ type Tone = 'brand' | 'neutral' | 'warning' | 'critical' | 'info' | 'ai'
 const toneClasses: Record<Tone, string> = {
   brand: 'bg-brand-100 text-brand-700',
   neutral: 'bg-[var(--bg-surface-muted)] text-[var(--text-secondary)]',
-  warning: 'bg-amber-100 text-amber-800',
+  warning: 'bg-gold-100 text-gold-700',
   critical: 'bg-red-100 text-red-700',
   info: 'bg-water-100 text-water-700',
   ai: 'bg-ai-100 text-ai-400',
@@ -18,7 +18,7 @@ export function Badge({ tone = 'neutral', children, dot }: { tone?: Tone; childr
       {dot && <span className={clsx('h-1.5 w-1.5 rounded-full', {
         'bg-brand-500': tone === 'brand',
         'bg-slate-400': tone === 'neutral',
-        'bg-amber-500': tone === 'warning',
+        'bg-gold-500': tone === 'warning',
         'bg-red-500': tone === 'critical',
         'bg-water-500': tone === 'info',
         'bg-ai-400': tone === 'ai',

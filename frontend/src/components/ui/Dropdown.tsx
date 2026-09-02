@@ -26,11 +26,13 @@ export function Dropdown({
   onChange,
   options,
   placeholder,
+  id,
 }: {
   value: string
   onChange: (value: string) => void
   options: DropdownOption[]
   placeholder?: string
+  id?: string
 }) {
   const [open, setOpen] = useState(false)
   const [rect, setRect] = useState<{ top: number; left: number; width: number; openUp: boolean } | null>(null)
@@ -71,6 +73,7 @@ export function Dropdown({
   return (
     <>
       <button
+        id={id}
         ref={triggerRef}
         type="button"
         onClick={() => setOpen((o) => !o)}

@@ -30,6 +30,8 @@ class User(Base):
     full_name: Mapped[str] = mapped_column(String(255), nullable=False)
     preferred_language: Mapped[str] = mapped_column(String(8), default="en", nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
+    failed_login_attempts: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
+    locked_until: Mapped[datetime | None] = mapped_column(DateTime, default=None, nullable=True)
 
     farm: Mapped["Farm"] = relationship(back_populates="owner", uselist=False, cascade="all, delete-orphan")
 
@@ -83,7 +85,7 @@ class FarmState(Base):
     farm_id: Mapped[int] = mapped_column(ForeignKey("farms.id"), unique=True, nullable=False)
 
     pump_on: Mapped[bool] = mapped_column(Boolean, default=False)
-    lid_open: Mapped[bool] = mapped_column(Boolean, default=False)
+    motor_speed: Mapped[int] = mapped_column(Integer, default=100)
     robot_connected: Mapped[bool] = mapped_column(Boolean, default=True)
     robot_battery_pct: Mapped[float] = mapped_column(Float, default=92.0)
 

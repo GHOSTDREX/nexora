@@ -79,7 +79,7 @@ def update_farm(
     farm: Farm = Depends(get_current_farm),
     db: Session = Depends(get_db),
 ):
-    for key, value in payload.model_dump().items():
+    for key, value in payload.model_dump(exclude_unset=True).items():
         setattr(farm, key, value)
     db.commit()
     db.refresh(farm)

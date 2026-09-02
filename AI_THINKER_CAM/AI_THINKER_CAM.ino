@@ -5,11 +5,11 @@
 
 // ====================================================================
 // WIFI CREDENTIALS
-// Must match sensors.ino and motor_controls.ino — all three boards join
-// the same LAN.
+// Defined in secrets.h (gitignored — copy secrets.h.example to secrets.h
+// and fill in your own values). Must match sensors.ino and
+// motor_controls.ino — all three boards join the same LAN.
 // ====================================================================
-const char* ssid = "YOUR_WIFI_SSID";
-const char* password = "YOUR_WIFI_PASSWORD";
+#include "secrets.h"
 
 // Reachable on the LAN as agrinova-cam.local regardless of the DHCP-assigned
 // IP — set this as Farm.camera_host in AgriNova's Settings page.

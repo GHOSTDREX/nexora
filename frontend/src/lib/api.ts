@@ -1,7 +1,11 @@
 import axios from 'axios'
 
-export const API_URL = import.meta.env.VITE_API_URL ?? 'http://127.0.0.1:8000'
-export const WS_URL = import.meta.env.VITE_WS_URL ?? 'ws://127.0.0.1:8000'
+// Default to whatever host the page was loaded from (localhost in normal
+// dev, the PC's LAN IP when opened from a phone) so no rebuild/env var is
+// needed to switch between them; VITE_API_URL/VITE_WS_URL still override.
+const backendHost = `${window.location.hostname}:8000`
+export const API_URL = import.meta.env.VITE_API_URL ?? `http://${backendHost}`
+export const WS_URL = import.meta.env.VITE_WS_URL ?? `ws://${backendHost}`
 
 const TOKEN_KEY = 'agrinova_token'
 

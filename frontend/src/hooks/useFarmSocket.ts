@@ -4,7 +4,7 @@ import { WS_URL, getToken } from '@/lib/api'
 export interface FarmSocketMessage {
   type: 'sensor_update'
   reading: Record<string, number | boolean | string>
-  robot: { pump_on: boolean; lid_open: boolean; robot_connected: boolean }
+  robot: { pump_on: boolean; robot_connected: boolean }
   alerts: { code: string; severity: string; params: Record<string, unknown> }[]
 }
 

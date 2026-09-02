@@ -4,9 +4,9 @@ AgriNova — Live sensor + automation simulator.
 No physical ESP32 hardware is connected yet, so this background loop stands
 in for it: every tick it advances each farm's sensor readings with a small
 random walk around that farm's own baseline (seeded from FarmState at farm
-creation, so two farms never show identical numbers), runs the irrigation /
-rainwater-harvesting automation state machines described in the MVP spec, and
-pushes the results out over that farm's WebSocket connections. Everything
+creation, so two farms never show identical numbers), runs the irrigation
+automation state machine described in the MVP spec, and pushes the results
+out over that farm's WebSocket connections. Everything
 here writes through the same tables a real ESP32 ingesting via the REST API
 would use, so swapping in real hardware later is a drop-in replacement.
 """
@@ -79,7 +79,8 @@ async def _tick_farm(db: Session, farm: Farm, state: FarmState):
     sunlight = last.sunlight if last else 8.0
 
     # Rain state machine
-    rain_detected = bool(last.rain_detected) if last else False
+    last_rain_detected = bool(last.rain_detected) if last else False
+    rain_detected = last_rain_detected
     if rain_detected:
         if rng.random() < RAIN_STOP_PROBABILITY_PER_TICK:
             rain_detected = False
@@ -120,14 +121,8 @@ async def _tick_farm(db: Session, farm: Farm, state: FarmState):
     if state.pump_on:
         soil_moisture = _clamp(soil_moisture + rng.uniform(3, 6), 0, 100)
 
-    # --- Automation: rainwater harvesting ---
-    if rain_detected and not state.lid_open:
-        state.lid_open = True
+    if rain_detected and not last_rain_detected:
         new_alerts.append(Alert(farm_id=farm.id, code="rain_detected", severity="info", params={}))
-        new_alerts.append(Alert(farm_id=farm.id, code="harvesting_lid_opened", severity="info", params={}))
-    elif not rain_detected and state.lid_open:
-        state.lid_open = False
-        new_alerts.append(Alert(farm_id=farm.id, code="harvesting_lid_closed", severity="info", params={}))
 
     # --- Robot connectivity flapping (rare, for realism) ---
     if state.robot_connected and rng.random() < DISCONNECT_PROBABILITY_PER_TICK:
@@ -162,7 +157,7 @@ async def _tick_farm(db: Session, farm: Farm, state: FarmState):
     db.refresh(reading)
 
     await manager.broadcast(farm.id, build_sensor_update_message(
-        reading, state.pump_on, state.lid_open, state.robot_connected, new_alerts,
+        reading, state.pump_on, state.robot_connected, new_alerts,
     ))
 
 

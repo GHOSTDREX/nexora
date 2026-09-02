@@ -5,7 +5,7 @@ import { motion } from 'framer-motion'
 import { Leaf, LogIn } from 'lucide-react'
 import { useAuth } from '@/context/AuthContext'
 import { Button } from '@/components/ui/Button'
-import { Input, Label } from '@/components/ui/Field'
+import { FieldGroup, Input } from '@/components/ui/Field'
 import { LanguageDropdown } from '@/components/LanguageDropdown'
 import { ThemeToggle } from '@/components/ThemeToggle'
 import { apiErrorMessage } from '@/lib/api'
@@ -55,14 +55,12 @@ export default function Login() {
         </div>
 
         <form onSubmit={onSubmit} className="space-y-4">
-          <div>
-            <Label>{t('auth.email')}</Label>
+          <FieldGroup label={t('auth.email')}>
             <Input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" />
-          </div>
-          <div>
-            <Label>{t('auth.password')}</Label>
+          </FieldGroup>
+          <FieldGroup label={t('auth.password')}>
             <Input type="password" required value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" />
-          </div>
+          </FieldGroup>
 
           {error && <p className="text-sm text-red-400">{error}</p>}
 

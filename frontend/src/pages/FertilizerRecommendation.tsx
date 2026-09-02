@@ -119,11 +119,11 @@ export default function FertilizerRecommendation() {
                 <p className="text-sm text-[var(--text-primary)]">{rec.reason}</p>
               </div>
 
-              <div className="flex items-start gap-2 rounded-xl bg-amber-50 px-4 py-2.5">
-                <TriangleAlert size={16} className="mt-0.5 shrink-0 text-amber-800" aria-hidden="true" />
+              <div className="flex items-start gap-2 rounded-xl bg-gold-50 px-4 py-2.5">
+                <TriangleAlert size={16} className="mt-0.5 shrink-0 text-gold-700" aria-hidden="true" />
                 <div>
-                  <p className="text-xs font-semibold text-amber-800">{t('fertilizer.warnings_title')}</p>
-                  <p className="mt-0.5 text-xs text-amber-800">{t('fertilizer.disclaimer')}</p>
+                  <p className="text-xs font-semibold text-gold-700">{t('fertilizer.warnings_title')}</p>
+                  <p className="mt-0.5 text-xs text-gold-700">{t('fertilizer.disclaimer')}</p>
                 </div>
               </div>
 

@@ -6,7 +6,6 @@ import type { AlertItem, SensorReading } from '@/lib/types'
 
 interface RobotLive {
   pump_on: boolean
-  lid_open: boolean
   robot_connected: boolean
 }
 

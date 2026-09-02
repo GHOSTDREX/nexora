@@ -1,15 +1,20 @@
-fastapi>=0.115.0
-uvicorn[standard]>=0.30.0
-sqlalchemy>=2.0.30
-pydantic[email]>=2.7.0
-bcrypt>=4.1.0
-pyjwt>=2.8.0
-python-dotenv>=1.0.1
-httpx>=0.27.0
-scikit-learn>=1.4.0
-pandas>=2.2.0
-joblib>=1.4.0
-numpy>=1.26.0
-Pillow>=10.3.0
-anthropic>=0.34.0
-websockets>=12.0
+# Pinned exact — the ML routers load pre-trained joblib/pickle artifacts at
+# import time (see app/ml/*/engine.py, predictor.py); an unpinned install
+# can silently pull a newer scikit-learn/numpy/pandas than what trained
+# those artifacts and break deserialization at startup. These versions are
+# the ones the committed models were last verified against.
+fastapi==0.141.1
+uvicorn[standard]==0.52.4
+sqlalchemy==2.0.52
+pydantic[email]==2.13.4
+bcrypt==5.0.0
+pyjwt==2.13.0
+python-dotenv==1.2.3
+httpx==0.28.1
+scikit-learn==1.9.0
+pandas==3.0.5
+joblib==1.5.3
+numpy==2.5.2
+Pillow==12.3.0
+anthropic==1.1.0
+websockets==17.1

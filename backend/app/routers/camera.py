@@ -6,6 +6,7 @@ import httpx
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import desc
 from sqlalchemy.orm import Session
+from starlette.concurrency import run_in_threadpool
 
 from app.core.network_safety import is_safe_hardware_host
 from app.db.database import get_db
@@ -19,6 +20,12 @@ router = APIRouter(prefix="/api/camera", tags=["camera"])
 PAN_LIMIT = 90
 TILT_LIMIT = 45
 STEP = 15
+
+# A real JPEG frame from the AI-Thinker camera is a few tens of KB — this
+# caps how much a single /capture will buffer in memory so a misbehaving or
+# spoofed camera host (still must pass is_safe_hardware_host) can't claim an
+# oversized Content-Length and balloon server memory.
+MAX_FRAME_BYTES = 2 * 1024 * 1024
 
 # The pan servo is physically wired to the motor-control ESP32-S3, not the
 # AI-Thinker camera board (see motor_controls/motor_controls.ino — it has no
@@ -65,6 +72,8 @@ async def _fetch_hardware_frame(camera_host: str) -> str | None:
                         if not match:
                             return None
                         length = int(match.group(1))
+                        if length > MAX_FRAME_BYTES:
+                            return None
                         body_start = header_end + 4
                     if len(buf) >= body_start + length:
                         jpeg_bytes = buf[body_start:body_start + length]
@@ -143,24 +152,27 @@ def move(
 
 @router.post("/capture", response_model=CameraSnapshotOut, status_code=201)
 async def capture(farm: Farm = Depends(get_current_farm), db: Session = Depends(get_db)):
-    state = _get_state(db, farm)
+    state = await run_in_threadpool(_get_state, db, farm)
     image_data_url = None
     if farm.hardware_enabled and farm.camera_host:
         image_data_url = await _fetch_hardware_frame(farm.camera_host)
     if not image_data_url:
-        image_data_url = render_frame(farm.id, state.camera_pan_deg, state.camera_tilt_deg)
+        image_data_url = await run_in_threadpool(render_frame, farm.id, state.camera_pan_deg, state.camera_tilt_deg)
 
-    snapshot = CameraSnapshot(
-        farm_id=farm.id,
-        image_data_url=image_data_url,
-        pan_deg=state.camera_pan_deg,
-        tilt_deg=state.camera_tilt_deg,
-    )
-    db.add(snapshot)
-    db.add(RobotAction(farm_id=farm.id, action_type="camera_capture", detail={}, source="manual"))
-    db.commit()
-    db.refresh(snapshot)
-    return snapshot
+    def _save() -> CameraSnapshot:
+        snapshot = CameraSnapshot(
+            farm_id=farm.id,
+            image_data_url=image_data_url,
+            pan_deg=state.camera_pan_deg,
+            tilt_deg=state.camera_tilt_deg,
+        )
+        db.add(snapshot)
+        db.add(RobotAction(farm_id=farm.id, action_type="camera_capture", detail={}, source="manual"))
+        db.commit()
+        db.refresh(snapshot)
+        return snapshot
+
+    return await run_in_threadpool(_save)
 
 
 @router.get("/snapshots", response_model=list[CameraSnapshotOut])

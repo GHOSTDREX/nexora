@@ -5,13 +5,13 @@
 
 // ====================================================================
 // WIFI CREDENTIALS
-// Must match motor_controls.ino and AI_THINKER_CAM.ino — all three boards
-// join the same LAN so the AgriNova backend can reach each of them and
-// motor_controls.ino's pump relay can reach this node's readings indirectly
-// via the backend's hardware poller.
+// Defined in secrets.h (gitignored — copy secrets.h.example to secrets.h
+// and fill in your own values). Must match motor_controls.ino and
+// AI_THINKER_CAM.ino — all three boards join the same LAN so the AgriNova
+// backend can reach each of them and motor_controls.ino's pump relay can
+// reach this node's readings indirectly via the backend's hardware poller.
 // ====================================================================
-const char* ssid = "YOUR_WIFI_SSID";
-const char* password = "YOUR_WIFI_PASSWORD";
+#include "secrets.h"
 
 // mDNS hostname -> reachable on the LAN as agrinova-sensors.local, so the
 // backend's Farm.sensor_node_host setting doesn't break when DHCP hands out

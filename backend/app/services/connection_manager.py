@@ -46,7 +46,7 @@ class ConnectionManager:
 manager = ConnectionManager()
 
 
-def build_sensor_update_message(reading, pump_on: bool, lid_open: bool, robot_connected: bool, alerts=None) -> dict:
+def build_sensor_update_message(reading, pump_on: bool, robot_connected: bool, alerts=None) -> dict:
     """Shape a `sensor_update` WebSocket message from a SensorReading row —
     shared by the simulator tick and the manual-reading endpoint so the two
     can never drift apart in what fields they send the dashboard."""
@@ -67,7 +67,6 @@ def build_sensor_update_message(reading, pump_on: bool, lid_open: bool, robot_co
         },
         "robot": {
             "pump_on": pump_on,
-            "lid_open": lid_open,
             "robot_connected": robot_connected,
         },
         "alerts": [

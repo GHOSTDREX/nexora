@@ -88,8 +88,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const updateLanguage = useCallback(
     async (language: string) => {
       i18n.changeLanguage(language)
-      await api.patch('/api/auth/me/language', { preferred_language: language })
-      setUser((prev) => (prev ? { ...prev, preferred_language: language } : prev))
+      try {
+        await api.patch('/api/auth/me/language', { preferred_language: language })
+        setUser((prev) => (prev ? { ...prev, preferred_language: language } : prev))
+      } catch {
+        // UI already switched language locally; persisting the preference
+        // server-side is best-effort and shouldn't block/crash the switch.
+      }
     },
     [i18n],
   )

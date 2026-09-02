@@ -31,3 +31,9 @@ Thumbs.db
 
 # SQLite journal files
 backend/data/*.db-journal
+
+# Real device WiFi credentials (never commit — see secrets.h.example in
+# each firmware sketch folder for the placeholder template)
+sensors/secrets.h
+motor_controls/secrets.h
+AI_THINKER_CAM/secrets.h

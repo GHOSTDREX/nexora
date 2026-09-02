@@ -1,0 +1,906 @@
+<title>AgriNova Field Brief</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Literata:opsz,wght@6..72,400;6..72,500;6..72,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+<style>
+  :root {
+    --bg: #f7f8f3;
+    --bg-raised: #ffffff;
+    --bg-inset: #eef1ea;
+    --border: #d8ddd2;
+    --border-strong: #c1c9b9;
+    --text: #16211b;
+    --text-dim: #4d5e53;
+    --text-faint: #7f8f83;
+    --accent: #2f8a3f;
+    --accent-ink: #ffffff;
+    --gold: #93690f;
+    --water: #106f95;
+    --ai: #0e7e73;
+    --danger: #a63a22;
+    --shadow: 0 1px 2px rgba(22, 33, 27, 0.06), 0 8px 24px rgba(22, 33, 27, 0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0b120e;
+      --bg-raised: #121b16;
+      --bg-inset: #0e1613;
+      --border: #263429;
+      --border-strong: #34473a;
+      --text: #eaf1ec;
+      --text-dim: #9db2a5;
+      --text-faint: #647569;
+      --accent: #7fe06a;
+      --accent-ink: #0b1b0f;
+      --gold: #e2b054;
+      --water: #5fc0ee;
+      --ai: #4fddce;
+      --danger: #f0967d;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 12px 32px rgba(0, 0, 0, 0.45);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #0b120e;
+    --bg-raised: #121b16;
+    --bg-inset: #0e1613;
+    --border: #263429;
+    --border-strong: #34473a;
+    --text: #eaf1ec;
+    --text-dim: #9db2a5;
+    --text-faint: #647569;
+    --accent: #7fe06a;
+    --accent-ink: #0b1b0f;
+    --gold: #e2b054;
+    --water: #5fc0ee;
+    --ai: #4fddce;
+    --danger: #f0967d;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 12px 32px rgba(0, 0, 0, 0.45);
+  }
+
+  * { box-sizing: border-box; }
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Literata", Georgia, "Noto Serif", serif;
+    font-size: 16px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, .display {
+    font-family: "Space Grotesk", "Segoe UI", Arial, sans-serif;
+    text-wrap: balance;
+    letter-spacing: -0.01em;
+  }
+
+  code, .mono, .kv dt, .spec-table, .chip, .pill {
+    font-family: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
+  }
+
+  a { color: inherit; }
+
+  .wrap {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 20px 96px;
+  }
+
+  /* ---- top bar / nav ---- */
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+  }
+  .topbar-inner {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+  .brand {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    font-family: "Space Grotesk", sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .brand .dot { color: var(--accent); }
+  .navpills {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding: 2px 0;
+  }
+  .navpills::-webkit-scrollbar { display: none; }
+  .navpills a {
+    flex-shrink: 0;
+    text-decoration: none;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11.5px;
+    letter-spacing: 0.02em;
+    color: var(--text-dim);
+    background: var(--bg-inset);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 6px 12px;
+    transition: color 0.15s ease, border-color 0.15s ease;
+  }
+  .navpills a:hover { color: var(--accent); border-color: var(--accent); }
+
+  /* ---- hero ---- */
+  .hero {
+    position: relative;
+    padding: 56px 0 40px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 48px;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 44px 44px;
+    -webkit-mask-image: linear-gradient(to bottom, black, transparent 85%);
+    mask-image: linear-gradient(to bottom, black, transparent 85%);
+    opacity: 0.5;
+    pointer-events: none;
+  }
+  .eyebrow {
+    position: relative;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 14px;
+  }
+  .hero h1 {
+    position: relative;
+    font-size: clamp(34px, 5.6vw, 54px);
+    line-height: 1.04;
+    margin: 0 0 18px;
+    max-width: 16ch;
+  }
+  .hero .pitch {
+    position: relative;
+    font-family: "Literata", serif;
+    font-size: 18px;
+    color: var(--text-dim);
+    max-width: 62ch;
+    margin: 0 0 28px;
+  }
+  .factrow {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .fact {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 14px;
+    box-shadow: var(--shadow);
+    min-width: 108px;
+  }
+  .fact b {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 20px;
+    font-variant-numeric: tabular-nums;
+  }
+  .fact span {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+  }
+
+  /* ---- sections ---- */
+  section { scroll-margin-top: 68px; margin-bottom: 56px; }
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 12px;
+  }
+  .section-head .num {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12px;
+    color: var(--text-faint);
+  }
+  .section-head h2 {
+    font-size: 24px;
+    margin: 0;
+  }
+  .lede {
+    font-size: 16.5px;
+    color: var(--text-dim);
+    max-width: 72ch;
+    margin: 0 0 22px;
+  }
+
+  /* ---- journey timeline ---- */
+  .timeline { display: flex; flex-direction: column; gap: 0; }
+  .tl-item {
+    display: grid;
+    grid-template-columns: 44px 1fr;
+    gap: 18px;
+    position: relative;
+    padding-bottom: 28px;
+  }
+  .tl-item:last-child { padding-bottom: 0; }
+  .tl-marker {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .tl-num {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--bg-inset);
+    border: 1px solid var(--border-strong);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12px;
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+  .tl-line {
+    flex: 1;
+    width: 1px;
+    background: var(--border);
+    margin-top: 4px;
+  }
+  .tl-item:last-child .tl-line { display: none; }
+  .tl-body h3 {
+    font-size: 16.5px;
+    margin: 2px 0 6px;
+    font-weight: 600;
+  }
+  .tl-body p { margin: 0; color: var(--text-dim); max-width: 68ch; }
+  .tl-body .tag {
+    display: inline-block;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 10px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    margin-bottom: 6px;
+  }
+
+  /* ---- cards / grid ---- */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  @media (max-width: 760px) {
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  }
+  .card {
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px 20px;
+    box-shadow: var(--shadow);
+  }
+  .card h3 {
+    font-size: 15px;
+    margin: 0 0 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card p { margin: 0; color: var(--text-dim); font-size: 14.5px; }
+  .swatch { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+
+  /* ---- diagram ---- */
+  figure { margin: 0; }
+  .diagram-frame {
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: var(--shadow);
+  }
+  .diagram-frame svg { width: 100%; height: auto; display: block; color: var(--text); }
+  figcaption {
+    margin-top: 12px;
+    font-size: 13px;
+    color: var(--text-faint);
+    font-family: "IBM Plex Mono", monospace;
+  }
+
+  /* ---- spec tables ---- */
+  .table-scroll { overflow-x: auto; border: 1px solid var(--border); border-radius: 12px; box-shadow: var(--shadow); }
+  table.spec-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+    background: var(--bg-raised);
+    min-width: 640px;
+  }
+  table.spec-table th, table.spec-table td {
+    text-align: left;
+    padding: 11px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  table.spec-table th {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    background: var(--bg-inset);
+    white-space: nowrap;
+  }
+  table.spec-table tr:last-child td { border-bottom: none; }
+  table.spec-table td.num { font-variant-numeric: tabular-nums; }
+  table.spec-table td.small { color: var(--text-dim); font-size: 12.5px; }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    border: 1px solid var(--border-strong);
+    white-space: nowrap;
+  }
+  .badge.accent { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 45%, var(--border-strong)); }
+  .badge.gold { color: var(--gold); border-color: color-mix(in srgb, var(--gold) 45%, var(--border-strong)); }
+  .badge.water { color: var(--water); border-color: color-mix(in srgb, var(--water) 45%, var(--border-strong)); }
+  .badge.ai { color: var(--ai); border-color: color-mix(in srgb, var(--ai) 45%, var(--border-strong)); }
+
+  code.inline {
+    background: var(--bg-inset);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 1px 6px;
+    font-size: 0.86em;
+  }
+
+  .callout {
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--gold);
+    background: var(--bg-inset);
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 13.5px;
+    color: var(--text-dim);
+    margin-top: 16px;
+  }
+  .callout b { color: var(--text); }
+
+  /* ---- chip list (tech stack) ---- */
+  .stackgroup { margin-bottom: 18px; }
+  .stackgroup h3 {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-faint);
+    font-family: "IBM Plex Mono", monospace;
+    margin: 0 0 10px;
+  }
+  .chiprow { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip {
+    font-size: 12.5px;
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    padding: 6px 10px;
+    box-shadow: var(--shadow);
+  }
+  .chip b { color: var(--text); font-weight: 600; }
+  .chip span { color: var(--text-faint); }
+
+  /* ---- use case list ---- */
+  .usecases { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  @media (max-width: 760px) { .usecases { grid-template-columns: 1fr; } }
+  .usecase {
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 18px;
+    box-shadow: var(--shadow);
+  }
+  .usecase h3 { font-size: 14.5px; margin: 0 0 6px; }
+  .usecase p { margin: 0; font-size: 13.5px; color: var(--text-dim); }
+
+  footer {
+    border-top: 1px solid var(--border);
+    padding-top: 20px;
+    margin-top: 40px;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11.5px;
+    color: var(--text-faint);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal {
+      animation: rise 0.5s ease both;
+    }
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  }
+</style>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand"><span>AgriNova</span><span class="dot">/</span><span style="color:var(--text-dim); font-weight:500;">field brief</span></div>
+    <nav class="navpills">
+      <a href="#journey">Journey</a>
+      <a href="#problem">Problem</a>
+      <a href="#architecture">Architecture</a>
+      <a href="#rover">AgriRover</a>
+      <a href="#sensors">Sensors</a>
+      <a href="#ml">AI / ML</a>
+      <a href="#security">Security</a>
+      <a href="#edge">Why it's better</a>
+      <a href="#stack">Tech stack</a>
+      <a href="#usecases">Use cases</a>
+    </nav>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <header class="hero">
+    <p class="eyebrow">Hackathon reference &middot; read before Q&amp;A</p>
+    <h1>A multilingual farm brain, wired to a robot that actually moves.</h1>
+    <p class="pitch">AgriNova pairs a full-stack web dashboard with three real ESP32 boards and five trained ML models, so a farmer can monitor soil, predict irrigation and yield, and drive a field robot &mdash; in any of ten Indian languages.</p>
+    <div class="factrow">
+      <div class="fact"><b>10</b><span>languages</span></div>
+      <div class="fact"><b>5</b><span>ML models</span></div>
+      <div class="fact"><b>3</b><span>ESP32 boards</span></div>
+      <div class="fact"><b>16</b><span>E2E tests</span></div>
+      <div class="fact"><b>4</b><span>NPK &amp; env sensors</span></div>
+    </div>
+  </header>
+
+  <section id="journey">
+    <div class="section-head"><h2>The journey</h2></div>
+    <p class="lede">Not a green-field build &mdash; AgriNova grew out of two existing Python prototypes, then had to survive contact with real hardware and a pre-launch audit.</p>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-marker"><div class="tl-num">1</div><div class="tl-line"></div></div>
+        <div class="tl-body">
+          <span class="tag">Starting point</span>
+          <h3>Two disconnected prototypes, no app around them</h3>
+          <p>An <code class="inline">Irrigation Recommendation</code> FastAPI microservice with a trained Decision Tree pipeline and a rule-based chatbot, plus a separate rule-based <code class="inline">Crop Suitability</code> checker and an unused 2,200-row crop dataset. Neither had a database, auth, a dashboard, or a way to reach hardware.</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-marker"><div class="tl-num">2</div><div class="tl-line"></div></div>
+        <div class="tl-body">
+          <span class="tag">Foundation</span>
+          <h3>Built the actual multi-tenant app</h3>
+          <p>FastAPI + SQLAlchemy + SQLite backend with JWT auth and per-farm data isolation, a React + Vite frontend, and a background simulator that writes sensor readings through the <em>same</em> ingestion path a real ESP32 would use &mdash; so hardware could be swapped in later without touching the frontend.</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-marker"><div class="tl-num">3</div><div class="tl-line"></div></div>
+        <div class="tl-body">
+          <span class="tag">Going physical</span>
+          <h3>Wired up three real ESP32 boards</h3>
+          <p>A sensor node (DHT22, soil moisture, rain, RS485 NPK), a motor/actuator controller (drive motors, pump, plow, seed dispenser, camera pan), and an AI-Thinker ESP32-CAM streaming MJPEG &mdash; all reachable from the backend over plain HTTP on the local WiFi.</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-marker"><div class="tl-num">4</div><div class="tl-line"></div></div>
+        <div class="tl-body">
+          <span class="tag">Real pivots</span>
+          <h3>Cut and swapped features once hardware existed</h3>
+          <p>Rainwater harvesting was dropped entirely once it was clear it didn't fit the build. Fertilizer-dispense was swapped for a plow control once the actual mechanism existed on the rover. A reported "speed slider does nothing" bug traced back to firmware only updating a variable on a speed-only command instead of re-driving the motors &mdash; fixed at the source, not papered over in the UI.</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-marker"><div class="tl-num">5</div><div class="tl-line"></div></div>
+        <div class="tl-body">
+          <span class="tag">Pre-hackathon audit</span>
+          <h3>A full security &amp; correctness pass, self-tested with Playwright</h3>
+          <p>Found and fixed a live database bug &mdash; a dropped column had left a stale <code class="inline">NOT NULL</code> constraint that would have 500'd every new signup at demo time &mdash; caught by the test suite itself, not by manual clicking. WiFi credentials were pulled out of committed firmware into gitignored <code class="inline">secrets.h</code> files. A 16-test Playwright suite now covers auth, every page, robot controls, language switching, and form validation.</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-marker"><div class="tl-num">6</div><div class="tl-line"></div></div>
+        <div class="tl-body">
+          <span class="tag">Final mile</span>
+          <h3>Made it reachable from a phone, for real</h3>
+          <p>Getting the dashboard onto a phone on the same WiFi surfaced a chain of environment issues, not code bugs: a Windows Firewall rule scoped to the wrong network profile, a stale <code class="inline">.env</code> file silently overriding the LAN-aware API URL back to <code class="inline">127.0.0.1</code>, and the backend running on the wrong Python interpreter with a mismatched <code class="inline">numpy</code> that broke every ML endpoint. All three had to be found and fixed before demo day, not during it.</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-marker"><div class="tl-num">7</div><div class="tl-line"></div></div>
+        <div class="tl-body">
+          <span class="tag">Hardening pass</span>
+          <h3>A second, deeper security pass against a standard checklist</h3>
+          <p>Account lockout after 5 failed logins, timing-safe login checks so response speed can't reveal which emails are registered, structured security-event logging, HSTS, a 2MB request body cap, CORS narrowed from a wildcard to the exact methods and headers the app actually uses, and explicit anti-prompt-injection instructions wrapping the farm-context data sent to the AI Assistant. Just as deliberately, CSRF tokens and secure cookie flags were left out &mdash; the app authenticates with a bearer JWT, not cookies, so those protections don't apply here and would have been theater.</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-marker"><div class="tl-num">8</div></div>
+        <div class="tl-body">
+          <span class="tag">Last bug, day-of</span>
+          <h3>The D-pad was driving the rover in the wrong direction &mdash; literally rotated</h3>
+          <p>Forward drove right, right drove back, back drove left, left drove forward: a clean four-way rotation, which was the tell that it wasn't a wiring fault but a labeling bug &mdash; the four motor patterns in firmware were internally consistent, just assigned to the wrong command names in <code class="inline">applyDirection()</code>. Re-mapped in software, no rewiring needed.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="problem">
+    <div class="section-head"><h2>Problem &amp; use case</h2></div>
+    <div class="grid-2">
+      <div class="card">
+        <h3><span class="swatch" style="background:var(--danger)"></span>What's broken today</h3>
+        <p>Small and marginal Indian farmers mostly irrigate and fertilize reactively &mdash; by eye and habit, not by measurement. Advisory tools that exist are single-language (usually English), assume constant connectivity, and stop at giving advice: nothing actually turns the pump or the plow.</p>
+      </div>
+      <div class="card">
+        <h3><span class="swatch" style="background:var(--accent)"></span>What AgriNova replaces it with</h3>
+        <p>Live soil/NPK/weather readings feed five trained models that answer four concrete questions &mdash; irrigate now?, which crop?, which fertilizer?, what yield to expect? &mdash; and a physical rover carries out the resulting action, in the farmer's own language.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="architecture">
+    <div class="section-head"><h2>Architecture</h2></div>
+    <p class="lede">Three tiers: a React dashboard, a FastAPI backend that owns auth and the ML models, and three ESP32 boards on the farm's own WiFi. The backend never lets the browser talk to hardware directly &mdash; every hardware call is relayed and SSRF-checked server-side.</p>
+
+    <figure class="diagram-frame">
+      <svg viewBox="0 0 760 300" role="img" aria-label="Two real-time loops: sensor readings push from the ESP32 sensor node through the backend and a WebSocket to the dashboard; button clicks relay from the dashboard through the backend to the ESP32 robot controller and its motors.">
+        <defs>
+          <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="currentColor" />
+          </marker>
+        </defs>
+
+        <!-- Lane labels -->
+        <text x="8" y="26" font-family="IBM Plex Mono, monospace" font-size="11" fill="currentColor" opacity="0.55" letter-spacing="0.06em">LOOP A &mdash; SENSOR READING REACHES THE DASHBOARD (PUSH)</text>
+        <text x="8" y="186" font-family="IBM Plex Mono, monospace" font-size="11" fill="currentColor" opacity="0.55" letter-spacing="0.06em">LOOP B &mdash; A CLICK REACHES THE MOTOR (RELAY)</text>
+
+        <!-- Lane A boxes -->
+        <g font-family="Space Grotesk, sans-serif" font-size="12.5" font-weight="600">
+          <rect x="8" y="42" width="150" height="52" rx="8" fill="none" stroke="currentColor" stroke-opacity="0.35" />
+          <text x="83" y="63" text-anchor="middle">ESP32 sensor</text>
+          <text x="83" y="79" text-anchor="middle" font-weight="400" font-family="IBM Plex Mono, monospace" font-size="10.5" opacity="0.6">DHT22 &middot; soil &middot; NPK</text>
+
+          <rect x="216" y="42" width="150" height="52" rx="8" fill="none" stroke="currentColor" stroke-opacity="0.35" />
+          <text x="291" y="63" text-anchor="middle">Backend poller</text>
+          <text x="291" y="79" text-anchor="middle" font-weight="400" font-family="IBM Plex Mono, monospace" font-size="10.5" opacity="0.6">writes SensorReading</text>
+
+          <rect x="424" y="42" width="150" height="52" rx="8" fill="none" stroke="currentColor" stroke-opacity="0.35" />
+          <text x="499" y="63" text-anchor="middle">WebSocket</text>
+          <text x="499" y="79" text-anchor="middle" font-weight="400" font-family="IBM Plex Mono, monospace" font-size="10.5" opacity="0.6">/ws/farm</text>
+
+          <rect x="602" y="42" width="150" height="52" rx="8" fill="var(--accent)" fill-opacity="0.12" stroke="var(--accent)" />
+          <text x="677" y="63" text-anchor="middle" fill="var(--accent)">Dashboard</text>
+          <text x="677" y="79" text-anchor="middle" font-weight="400" font-family="IBM Plex Mono, monospace" font-size="10.5" fill="var(--accent)" opacity="0.8">live stat cards</text>
+        </g>
+
+        <line x1="158" y1="68" x2="212" y2="68" stroke="currentColor" stroke-opacity="0.6" marker-end="url(#arrow)" />
+        <text x="185" y="60" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9.5" fill="currentColor" opacity="0.65">GET /sensors</text>
+        <text x="185" y="112" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9.5" fill="currentColor" opacity="0.5">every ~4s</text>
+
+        <line x1="366" y1="68" x2="420" y2="68" stroke="currentColor" stroke-opacity="0.6" marker-end="url(#arrow)" />
+        <text x="393" y="60" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9.5" fill="currentColor" opacity="0.65">broadcast()</text>
+
+        <line x1="574" y1="68" x2="598" y2="68" stroke="var(--accent)" marker-end="url(#arrow)" />
+        <text x="588" y="60" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9.5" fill="var(--accent)">push</text>
+
+        <!-- Lane B boxes -->
+        <g font-family="Space Grotesk, sans-serif" font-size="12.5" font-weight="600">
+          <rect x="602" y="202" width="150" height="52" rx="8" fill="var(--gold)" fill-opacity="0.12" stroke="var(--gold)" />
+          <text x="677" y="223" text-anchor="middle" fill="var(--gold)">Dashboard</text>
+          <text x="677" y="239" text-anchor="middle" font-weight="400" font-family="IBM Plex Mono, monospace" font-size="10.5" fill="var(--gold)" opacity="0.85">"Forward" click</text>
+
+          <rect x="424" y="202" width="150" height="52" rx="8" fill="none" stroke="currentColor" stroke-opacity="0.35" />
+          <text x="499" y="223" text-anchor="middle">Backend relay</text>
+          <text x="499" y="239" text-anchor="middle" font-weight="400" font-family="IBM Plex Mono, monospace" font-size="10.5" opacity="0.6">SSRF host check</text>
+
+          <rect x="216" y="202" width="150" height="52" rx="8" fill="none" stroke="currentColor" stroke-opacity="0.35" />
+          <text x="291" y="223" text-anchor="middle">ESP32 robot</text>
+          <text x="291" y="239" text-anchor="middle" font-weight="400" font-family="IBM Plex Mono, monospace" font-size="10.5" opacity="0.6">/command?action=</text>
+
+          <rect x="8" y="202" width="150" height="52" rx="8" fill="none" stroke="currentColor" stroke-opacity="0.35" />
+          <text x="83" y="223" text-anchor="middle">Motor / actuator</text>
+          <text x="83" y="239" text-anchor="middle" font-weight="400" font-family="IBM Plex Mono, monospace" font-size="10.5" opacity="0.6">BTS7960 PWM</text>
+        </g>
+
+        <line x1="598" y1="228" x2="578" y2="228" stroke="var(--gold)" marker-end="url(#arrow)" />
+        <text x="588" y="220" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9.5" fill="var(--gold)">POST</text>
+
+        <line x1="420" y1="228" x2="370" y2="228" stroke="currentColor" stroke-opacity="0.6" marker-end="url(#arrow)" />
+        <text x="393" y="220" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9.5" fill="currentColor" opacity="0.65">GET /command</text>
+
+        <line x1="212" y1="228" x2="162" y2="228" stroke="currentColor" stroke-opacity="0.6" marker-end="url(#arrow)" />
+        <text x="185" y="220" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="9.5" fill="currentColor" opacity="0.65">analogWrite</text>
+
+        <text x="8" y="290" font-family="Literata, serif" font-size="12" fill="currentColor" opacity="0.6">Same backend, two directions: sensor data is pushed to every open tab; hardware commands are relayed and host-checked, never sent straight from the browser.</text>
+      </svg>
+      <figcaption>Fig. 1 &mdash; the two live loops that make the dashboard feel real-time.</figcaption>
+    </figure>
+
+    <div class="grid-3" style="margin-top:20px;">
+      <div class="card">
+        <h3><span class="swatch" style="background:var(--accent)"></span>Frontend</h3>
+        <p>React 19 + Vite + TypeScript, Tailwind v4, Framer Motion. Dark-mode-first design system, 10 fully translated languages, a raw WebSocket hook for live pushes.</p>
+      </div>
+      <div class="card">
+        <h3><span class="swatch" style="background:var(--water)"></span>Backend</h3>
+        <p>FastAPI + SQLAlchemy 2.0 + SQLite. JWT auth, one farm per user, every query scoped to <code class="inline">farm_id</code>. 13 routers, 5 ML models, a WebSocket connection manager keyed by farm.</p>
+      </div>
+      <div class="card">
+        <h3><span class="swatch" style="background:var(--gold)"></span>Hardware</h3>
+        <p>3 ESP32 boards on the farm's WiFi, addressed by mDNS hostname. No auth on the boards themselves &mdash; the backend's SSRF guard is the only gate, blocking loopback / link-local / multicast targets.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="rover">
+    <div class="section-head"><h2>AgriRover &mdash; the physical robot</h2></div>
+    <p class="lede">A single ESP32-S3 controller drives locomotion and every field actuator, all exposed as one plain-HTTP command surface the backend calls directly.</p>
+    <div class="table-scroll">
+      <table class="spec-table">
+        <thead>
+          <tr><th>Subsystem</th><th>Hardware</th><th>Behaviour</th><th>Command</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Drive</td>
+            <td class="small">2&times; BTS7960 motor driver, differential (skid-steer) pair</td>
+            <td class="small">PWM speed 0&ndash;255, direction re-applies live on a speed-only change</td>
+            <td><code class="inline">move_forward / back / left / right / stop</code>, <code class="inline">set_speed&amp;val=</code></td>
+          </tr>
+          <tr>
+            <td>Irrigation pump</td>
+            <td class="small">L298N module #1, channel A</td>
+            <td class="small">Latching relay drive &mdash; stays on until told off</td>
+            <td><code class="inline">pump_on / pump_off</code></td>
+          </tr>
+          <tr>
+            <td>Plow</td>
+            <td class="small">L298N module #1, channel B</td>
+            <td class="small">Bang-bang actuator, fixed 100ms raise/lower stroke</td>
+            <td><code class="inline">plow_on / plow_off</code></td>
+          </tr>
+          <tr>
+            <td>Camera pan</td>
+            <td class="small">L298N module #2, channel A &middot; BO gear motor</td>
+            <td class="small">Stepper-style pulses, &plusmn;8 steps from center</td>
+            <td><code class="inline">camera_left / right / center</code></td>
+          </tr>
+          <tr>
+            <td>Seed dispenser</td>
+            <td class="small">L298N module #2, channel B &middot; BO gear motor</td>
+            <td class="small">Continuous back-and-forth sweep while active, auto-recenters on stop</td>
+            <td><code class="inline">seed_on / seed_off</code></td>
+          </tr>
+          <tr>
+            <td>Vision</td>
+            <td class="small">Separate ESP32&#8209;CAM (AI-Thinker, OV2640)</td>
+            <td class="small">320&times;240 MJPEG stream; backend also samples a single JPEG frame per request</td>
+            <td><code class="inline">GET /stream</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout"><b>Note on the name:</b> the firmware and backend refer to this board simply as <code class="inline">ESP32_ROBOT_01</code> / "the robot controller" &mdash; AgriRover is the pitch name for the same physical unit.</div>
+  </section>
+
+  <section id="sensors">
+    <div class="section-head"><h2>Sensors</h2></div>
+    <p class="lede">One ESP32 sensor node carries everything below and is polled by the backend roughly every 4 seconds over <code class="inline">GET /sensors</code>.</p>
+    <div class="table-scroll">
+      <table class="spec-table">
+        <thead>
+          <tr><th>Reading</th><th>Sensor</th><th>Interface</th><th>Notes</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Temperature &amp; humidity</td><td class="small">DHT22</td><td class="small mono">Digital, 1-wire</td><td class="small">NaN reads coerced to 0.0 rather than crashing the poll</td></tr>
+          <tr><td>Soil moisture</td><td class="small">Capacitive probe</td><td class="small mono">Analog ADC</td><td class="small">Scaled 4095&rarr;0% .. 1500&rarr;100%</td></tr>
+          <tr><td>Rain</td><td class="small">Resistive rain sensor</td><td class="small mono">Analog ADC</td><td class="small">rain_detected flips true above a 20% intensity threshold</td></tr>
+          <tr><td>Nitrogen / Phosphorus / Potassium</td><td class="small">RS485 NPK probe</td><td class="small mono">Modbus RTU via MAX485, 4800 baud</td><td class="small">3 register reads per cycle (0x1E/0x1F/0x20), 0 on timeout</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="ml">
+    <div class="section-head"><h2>The AI / ML layer</h2></div>
+    <p class="lede">Five trained models plus two deterministic rule engines, each backing one page of the dashboard.</p>
+    <div class="table-scroll">
+      <table class="spec-table">
+        <thead>
+          <tr><th>Model</th><th>Algorithm</th><th>Inputs</th><th>Reported accuracy</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Irrigation need</td>
+            <td class="small">Decision Tree pipeline</td>
+            <td class="small">16 features &mdash; soil, weather, crop stage, field config</td>
+            <td class="small">Low / Medium / High + confidence</td>
+          </tr>
+          <tr>
+            <td>Crop recommendation</td>
+            <td class="small">Random Forest (200 trees)</td>
+            <td class="small">N, P, K, temperature, humidity, pH, rainfall</td>
+            <td class="small">22-class, top crop + 3 alternatives</td>
+          </tr>
+          <tr>
+            <td>Fertilizer recommendation</td>
+            <td class="small">Decision Tree pipeline</td>
+            <td class="small">Crop, soil, growth stage, pH, N/P/K, EC</td>
+            <td class="small num"><span class="badge accent">89.34%</span> accuracy, 2,857 rows (Rice + Sugarcane)</td>
+          </tr>
+          <tr>
+            <td>Yield prediction</td>
+            <td class="small">Random Forest Regressor (300 trees, tuned)</td>
+            <td class="small">Crop, state, season, year, area, fertilizer/pesticide use</td>
+            <td class="small num"><span class="badge accent">R&sup2; 0.976</span> &middot; <span class="badge gold">20.6%</span> median error &middot; 19,689 rows, 1997&ndash;2020</td>
+          </tr>
+          <tr>
+            <td>Crop condition check</td>
+            <td class="small">Rule engine (not ML)</td>
+            <td class="small">Live reading vs. per-crop optimal ranges</td>
+            <td class="small">23 crops, dataset-percentile-derived ranges</td>
+          </tr>
+          <tr>
+            <td>Soil health score</td>
+            <td class="small">Rule engine (not ML)</td>
+            <td class="small">N, P, K, moisture, humidity, temperature, pH</td>
+            <td class="small">0&ndash;100 score + narrated explanation</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="grid-2" style="margin-top:20px;">
+      <div class="card">
+        <h3><span class="badge ai">AI</span>&nbsp;Assistant &mdash; Claude, live</h3>
+        <p>Every chat message is grounded with the farm's live sensor reading, latest prediction, weather, and recent alerts, then answered by the Claude API in whichever of the 10 languages the user has selected.</p>
+      </div>
+      <div class="card">
+        <h3><span class="badge">Fallback</span>&nbsp;Assistant &mdash; offline mode</h3>
+        <p>If no API key is configured (or the call fails), a 15-topic rule-based responder answers instead &mdash; irrigation, fertilizer, pests, weeds, sowing, harvest, organics &mdash; in English, Hindi, or Marathi. The app never breaks for lack of a key.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="security">
+    <div class="section-head"><h2>Security</h2></div>
+    <p class="lede">A checklist-driven hardening pass run against the live app before the hackathon &mdash; each item verified working, not just written.</p>
+    <div class="table-scroll">
+      <table class="spec-table">
+        <thead>
+          <tr><th>Measure</th><th>Implementation</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Account lockout</td><td class="small">5 failed logins locks the account for 15 minutes, tracked per-user in the database</td></tr>
+          <tr><td>User enumeration prevention</td><td class="small">Login runs a bcrypt check against a dummy hash even for unregistered emails, so response timing can't reveal which accounts exist</td></tr>
+          <tr><td>Security event logging</td><td class="small">Login, registration, and lockout events logged by user id &mdash; never raw email or password</td></tr>
+          <tr><td>Prompt-injection defense</td><td class="small">Farm context sent to the AI Assistant is wrapped in explicit data-not-instructions tags; the model is told to decline attempts to override its role</td></tr>
+          <tr><td>Request size limit</td><td class="small">2MB cap on every request body, rejected with 413 before it reaches a route handler</td></tr>
+          <tr><td>Input length bounds</td><td class="small">Chat messages capped at 2,000 characters; all auth fields already bounded by schema</td></tr>
+          <tr><td>CORS locked down</td><td class="small">Narrowed from a wildcard to exactly the methods and headers the app uses (GET/POST/PUT/PATCH, Authorization, Content-Type)</td></tr>
+          <tr><td>HSTS</td><td class="small">Strict-Transport-Security sent on every response, ready for the moment this sits behind HTTPS</td></tr>
+          <tr><td>SSRF-guarded hardware relay</td><td class="small">Farm-configured hardware hostnames are re-resolved and checked against loopback/link-local/multicast before every outbound call</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout">
+      <b>Deliberately not added:</b> CSRF tokens, secure cookie flags, expiring reset links, upload-type whitelisting, directory-listing/admin-route removal. The app authenticates with a bearer JWT (not cookies), so CSRF and cookie flags don't apply; there's no password-reset or file-upload feature yet to harden, and no static directory or admin panel is served. Adding protections for features that don't exist would be security theater, not hardening.
+    </div>
+  </section>
+
+  <section id="edge">
+    <div class="section-head"><h2>Why it's better</h2></div>
+    <div class="grid-3">
+      <div class="card"><h3><span class="swatch" style="background:var(--accent)"></span>Actually multilingual</h3><p>10 fully-translated Indian languages across the whole UI, not just a landing page &mdash; rare in agri-tech tooling, which is almost always English-only.</p></div>
+      <div class="card"><h3><span class="swatch" style="background:var(--water)"></span>Real hardware, not a mockup</h3><p>Every "robot" button is a live HTTP call to a physical ESP32 driving real motors, not a simulated animation.</p></div>
+      <div class="card"><h3><span class="swatch" style="background:var(--gold)"></span>Degrades gracefully</h3><p>No hardware yet? The simulator writes through the same code path. No API key? The chatbot still answers. Nothing hard-fails for lack of a resource.</p></div>
+      <div class="card"><h3><span class="swatch" style="background:var(--ai)"></span>Real multi-tenancy</h3><p>Every table is scoped to <code class="inline">farm_id</code>, one farm per user, a WebSocket room per farm &mdash; not a single shared demo account.</p></div>
+      <div class="card"><h3><span class="swatch" style="background:var(--danger)"></span>Defense in depth</h3><p>SSRF-guarded hardware relay, per-account lockout after repeated failed logins, timing-safe auth checks, HSTS, and explicit anti-prompt-injection framing around the data fed to the AI Assistant.</p></div>
+      <div class="card"><h3><span class="swatch" style="background:var(--accent)"></span>Actually tested</h3><p>A 16-test Playwright suite runs the real registration &rarr; dashboard &rarr; robot &rarr; language-switch path, not just unit tests around the edges.</p></div>
+    </div>
+  </section>
+
+  <section id="stack">
+    <div class="section-head"><h2>Tools &amp; tech stack</h2></div>
+    <div class="stackgroup">
+      <h3>Frontend</h3>
+      <div class="chiprow">
+        <span class="chip"><b>React</b> <span>19.2</span></span>
+        <span class="chip"><b>Vite</b> <span>8</span></span>
+        <span class="chip"><b>TypeScript</b> <span>6</span></span>
+        <span class="chip"><b>Tailwind CSS</b> <span>v4</span></span>
+        <span class="chip"><b>Framer Motion</b> <span>13</span></span>
+        <span class="chip"><b>react-router-dom</b> <span>7</span></span>
+        <span class="chip"><b>react-i18next</b></span>
+        <span class="chip"><b>axios</b></span>
+        <span class="chip"><b>recharts</b></span>
+        <span class="chip"><b>lucide-react</b></span>
+        <span class="chip"><b>Playwright</b> <span>1.62</span></span>
+      </div>
+    </div>
+    <div class="stackgroup">
+      <h3>Backend</h3>
+      <div class="chiprow">
+        <span class="chip"><b>FastAPI</b></span>
+        <span class="chip"><b>SQLAlchemy</b> <span>2.0</span></span>
+        <span class="chip"><b>SQLite</b></span>
+        <span class="chip"><b>scikit-learn</b></span>
+        <span class="chip"><b>pandas</b> / <b>numpy</b></span>
+        <span class="chip"><b>joblib</b></span>
+        <span class="chip"><b>PyJWT</b> + <b>bcrypt</b></span>
+        <span class="chip"><b>httpx</b></span>
+        <span class="chip"><b>anthropic</b> SDK</span>
+        <span class="chip"><b>websockets</b></span>
+      </div>
+    </div>
+    <div class="stackgroup">
+      <h3>Hardware &amp; firmware</h3>
+      <div class="chiprow">
+        <span class="chip"><b>ESP32-S3</b> <span>rover controller</span></span>
+        <span class="chip"><b>ESP32</b> <span>sensor node</span></span>
+        <span class="chip"><b>AI-Thinker ESP32-CAM</b> <span>OV2640</span></span>
+        <span class="chip"><b>BTS7960</b> <span>drive motors</span></span>
+        <span class="chip"><b>L298N</b> <span>&times;2, actuators</span></span>
+        <span class="chip"><b>MAX485</b> <span>Modbus NPK</span></span>
+        <span class="chip"><b>DHT22</b></span>
+      </div>
+    </div>
+  </section>
+
+  <section id="usecases">
+    <div class="section-head"><h2>Use cases</h2></div>
+    <div class="usecases">
+      <div class="usecase"><h3>Remote daily monitoring</h3><p>Check soil, NPK, and weather from a phone without walking the field.</p></div>
+      <div class="usecase"><h3>Water-saving automation</h3><p>Auto mode turns the pump on at 32% soil moisture and off again at 55%, without a person watching a gauge.</p></div>
+      <div class="usecase"><h3>Language-first accessibility</h3><p>A farmer who has never used an English app can onboard, read alerts, and chat with the assistant in their own language.</p></div>
+      <div class="usecase"><h3>Physical fieldwork on demand</h3><p>Seed, plow, or pump from the dashboard &mdash; or let auto-irrigation trigger the same actuator without a tap.</p></div>
+      <div class="usecase"><h3>An agronomist that's always on</h3><p>Fertilizer dosing, pest/disease triage, and sowing advice, grounded in the farm's actual live readings, at 2am if needed.</p></div>
+      <div class="usecase"><h3>Yield forecasting for planning</h3><p>Estimate production ahead of a season using 24 years of Indian government crop-yield data by state and crop.</p></div>
+    </div>
+  </section>
+
+  <footer>
+    <span>AgriNova &middot; field brief compiled from the live codebase</span>
+    <span>backend/ &middot; frontend/ &middot; sensors/ &middot; motor_controls/ &middot; AI_THINKER_CAM/</span>
+  </footer>
+
+</div>

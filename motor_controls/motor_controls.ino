@@ -1,16 +1,15 @@
 #include <WiFi.h>
 #include <WebServer.h>
 #include <ESPmDNS.h>
-#include <ESP32Servo.h>
 
 // ==============================================================================
 // WIFI CREDENTIALS
-// Must match sensors.ino and AI_THINKER_CAM.ino — all three boards join the
-// same LAN.
+// Defined in secrets.h (gitignored — copy secrets.h.example to secrets.h
+// and fill in your own values). Must match sensors.ino and
+// AI_THINKER_CAM.ino — all three boards join the same LAN.
 // ==============================================================================
 
-const char *ssid = "YOUR_WIFI_SSID";
-const char *password = "YOUR_WIFI_PASSWORD";
+#include "secrets.h"
 
 // Reachable on the LAN as agrinova-robot.local regardless of the DHCP-
 // assigned IP — set this as Farm.robot_host in AgriNova's Settings page.
@@ -20,19 +19,23 @@ const char *MDNS_HOSTNAME = "agrinova-robot";
 // HARDWARE PINS
 // ==============================================================================
 
-// Motor Left - BTS7960 #1
+// Locomotion Motors (BTS7960)
 const int LEFT_RPWM = 5;
 const int LEFT_LPWM = 4;
-
-// Motor Right - BTS7960 #2
 const int RIGHT_RPWM = 6;
 const int RIGHT_LPWM = 7;
 
-// Robot tools
-const int PUMP_PIN = 8;
-const int SEED_PIN = 9;
-const int PLOW_PIN = 10;
-const int CAM_PIN = 11;
+// L298N #1 (Pump & Plow)
+const int PUMP_IN1 = 8;
+const int PUMP_IN2 = 12;
+const int PLOW_IN3 = 10;
+const int PLOW_IN4 = 13;
+
+// L298N #2 (Camera & Seed Dispenser BO Motors)
+const int CAM_IN1 = 9;
+const int CAM_IN2 = 11;
+const int SEED_IN3 = 14;
+const int SEED_IN4 = 15;
 
 // ==============================================================================
 // ROBOT STATE
@@ -40,23 +43,28 @@ const int CAM_PIN = 11;
 
 int motorSpeed = 100;
 
+// Last locomotion command, so a set_speed change can be re-applied to the
+// motors immediately instead of only taking effect on the next move command.
+String lastDirection = "move_stop";
+
 bool pumpState = false;
-bool seedActive = false;
 bool plowState = false;
 
-int seedAngle = 0;
-int plowAngle = 0;
-int camAngle = 90;
+const int plowDuration = 100;
 
-// ==============================================================================
-// SEED DISPENSER
-// ==============================================================================
+// --- Camera BO Motor ---
+const int camStepDuration = 50;
+const int camMaxSteps = 8;
+int camCurrentStep = 0;
 
-unsigned long lastSeedMove = 0;
+// --- Seed Dispenser BO Motor ---
+bool seedActive = false;
+long seedPosition = 0;
 
-const int seedDelay = 15;
+const int seedMaxLimit = 180;
 
-int seedDir = 1;
+int seedDirection = 1;
+unsigned long lastSeedTime = 0;
 
 // ==============================================================================
 // OBJECTS
@@ -64,20 +72,11 @@ int seedDir = 1;
 
 WebServer server(80);
 
-Servo seedServo;
-Servo plowServo;
-Servo camServo;
-
 // ==============================================================================
 // MOTOR CONTROL
 // ==============================================================================
 
-void setMotors(
-  int leftFwd,
-  int leftRev,
-  int rightFwd,
-  int rightRev
-) {
+void setMotors(int leftFwd, int leftRev, int rightFwd, int rightRev) {
 
   analogWrite(LEFT_RPWM, leftFwd);
   analogWrite(LEFT_LPWM, leftRev);
@@ -86,74 +85,31 @@ void setMotors(
   analogWrite(RIGHT_LPWM, rightRev);
 }
 
-// ==============================================================================
-// MOVE FORWARD
-// ==============================================================================
+// Re-drives the motors using the current motorSpeed and the last direction
+// command — called after every move command and after every set_speed
+// change, so adjusting the slider while the robot is already moving takes
+// effect immediately instead of waiting for the next move command.
+void applyDirection() {
 
-void moveForward() {
+  if (lastDirection == "move_forward") {
+    setMotors(0, motorSpeed, motorSpeed, 0);
+  }
 
-  setMotors(
-    motorSpeed,
-    0,
-    motorSpeed,
-    0
-  );
-}
+  else if (lastDirection == "move_back") {
+    setMotors(motorSpeed, 0, 0, motorSpeed);
+  }
 
-// ==============================================================================
-// MOVE BACKWARD
-// ==============================================================================
+  else if (lastDirection == "move_left") {
+    setMotors(motorSpeed, 0, motorSpeed, 0);
+  }
 
-void moveBackward() {
+  else if (lastDirection == "move_right") {
+    setMotors(0, motorSpeed, 0, motorSpeed);
+  }
 
-  setMotors(
-    0,
-    motorSpeed,
-    0,
-    motorSpeed
-  );
-}
-
-// ==============================================================================
-// TURN LEFT
-// ==============================================================================
-
-void moveLeft() {
-
-  setMotors(
-    0,
-    motorSpeed,
-    motorSpeed,
-    0
-  );
-}
-
-// ==============================================================================
-// TURN RIGHT
-// ==============================================================================
-
-void moveRight() {
-
-  setMotors(
-    motorSpeed,
-    0,
-    0,
-    motorSpeed
-  );
-}
-
-// ==============================================================================
-// STOP
-// ==============================================================================
-
-void moveStop() {
-
-  setMotors(
-    0,
-    0,
-    0,
-    0
-  );
+  else {
+    setMotors(0, 0, 0, 0);
+  }
 }
 
 // ==============================================================================
@@ -162,38 +118,72 @@ void moveStop() {
 
 void processSeedMovement() {
 
+  unsigned long now = millis();
+
+  long dt = now - lastSeedTime;
+
+  lastSeedTime = now;
+
   if (seedActive) {
 
-    if (millis() - lastSeedMove >= seedDelay) {
+    // Move left/right
+    seedPosition += seedDirection * dt;
 
-      lastSeedMove = millis();
+    // Right limit
+    if (seedPosition >= seedMaxLimit) {
 
-      seedAngle += seedDir;
+      seedPosition = seedMaxLimit;
 
-      if (seedAngle >= 90) {
-
-        seedAngle = 90;
-        seedDir = -1;
-      }
-
-      else if (seedAngle <= 0) {
-
-        seedAngle = 0;
-        seedDir = 1;
-      }
-
-      seedServo.write(seedAngle);
+      seedDirection = -1;
     }
-  }
 
-  else {
+    // Left limit
+    else if (seedPosition <= -seedMaxLimit) {
 
-    if (seedAngle != 0) {
+      seedPosition = -seedMaxLimit;
 
-      seedAngle = 0;
-      seedDir = 1;
+      seedDirection = 1;
+    }
 
-      seedServo.write(0);
+    // Motor direction
+    if (seedDirection == 1) {
+
+      digitalWrite(SEED_IN3, HIGH);
+      digitalWrite(SEED_IN4, LOW);
+
+    } else {
+
+      digitalWrite(SEED_IN3, LOW);
+      digitalWrite(SEED_IN4, HIGH);
+    }
+
+  } else {
+
+    // Return to center
+    if (seedPosition > 10) {
+
+      digitalWrite(SEED_IN3, LOW);
+      digitalWrite(SEED_IN4, HIGH);
+
+      seedPosition -= dt;
+
+    }
+
+    else if (seedPosition < -10) {
+
+      digitalWrite(SEED_IN3, HIGH);
+      digitalWrite(SEED_IN4, LOW);
+
+      seedPosition += dt;
+
+    }
+
+    else {
+
+      digitalWrite(SEED_IN3, LOW);
+      digitalWrite(SEED_IN4, LOW);
+
+      seedPosition = 0;
     }
   }
 }
@@ -208,32 +198,15 @@ void handleStatus() {
 
   json += "\"device\":\"ESP32_ROBOT_01\",";
   json += "\"ip\":\"" + WiFi.localIP().toString() + "\",";
-  json += "\"wifi\":true,";
-
   json += "\"motor_speed\":" + String(motorSpeed) + ",";
-
-  json += "\"pump\":";
-  json += pumpState ? "true," : "false,";
-
-  json += "\"seed\":";
-  json += seedActive ? "true," : "false,";
-
-  json += "\"seed_angle\":" + String(seedAngle) + ",";
-
-  json += "\"plow\":";
-  json += plowState ? "true," : "false,";
-
-  json += "\"plow_angle\":" + String(plowAngle) + ",";
-
-  json += "\"camera_angle\":" + String(camAngle);
+  json += "\"pump\":" + String(pumpState ? "true" : "false") + ",";
+  json += "\"plow\":" + String(plowState ? "true" : "false") + ",";
+  json += "\"seed\":" + String(seedActive ? "true" : "false") + ",";
+  json += "\"cam_pos\":" + String(camCurrentStep);
 
   json += "}";
 
-  server.send(
-    200,
-    "application/json",
-    json
-  );
+  server.send(200, "application/json", json);
 }
 
 // ==============================================================================
@@ -244,11 +217,7 @@ void handleCommand() {
 
   if (!server.hasArg("action")) {
 
-    server.send(
-      400,
-      "text/plain",
-      "Missing action"
-    );
+    server.send(400, "text/plain", "Missing action");
 
     return;
   }
@@ -256,42 +225,15 @@ void handleCommand() {
   String action = server.arg("action");
 
   // --------------------------------------------------------------------------
-  // MOVEMENT
+  // LOCOMOTION
   // --------------------------------------------------------------------------
 
-  if (action == "move_forward") {
+  if (action == "move_forward" || action == "move_back" ||
+      action == "move_left" || action == "move_right" ||
+      action == "move_stop") {
 
-    moveForward();
-
-    Serial.println("COMMAND: FORWARD");
-  }
-
-  else if (action == "move_back") {
-
-    moveBackward();
-
-    Serial.println("COMMAND: BACKWARD");
-  }
-
-  else if (action == "move_left") {
-
-    moveLeft();
-
-    Serial.println("COMMAND: LEFT");
-  }
-
-  else if (action == "move_right") {
-
-    moveRight();
-
-    Serial.println("COMMAND: RIGHT");
-  }
-
-  else if (action == "move_stop") {
-
-    moveStop();
-
-    Serial.println("COMMAND: STOP");
+    lastDirection = action;
+    applyDirection();
   }
 
   // --------------------------------------------------------------------------
@@ -300,18 +242,13 @@ void handleCommand() {
 
   else if (action == "set_speed") {
 
-    if (server.hasArg("value")) {
+    if (server.hasArg("val")) {
 
-      motorSpeed = server.arg("value").toInt();
+      motorSpeed = server.arg("val").toInt();
 
-      motorSpeed = constrain(
-        motorSpeed,
-        0,
-        255
-      );
+      motorSpeed = constrain(motorSpeed, 0, 255);
 
-      Serial.print("MOTOR SPEED: ");
-      Serial.println(motorSpeed);
+      applyDirection();
     }
   }
 
@@ -323,24 +260,112 @@ void handleCommand() {
 
     pumpState = true;
 
-    digitalWrite(
-      PUMP_PIN,
-      HIGH
-    );
-
-    Serial.println("PUMP: ON");
+    digitalWrite(PUMP_IN1, HIGH);
+    digitalWrite(PUMP_IN2, LOW);
   }
 
   else if (action == "pump_off") {
 
     pumpState = false;
 
-    digitalWrite(
-      PUMP_PIN,
-      LOW
-    );
+    digitalWrite(PUMP_IN1, LOW);
+    digitalWrite(PUMP_IN2, LOW);
+  }
 
-    Serial.println("PUMP: OFF");
+  // --------------------------------------------------------------------------
+  // PLOW
+  // --------------------------------------------------------------------------
+
+  else if (action == "plow_on") {
+
+    if (!plowState) {
+
+      digitalWrite(PLOW_IN3, LOW);
+      digitalWrite(PLOW_IN4, HIGH);
+
+      delay(plowDuration);
+
+      digitalWrite(PLOW_IN3, LOW);
+      digitalWrite(PLOW_IN4, LOW);
+
+      plowState = true;
+    }
+  }
+
+  else if (action == "plow_off") {
+
+    if (plowState) {
+
+      digitalWrite(PLOW_IN3, HIGH);
+      digitalWrite(PLOW_IN4, LOW);
+
+      delay(plowDuration);
+
+      digitalWrite(PLOW_IN3, LOW);
+      digitalWrite(PLOW_IN4, LOW);
+
+      plowState = false;
+    }
+  }
+
+  // --------------------------------------------------------------------------
+  // CAMERA
+  // --------------------------------------------------------------------------
+
+  else if (action == "camera_left") {
+
+    if (camCurrentStep > -camMaxSteps) {
+
+      digitalWrite(CAM_IN1, HIGH);
+      digitalWrite(CAM_IN2, LOW);
+
+      delay(camStepDuration);
+
+      digitalWrite(CAM_IN1, LOW);
+      digitalWrite(CAM_IN2, LOW);
+
+      camCurrentStep--;
+    }
+  }
+
+  else if (action == "camera_right") {
+
+    if (camCurrentStep < camMaxSteps) {
+
+      digitalWrite(CAM_IN1, LOW);
+      digitalWrite(CAM_IN2, HIGH);
+
+      delay(camStepDuration);
+
+      digitalWrite(CAM_IN1, LOW);
+      digitalWrite(CAM_IN2, LOW);
+
+      camCurrentStep++;
+    }
+  }
+
+  else if (action == "camera_center") {
+
+    if (camCurrentStep < 0) {
+
+      digitalWrite(CAM_IN1, LOW);
+      digitalWrite(CAM_IN2, HIGH);
+
+      delay(camStepDuration * abs(camCurrentStep));
+    }
+
+    else if (camCurrentStep > 0) {
+
+      digitalWrite(CAM_IN1, HIGH);
+      digitalWrite(CAM_IN2, LOW);
+
+      delay(camStepDuration * camCurrentStep);
+    }
+
+    digitalWrite(CAM_IN1, LOW);
+    digitalWrite(CAM_IN2, LOW);
+
+    camCurrentStep = 0;
   }
 
   // --------------------------------------------------------------------------
@@ -350,117 +375,11 @@ void handleCommand() {
   else if (action == "seed_on") {
 
     seedActive = true;
-
-    Serial.println("SEED DISPENSER: ON");
   }
 
   else if (action == "seed_off") {
 
     seedActive = false;
-
-    Serial.println("SEED DISPENSER: OFF");
-  }
-
-  // --------------------------------------------------------------------------
-  // PLOW
-  // --------------------------------------------------------------------------
-
-  else if (action == "plow_on") {
-
-    plowState = true;
-
-    plowAngle = 90;
-
-    plowServo.write(
-      plowAngle
-    );
-
-    Serial.println("PLOW: DOWN");
-  }
-
-  else if (action == "plow_off") {
-
-    plowState = false;
-
-    plowAngle = 0;
-
-    plowServo.write(
-      plowAngle
-    );
-
-    Serial.println("PLOW: UP");
-  }
-
-  // --------------------------------------------------------------------------
-  // CAMERA
-  // --------------------------------------------------------------------------
-
-  else if (action == "camera_left") {
-
-    camAngle -= 10;
-
-    camAngle = constrain(
-      camAngle,
-      10,
-      170
-    );
-
-    camServo.write(
-      camAngle
-    );
-
-    Serial.print("CAMERA: ");
-    Serial.println(camAngle);
-  }
-
-  else if (action == "camera_right") {
-
-    camAngle += 10;
-
-    camAngle = constrain(
-      camAngle,
-      10,
-      170
-    );
-
-    camServo.write(
-      camAngle
-    );
-
-    Serial.print("CAMERA: ");
-    Serial.println(camAngle);
-  }
-
-  else if (action == "camera_center") {
-
-    camAngle = 90;
-
-    camServo.write(
-      camAngle
-    );
-
-    Serial.println("CAMERA: CENTER");
-  }
-
-  else if (action == "camera_pan") {
-
-    if (server.hasArg("angle")) {
-
-      camAngle = server.arg("angle").toInt();
-
-      camAngle = constrain(
-        camAngle,
-        10,
-        170
-      );
-
-      camServo.write(
-        camAngle
-      );
-
-      Serial.print("CAMERA ANGLE: ");
-      Serial.println(camAngle);
-    }
   }
 
   // --------------------------------------------------------------------------
@@ -469,20 +388,12 @@ void handleCommand() {
 
   else {
 
-    server.send(
-      400,
-      "text/plain",
-      "Unknown command"
-    );
+    server.send(400, "text/plain", "Unknown command");
 
     return;
   }
 
-  server.send(
-    200,
-    "text/plain",
-    "OK"
-  );
+  server.send(200, "text/plain", "OK");
 }
 
 // ==============================================================================
@@ -496,101 +407,51 @@ void setup() {
   delay(500);
 
   Serial.println();
-  Serial.println("======================================");
-  Serial.println("       ESP32 ROBOT CONTROLLER");
-  Serial.println("======================================");
+  Serial.println("--- ESP32-S3 ROBOT CONTROLLER ---");
 
   // ==========================================================================
-  // MOTOR PINS
+  // LOCOMOTION PINS
   // ==========================================================================
 
-  pinMode(
-    LEFT_RPWM,
-    OUTPUT
-  );
+  pinMode(LEFT_RPWM, OUTPUT);
+  pinMode(LEFT_LPWM, OUTPUT);
 
-  pinMode(
-    LEFT_LPWM,
-    OUTPUT
-  );
+  pinMode(RIGHT_RPWM, OUTPUT);
+  pinMode(RIGHT_LPWM, OUTPUT);
 
-  pinMode(
-    RIGHT_RPWM,
-    OUTPUT
-  );
-
-  pinMode(
-    RIGHT_LPWM,
-    OUTPUT
-  );
-
-  // Safe startup
-  moveStop();
+  setMotors(0, 0, 0, 0);
 
   // ==========================================================================
-  // PUMP
+  // L298N #1
   // ==========================================================================
 
-  pinMode(
-    PUMP_PIN,
-    OUTPUT
-  );
+  pinMode(PUMP_IN1, OUTPUT);
+  pinMode(PUMP_IN2, OUTPUT);
 
-  digitalWrite(
-    PUMP_PIN,
-    LOW
-  );
+  pinMode(PLOW_IN3, OUTPUT);
+  pinMode(PLOW_IN4, OUTPUT);
 
-  // ==========================================================================
-  // SERVO TIMERS
-  // ==========================================================================
+  digitalWrite(PUMP_IN1, LOW);
+  digitalWrite(PUMP_IN2, LOW);
 
-  ESP32PWM::allocateTimer(0);
-  ESP32PWM::allocateTimer(1);
-  ESP32PWM::allocateTimer(2);
-  ESP32PWM::allocateTimer(3);
+  digitalWrite(PLOW_IN3, LOW);
+  digitalWrite(PLOW_IN4, LOW);
 
   // ==========================================================================
-  // SEED SERVO
+  // L298N #2
   // ==========================================================================
 
-  seedServo.setPeriodHertz(50);
+  pinMode(CAM_IN1, OUTPUT);
+  pinMode(CAM_IN2, OUTPUT);
 
-  seedServo.attach(
-    SEED_PIN,
-    500,
-    2400
-  );
+  pinMode(SEED_IN3, OUTPUT);
+  pinMode(SEED_IN4, OUTPUT);
 
-  seedServo.write(0);
+  digitalWrite(CAM_IN1, LOW);
+  digitalWrite(CAM_IN2, LOW);
 
-  // ==========================================================================
-  // PLOW SERVO
-  // ==========================================================================
-
-  plowServo.setPeriodHertz(50);
-
-  plowServo.attach(
-    PLOW_PIN,
-    500,
-    2400
-  );
-
-  plowServo.write(0);
-
-  // ==========================================================================
-  // CAMERA SERVO
-  // ==========================================================================
-
-  camServo.setPeriodHertz(50);
-
-  camServo.attach(
-    CAM_PIN,
-    500,
-    2400
-  );
-
-  camServo.write(90);
+  digitalWrite(SEED_IN3, LOW);
+  digitalWrite(SEED_IN4, LOW);
 
   // ==========================================================================
   // WIFI
@@ -602,10 +463,7 @@ void setup() {
   Serial.print("Connecting to WiFi: ");
   Serial.println(ssid);
 
-  WiFi.begin(
-    ssid,
-    password
-  );
+  WiFi.begin(ssid, password);
 
   while (WiFi.status() != WL_CONNECTED) {
 
@@ -618,9 +476,7 @@ void setup() {
   Serial.println("WiFi connected!");
 
   Serial.print("IP Address: ");
-  Serial.println(
-    WiFi.localIP()
-  );
+  Serial.println(WiFi.localIP());
 
   // ==========================================================================
   // mDNS
@@ -636,19 +492,12 @@ void setup() {
   // HTTP API
   // ==========================================================================
 
-  server.on(
-    "/command",
-    HTTP_GET,
-    handleCommand
-  );
-
-  server.on(
-    "/status",
-    HTTP_GET,
-    handleStatus
-  );
+  server.on("/command", HTTP_GET, handleCommand);
+  server.on("/status", HTTP_GET, handleStatus);
 
   server.begin();
+
+  lastSeedTime = millis();
 
   Serial.println();
   Serial.println("======================================");
@@ -662,6 +511,7 @@ void setup() {
   Serial.println("/command?action=move_left");
   Serial.println("/command?action=move_right");
   Serial.println("/command?action=move_stop");
+  Serial.println("/command?action=set_speed&val=<0-255>");
 
   Serial.println("/command?action=pump_on");
   Serial.println("/command?action=pump_off");
@@ -687,9 +537,7 @@ void setup() {
 
 void loop() {
 
-  // Handle incoming HTTP commands
   server.handleClient();
 
-  // Keep seed dispenser movement non-blocking
   processSeedMovement();
 }

@@ -6,7 +6,7 @@ import { api, apiErrorMessage } from '@/lib/api'
 import { useAuth } from '@/context/AuthContext'
 import { Card, CardHeader } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
-import { Select, Input, Label } from '@/components/ui/Field'
+import { Input, Label } from '@/components/ui/Field'
 import { IconBadge } from '@/components/ui/IconBadge'
 import { Dropdown } from '@/components/ui/Dropdown'
 import type { YieldPrediction as YieldPredictionType, YieldOptions } from '@/lib/types'
@@ -76,34 +76,32 @@ export default function YieldPrediction() {
           {options && (
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
               <div>
-                <Label>{t('yield.crop')}</Label>
-                <Dropdown value={crop} onChange={setCrop} options={options.crops.map((c) => ({ value: c, label: c }))} />
+                <Label htmlFor="yield-crop">{t('yield.crop')}</Label>
+                <Dropdown id="yield-crop" value={crop} onChange={setCrop} options={options.crops.map((c) => ({ value: c, label: c }))} />
               </div>
               <div>
-                <Label>{t('yield.state')}</Label>
-                <Dropdown value={state} onChange={setState} options={options.states.map((s) => ({ value: s, label: s }))} />
+                <Label htmlFor="yield-state">{t('yield.state')}</Label>
+                <Dropdown id="yield-state" value={state} onChange={setState} options={options.states.map((s) => ({ value: s, label: s }))} />
               </div>
               <div>
-                <Label>{t('yield.season')}</Label>
-                <Select value={season} onChange={(e) => setSeason(e.target.value)}>
-                  {options.seasons.map((s) => <option key={s} value={s}>{s}</option>)}
-                </Select>
+                <Label htmlFor="yield-season">{t('yield.season')}</Label>
+                <Dropdown id="yield-season" value={season} onChange={setSeason} options={options.seasons.map((s) => ({ value: s, label: s }))} />
               </div>
               <div>
-                <Label>{t('yield.year')}</Label>
-                <Input type="number" value={year} onChange={(e) => setYear(e.target.value)} />
+                <Label htmlFor="yield-year">{t('yield.year')}</Label>
+                <Input id="yield-year" type="number" value={year} onChange={(e) => setYear(e.target.value)} />
               </div>
               <div>
-                <Label>{t('yield.area_hectare')}</Label>
-                <Input type="number" step="0.1" value={areaHectare} onChange={(e) => setAreaHectare(e.target.value)} />
+                <Label htmlFor="yield-area">{t('yield.area_hectare')}</Label>
+                <Input id="yield-area" type="number" step="0.1" value={areaHectare} onChange={(e) => setAreaHectare(e.target.value)} />
               </div>
               <div>
-                <Label>{t('yield.fertilizer_kg')}</Label>
-                <Input type="number" step="0.1" value={fertilizerKg} onChange={(e) => setFertilizerKg(e.target.value)} />
+                <Label htmlFor="yield-fertilizer">{t('yield.fertilizer_kg')}</Label>
+                <Input id="yield-fertilizer" type="number" step="0.1" value={fertilizerKg} onChange={(e) => setFertilizerKg(e.target.value)} />
               </div>
               <div>
-                <Label>{t('yield.pesticide_kg')}</Label>
-                <Input type="number" step="0.1" value={pesticideKg} onChange={(e) => setPesticideKg(e.target.value)} />
+                <Label htmlFor="yield-pesticide">{t('yield.pesticide_kg')}</Label>
+                <Input id="yield-pesticide" type="number" step="0.1" value={pesticideKg} onChange={(e) => setPesticideKg(e.target.value)} />
               </div>
             </div>
           )}
@@ -144,11 +142,11 @@ export default function YieldPrediction() {
               </div>
 
               {result.warnings.length > 0 && (
-                <div className="flex items-start gap-2 rounded-xl bg-amber-50 px-4 py-2.5">
-                  <TriangleAlert size={16} className="mt-0.5 shrink-0 text-amber-800" aria-hidden="true" />
+                <div className="flex items-start gap-2 rounded-xl bg-gold-50 px-4 py-2.5">
+                  <TriangleAlert size={16} className="mt-0.5 shrink-0 text-gold-700" aria-hidden="true" />
                   <div className="space-y-1">
-                    <p className="text-xs font-semibold text-amber-800">{t('yield.warnings_title')}</p>
-                    {result.warnings.map((w, i) => <p key={i} className="text-xs text-amber-800">{w}</p>)}
+                    <p className="text-xs font-semibold text-gold-700">{t('yield.warnings_title')}</p>
+                    {result.warnings.map((w, i) => <p key={i} className="text-xs text-gold-700">{w}</p>)}
                   </div>
                 </div>
               )}

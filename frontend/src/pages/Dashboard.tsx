@@ -84,7 +84,6 @@ export default function Dashboard() {
   }
 
   const pumpOn = robotLive?.pump_on ?? robot?.pump_on ?? false
-  const lidOpen = robotLive?.lid_open ?? robot?.lid_open ?? false
   const robotConnected = robotLive?.robot_connected ?? robot?.robot_connected ?? true
 
   return (
@@ -113,7 +112,7 @@ export default function Dashboard() {
       {sensorModeError && <p className="text-sm text-red-400">{sensorModeError}</p>}
 
       {farm?.sensor_mode === 'Manual' && (
-        <p className="rounded-xl bg-amber-50 px-4 py-2.5 text-sm text-amber-800">{t('dashboard.manual_sensor_hint')}</p>
+        <p className="rounded-xl bg-gold-50 px-4 py-2.5 text-sm text-gold-700">{t('dashboard.manual_sensor_hint')}</p>
       )}
 
       {farm?.sensor_mode === 'Manual' ? (
@@ -186,10 +185,6 @@ export default function Dashboard() {
               <span className="text-[var(--text-secondary)]">{t('robot.control')}: {t('irrigation.pump')}</span>
               <Badge tone={pumpOn ? 'brand' : 'neutral'}>{pumpOn ? t('common.on') : t('common.off')}</Badge>
             </div>
-            <div className="flex items-center justify-between text-sm">
-              <span className="text-[var(--text-secondary)]">{t('rainwater.lid_status')}</span>
-              <Badge tone={lidOpen ? 'info' : 'neutral'}>{lidOpen ? t('common.open') : t('common.closed')}</Badge>
-            </div>
             <Link to="/robot" className="mt-1 flex items-center gap-1 text-xs font-semibold text-brand-700 hover:underline">
               {t('common.view_all')} <ArrowRight size={12} aria-hidden="true" />
             </Link>
@@ -223,7 +218,7 @@ export default function Dashboard() {
                 <p className="text-sm text-[var(--text-secondary)]">{t('crop.model_confidence')}: {cropRec.confidence}%</p>
               </div>
             ) : (
-              <p className="text-sm text-[var(--text-secondary)]">—</p>
+              <Skeleton className="h-6 w-24" />
             )}
             <Link to="/crop-recommendation" className="mt-3 flex items-center gap-1 text-xs font-semibold text-brand-700 hover:underline">
               {t('common.view_all')} <ArrowRight size={12} aria-hidden="true" />
@@ -242,7 +237,7 @@ export default function Dashboard() {
                 </Badge>
               </div>
             ) : (
-              <p className="text-sm text-[var(--text-secondary)]">—</p>
+              <Skeleton className="h-6 w-24" />
             )}
             <Link to="/soil-health" className="mt-3 flex items-center gap-1 text-xs font-semibold text-brand-700 hover:underline">
               {t('common.view_all')} <ArrowRight size={12} aria-hidden="true" />

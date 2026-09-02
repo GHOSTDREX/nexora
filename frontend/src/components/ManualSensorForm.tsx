@@ -8,14 +8,17 @@ import { Button } from '@/components/ui/Button'
 import { staggerContainer, staggerItem } from '@/lib/motion'
 import type { ManualSensorReadingIn, SensorReading } from '@/lib/types'
 
-const NUMERIC_FIELDS: { key: keyof Omit<ManualSensorReadingIn, 'rain_detected'>; labelKey: string; unit: string }[] = [
-  { key: 'temperature', labelKey: 'sensors.temperature', unit: '°C' },
-  { key: 'humidity', labelKey: 'sensors.humidity', unit: '%' },
-  { key: 'soil_moisture', labelKey: 'sensors.soil_moisture', unit: '%' },
-  { key: 'nitrogen', labelKey: 'sensors.nitrogen', unit: 'mg/kg' },
-  { key: 'phosphorus', labelKey: 'sensors.phosphorus', unit: 'mg/kg' },
-  { key: 'potassium', labelKey: 'sensors.potassium', unit: 'mg/kg' },
-  { key: 'wind_speed', labelKey: 'sensors.wind_speed', unit: 'km/h' },
+// min/max mirror backend/app/schemas/sensor.py's ManualSensorReadingIn field
+// constraints exactly — kept in sync so a submission never round-trips to a
+// raw Pydantic validation error.
+const NUMERIC_FIELDS: { key: keyof Omit<ManualSensorReadingIn, 'rain_detected'>; labelKey: string; unit: string; min: number; max: number }[] = [
+  { key: 'temperature', labelKey: 'sensors.temperature', unit: '°C', min: -20, max: 70 },
+  { key: 'humidity', labelKey: 'sensors.humidity', unit: '%', min: 0, max: 100 },
+  { key: 'soil_moisture', labelKey: 'sensors.soil_moisture', unit: '%', min: 0, max: 100 },
+  { key: 'nitrogen', labelKey: 'sensors.nitrogen', unit: 'mg/kg', min: 0, max: 200 },
+  { key: 'phosphorus', labelKey: 'sensors.phosphorus', unit: 'mg/kg', min: 0, max: 150 },
+  { key: 'potassium', labelKey: 'sensors.potassium', unit: 'mg/kg', min: 0, max: 200 },
+  { key: 'wind_speed', labelKey: 'sensors.wind_speed', unit: 'km/h', min: 0, max: 150 },
 ]
 
 export function ManualSensorForm({ initial }: { initial: SensorReading | null }) {
@@ -46,6 +49,11 @@ export function ManualSensorForm({ initial }: { initial: SensorReading | null })
       const n = Number(values[f.key])
       if (values[f.key].trim() === '' || !Number.isFinite(n)) {
         setError(`${t(f.labelKey)}: enter a valid number.`)
+        setSaving(false)
+        return
+      }
+      if (n < f.min || n > f.max) {
+        setError(`${t(f.labelKey)}: must be between ${f.min} and ${f.max}.`)
         setSaving(false)
         return
       }
@@ -86,11 +94,14 @@ export function ManualSensorForm({ initial }: { initial: SensorReading | null })
             variants={staggerItem}
             className="rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-4"
           >
-            <Label>{t(f.labelKey)}</Label>
+            <Label htmlFor={`manual-sensor-${f.key}`}>{t(f.labelKey)}</Label>
             <div className="flex items-center gap-1.5">
               <Input
+                id={`manual-sensor-${f.key}`}
                 type="number"
                 step="0.1"
+                min={f.min}
+                max={f.max}
                 value={values[f.key]}
                 onChange={(e) => setValues((v) => ({ ...v, [f.key]: e.target.value }))}
               />

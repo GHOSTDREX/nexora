@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import { motion } from 'framer-motion'
 import clsx from 'clsx'
-import { staggerItem } from '@/lib/motion'
+import { cardHover, staggerItem } from '@/lib/motion'
 import { AnimatedNumber } from '@/components/ui/AnimatedNumber'
 
 export function StatCard({
@@ -47,9 +47,8 @@ export function StatCard({
 
   return (
     <motion.div
-      variants={staggerItem}
-      whileHover={{ y: -4, scale: 1.015, boxShadow: '0 0 0 1px rgba(123,224,91,0.25), 0 16px 32px rgba(0,0,0,0.4)' }}
-      transition={{ duration: 0.22, ease: 'easeOut' }}
+      variants={{ ...staggerItem, hover: cardHover.hover }}
+      whileHover="hover"
       className="relative overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-4"
     >
       <div className={clsx('absolute inset-x-0 top-0 h-1', toneBar[tone])} aria-hidden="true" />
