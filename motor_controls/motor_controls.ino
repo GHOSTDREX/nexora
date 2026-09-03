@@ -58,6 +58,10 @@ const int camMaxSteps = 8;
 int camCurrentStep = 0;
 
 // --- Seed Dispenser BO Motor ---
+// The hopper flap has a real mechanical hard stop at "closed" (it's a
+// cardboard gate blocked by the hopper mouth), so homing drives into that
+// stop for a fixed duration instead of trusting a timed position estimate
+// — the stop guarantees the final position, not the math.
 bool seedActive = false;
 long seedPosition = 0;
 
@@ -65,6 +69,15 @@ const int seedMaxLimit = 180;
 
 int seedDirection = 1;
 unsigned long lastSeedTime = 0;
+
+bool seedHoming = false;
+int seedHomeDir = -1;
+unsigned long seedHomeStart = 0;
+// ponytail: fixed guess at "long enough to always reach the stop from any
+// drifted position"; the flap can't overshoot past the hard stop so extra
+// drive time just stalls harmlessly. Raise this if it still isn't reaching
+// closed, or lower it once you've timed how long a real sweep takes.
+const unsigned long seedHomeDuration = 500;
 
 // ==============================================================================
 // OBJECTS
@@ -157,40 +170,28 @@ void processSeedMovement() {
       digitalWrite(SEED_IN4, HIGH);
     }
 
-  } else {
+  } else if (seedHoming) {
 
-    // Return to center
-    if (seedPosition > 10) {
+    // Drive into the closed hard stop for a fixed duration, ignoring the
+    // (possibly drifted) position estimate — the stop defines "closed",
+    // not the timer.
+    if (millis() - seedHomeStart < seedHomeDuration) {
 
-      digitalWrite(SEED_IN3, LOW);
-      digitalWrite(SEED_IN4, HIGH);
+      if (seedHomeDir == 1) {
+        digitalWrite(SEED_IN3, HIGH);
+        digitalWrite(SEED_IN4, LOW);
+      } else {
+        digitalWrite(SEED_IN3, LOW);
+        digitalWrite(SEED_IN4, HIGH);
+      }
 
-      seedPosition -= dt;
-
-      // A large dt (loop() blocked by another command's delay()) can
-      // overshoot past 0 in one step; clamp so it settles at center
-      // instead of flipping into the opposite branch and oscillating.
-      if (seedPosition < 0) seedPosition = 0;
-
-    }
-
-    else if (seedPosition < -10) {
-
-      digitalWrite(SEED_IN3, HIGH);
-      digitalWrite(SEED_IN4, LOW);
-
-      seedPosition += dt;
-
-      if (seedPosition > 0) seedPosition = 0;
-
-    }
-
-    else {
+    } else {
 
       digitalWrite(SEED_IN3, LOW);
       digitalWrite(SEED_IN4, LOW);
 
       seedPosition = 0;
+      seedHoming = false;
     }
   }
 }
@@ -382,11 +383,17 @@ void handleCommand() {
   else if (action == "seed_on") {
 
     seedActive = true;
+    seedHoming = false;
   }
 
   else if (action == "seed_off") {
 
-    seedActive = false;
+    if (seedActive) {
+      seedActive = false;
+      seedHomeDir = (seedPosition >= 0) ? -1 : 1;
+      seedHomeStart = millis();
+      seedHoming = true;
+    }
   }
 
   // --------------------------------------------------------------------------
