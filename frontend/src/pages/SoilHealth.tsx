@@ -103,10 +103,6 @@ export default function SoilHealth() {
 
               <div className="mt-5 space-y-3">
                 <div>
-                  <p className="text-xs font-semibold text-[var(--text-secondary)]">{t('soil_health.explanation_title')}</p>
-                  <p className="mt-1 text-sm text-[var(--text-primary)]">{result.explanation}</p>
-                </div>
-                <div>
                   <p className="text-xs font-semibold text-[var(--text-secondary)]">{t('soil_health.recommendation_title')}</p>
                   <p className="mt-1 text-sm text-[var(--text-primary)]">{result.recommendation}</p>
                 </div>
@@ -115,8 +111,6 @@ export default function SoilHealth() {
               <Button variant="secondary" size="sm" className="mt-5" onClick={getAnalysis} isLoading={loading}>
                 <Sparkles size={14} aria-hidden="true" /> {t('soil_health.get_analysis')}
               </Button>
-
-              <p className="mt-4 text-[11px] text-[var(--text-secondary)]">{result.disclaimer}</p>
             </div>
           )}
         </div>

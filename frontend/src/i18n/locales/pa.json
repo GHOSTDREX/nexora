@@ -50,6 +50,13 @@
     "complete": "ਸੈੱਟਅੱਪ ਪੂਰਾ ਕਰੋ",
     "submitting": "ਤੁਹਾਡਾ ਫਾਰਮ ਸੈੱਟ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ…"
   },
+  "options": {
+    "region": { "North": "ਉੱਤਰ", "South": "ਦੱਖਣ", "East": "ਪੂਰਬ", "West": "ਪੱਛਮ", "Central": "ਕੇਂਦਰੀ" },
+    "soil_type": { "Clay": "ਚੀਕਣੀ ਮਿੱਟੀ", "Loamy": "ਦੋਮਟ ਮਿੱਟੀ", "Sandy": "ਰੇਤਲੀ ਮਿੱਟੀ", "Silt": "ਗਾਦ ਵਾਲੀ ਮਿੱਟੀ" },
+    "crop_type": { "Wheat": "ਕਣਕ", "Maize": "ਮੱਕੀ", "Cotton": "ਕਪਾਹ", "Rice": "ਚੌਲ", "Sugarcane": "ਗੰਨਾ", "Potato": "ਆਲੂ" },
+    "growth_stage": { "Sowing": "ਬਿਜਾਈ", "Vegetative": "ਵਿਕਾਸ ਪੜਾਅ", "Flowering": "ਫੁੱਲ ਆਉਣਾ", "Harvest": "ਵਾਢੀ" },
+    "season": { "Kharif": "ਸਾਉਣੀ", "Rabi": "ਹਾੜੀ", "Zaid": "ਜ਼ੈਦ" }
+  },
   "common": {
     "loading": "ਲੋਡ ਹੋ ਰਿਹਾ ਹੈ…",
     "save": "ਬਦਲਾਅ ਸੰਭਾਲੋ",
@@ -74,7 +81,12 @@
     "live": "ਲਾਈਵ",
     "hectares": "ਹੈਕਟੇਅਰ",
     "view_all": "ਸਭ ਦੇਖੋ",
-    "error_generic": "ਕੁਝ ਗਲਤ ਹੋ ਗਿਆ। ਕਿਰਪਾ ਕਰਕੇ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।"
+    "error_generic": "ਕੁਝ ਗਲਤ ਹੋ ਗਿਆ। ਕਿਰਪਾ ਕਰਕੇ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।",
+    "just_now": "ਹੁਣੇ",
+    "seconds_ago": "{{count}} ਸਕਿੰਟ ਪਹਿਲਾਂ",
+    "minutes_ago": "{{count}} ਮਿੰਟ ਪਹਿਲਾਂ",
+    "hours_ago": "{{count}} ਘੰਟੇ ਪਹਿਲਾਂ",
+    "last_seen": "ਆਖਰੀ ਵਾਰ ਦੇਖਿਆ"
   },
   "sensors": {
     "temperature": "ਤਾਪਮਾਨ",
@@ -89,7 +101,8 @@
     "wind_speed": "ਹਵਾ ਦੀ ਗਤੀ",
     "environment": "ਵਾਤਾਵਰਣ",
     "rain_detected": "ਬਾਰਿਸ਼ ਦਾ ਪਤਾ ਲੱਗਾ",
-    "no_rain": "ਬਾਰਿਸ਼ ਨਹੀਂ"
+    "no_rain": "ਬਾਰਿਸ਼ ਨਹੀਂ",
+    "last_updated": "ਆਖਰੀ ਵਾਰ ਅੱਪਡੇਟ ਕੀਤਾ"
   },
   "dashboard": {
     "title": "ਡੈਸ਼ਬੋਰਡ",
@@ -245,7 +258,13 @@
     "suggested": "ਸੁਝਾਏ ਗਏ ਸਵਾਲ",
     "thinking": "ਸੋਚ ਰਿਹਾ ਹੈ…",
     "source_llm": "AI-ਤਿਆਰ",
-    "source_rule_based": "ਆਫਲਾਈਨ ਸਹਾਇਕ"
+    "source_rule_based": "ਆਫਲਾਈਨ ਸਹਾਇਕ",
+    "voice_start": "ਆਪਣਾ ਸਵਾਲ ਬੋਲੋ",
+    "voice_stop": "ਸੁਣਨਾ ਬੰਦ ਕਰੋ",
+    "sms_preview_title": "SMS ਸਹਾਇਕ ਝਲਕ",
+    "sms_preview_hint": "ਪ੍ਰੋਟੋਟਾਈਪ — ਅਜੇ ਅਸਲੀ ਨੈੱਟਵਰਕ ਨਾਲ ਨਹੀਂ ਜੁੜਿਆ। ਸਮਾਰਟਫੋਨ ਤੋਂ ਬਿਨਾਂ ਕਿਸਾਨ SMS ਰਾਹੀਂ ਸਵਾਲ ਪੁੱਛ ਕੇ ਛੋਟਾ ਜਵਾਬ ਕਿਵੇਂ ਲੈ ਸਕਦਾ ਹੈ, ਇਹ ਉਸੇ ਆਫਲਾਈਨ ਸਹਾਇਕ ਰਾਹੀਂ ਦਿਖਾਉਂਦਾ ਹੈ।",
+    "sms_preview_placeholder": "SMS ਭੇਜਣ ਵਾਂਗ ਸਵਾਲ ਲਿਖੋ…",
+    "sms_preview_truncated": "ਇੱਕ SMS (160 ਅੱਖਰ) ਵਿੱਚ ਫਿੱਟ ਕਰਨ ਲਈ ਛੋਟਾ ਕੀਤਾ ਗਿਆ।"
   },
   "alerts_page": {
     "title": "ਚੇਤਾਵਨੀਆਂ",

@@ -50,6 +50,13 @@
     "complete": "Complete setup",
     "submitting": "Setting up your farm…"
   },
+  "options": {
+    "region": { "North": "North", "South": "South", "East": "East", "West": "West", "Central": "Central" },
+    "soil_type": { "Clay": "Clay", "Loamy": "Loamy", "Sandy": "Sandy", "Silt": "Silt" },
+    "crop_type": { "Wheat": "Wheat", "Maize": "Maize", "Cotton": "Cotton", "Rice": "Rice", "Sugarcane": "Sugarcane", "Potato": "Potato" },
+    "growth_stage": { "Sowing": "Sowing", "Vegetative": "Vegetative", "Flowering": "Flowering", "Harvest": "Harvest" },
+    "season": { "Kharif": "Kharif", "Rabi": "Rabi", "Zaid": "Zaid" }
+  },
   "common": {
     "loading": "Loading…",
     "save": "Save changes",
@@ -74,7 +81,12 @@
     "live": "Live",
     "hectares": "ha",
     "view_all": "View all",
-    "error_generic": "Something went wrong. Please try again."
+    "error_generic": "Something went wrong. Please try again.",
+    "just_now": "just now",
+    "seconds_ago": "{{count}}s ago",
+    "minutes_ago": "{{count}}m ago",
+    "hours_ago": "{{count}}h ago",
+    "last_seen": "Last seen"
   },
   "sensors": {
     "temperature": "Temperature",
@@ -89,7 +101,8 @@
     "wind_speed": "Wind Speed",
     "environment": "Environment",
     "rain_detected": "Rain detected",
-    "no_rain": "No rain"
+    "no_rain": "No rain",
+    "last_updated": "Last Updated"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -245,7 +258,13 @@
     "suggested": "Suggested questions",
     "thinking": "Thinking…",
     "source_llm": "AI-generated",
-    "source_rule_based": "Offline assistant"
+    "source_rule_based": "Offline assistant",
+    "voice_start": "Speak your question",
+    "voice_stop": "Stop listening",
+    "sms_preview_title": "SMS Assistant Preview",
+    "sms_preview_hint": "Prototype — not connected to a real carrier yet. Shows how a farmer without a smartphone could text a question and get a short reply, using the same offline assistant (no internet/API needed on our end).",
+    "sms_preview_placeholder": "Type a question as if texting…",
+    "sms_preview_truncated": "Trimmed to fit one SMS (160 characters)."
   },
   "alerts_page": {
     "title": "Alerts",

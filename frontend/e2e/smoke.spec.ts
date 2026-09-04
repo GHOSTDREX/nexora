@@ -153,6 +153,34 @@ test.describe('AgriNova smoke suite', () => {
     }
   })
 
+  test('dashboard shows a live "last seen" heartbeat for hardware status', async ({ page }) => {
+    await page.goto('/dashboard')
+    await expect(page.getByText(/last seen/i)).toBeVisible({ timeout: 10_000 })
+  })
+
+  test('SMS assistant preview returns a plain-text reply capped at 160 chars', async ({ page }) => {
+    const errors = trackConsoleErrors(page)
+    await page.goto('/assistant')
+    await page.waitForLoadState('networkidle')
+
+    const smsInput = page.getByPlaceholder(/type a question as if texting/i)
+    await expect(smsInput).toBeVisible()
+    await smsInput.fill('Is my soil healthy?')
+
+    await Promise.all([
+      page.waitForResponse((r) => r.url().includes('/api/sms/preview') && r.request().method() === 'POST'),
+      smsInput.press('Enter'), // submits the SMS form directly (onSubmit={sendSms})
+    ])
+
+    const replyBox = page.locator('.font-mono').first()
+    await expect(replyBox).toBeVisible({ timeout: 10_000 })
+    const replyText = (await replyBox.textContent())?.trim() ?? ''
+    expect(replyText.length).toBeGreaterThan(0)
+    expect(replyText.length).toBeLessThanOrEqual(200) // reply + optional truncation note
+
+    expect(errors, `console errors on SMS preview: ${errors.join('\n')}`).toHaveLength(0)
+  })
+
   // Runs LAST: switching language persists server-side to the shared test
   // account (LanguageDropdown -> AuthContext.updateLanguage -> PATCH
   // /api/auth/me/language), which would break every English-text-matching

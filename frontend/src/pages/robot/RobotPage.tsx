@@ -15,12 +15,13 @@ import { Badge } from '@/components/ui/Badge'
 import { Skeleton } from '@/components/ui/Skeleton'
 import { IconBadge } from '@/components/ui/IconBadge'
 import { staggerContainer, staggerItem } from '@/lib/motion'
+import { useTimeAgo } from '@/lib/useTimeAgo'
 import type { CameraSnapshot, RobotStatus } from '@/lib/types'
 
 export default function RobotPage() {
   const { t } = useTranslation()
   const { farm } = useAuth()
-  const { robotLive } = useFarmData()
+  const { robotLive, latestReading } = useFarmData()
 
   const [status, setStatus] = useState<RobotStatus | null>(null)
   const [cameraFrame, setCameraFrame] = useState<string | null>(null)
@@ -112,6 +113,7 @@ export default function RobotPage() {
   const pumpOn = robotLive?.pump_on ?? status?.pump_on ?? false
   const connected = robotLive?.robot_connected ?? status?.robot_connected ?? true
   const isManual = farm?.irrigation_mode === 'Manual' || farm?.sensor_mode === 'Manual'
+  const lastSeen = useTimeAgo(latestReading?.timestamp)
 
   return (
     <div className="space-y-6">
@@ -126,6 +128,7 @@ export default function RobotPage() {
             <div>
               <p className="text-xs text-[var(--text-secondary)]">{t('robot.status')}</p>
               <p className="text-sm font-semibold text-[var(--text-primary)]">{connected ? t('common.connected') : t('common.disconnected')}</p>
+              {lastSeen && <p className="text-[11px] text-[var(--text-secondary)]">{t('common.last_seen')}: {lastSeen}</p>}
             </div>
           </Card>
         </motion.div>
@@ -178,8 +181,8 @@ export default function RobotPage() {
               <Button variant="secondary" size="sm" onClick={() => doMove('pan_left')} isLoading={busy === 'pan_left'}>
                 <RotateCcw size={14} aria-hidden="true" /> {t('robot.pan_left')}
               </Button>
-              <Button variant="secondary" size="sm" onClick={() => doMove('tilt_up')} isLoading={busy === 'tilt_up'} aria-label={t('robot.tilt_up')}>
-                <ChevronUp size={14} aria-hidden="true" />
+              <Button variant="secondary" size="icon" onClick={() => doMove('tilt_up')} isLoading={busy === 'tilt_up'} aria-label={t('robot.tilt_up')}>
+                <ChevronUp size={16} aria-hidden="true" />
               </Button>
               <Button variant="secondary" size="sm" onClick={() => doMove('pan_right')} isLoading={busy === 'pan_right'}>
                 {t('robot.pan_right')} <RotateCw size={14} aria-hidden="true" />
@@ -189,8 +192,8 @@ export default function RobotPage() {
               <Button variant="secondary" size="sm" onClick={() => doMove('center')} isLoading={busy === 'center'}>
                 <Crosshair size={14} aria-hidden="true" /> {t('robot.center')}
               </Button>
-              <Button variant="secondary" size="sm" onClick={() => doMove('tilt_down')} isLoading={busy === 'tilt_down'} aria-label={t('robot.tilt_down')}>
-                <ChevronDown size={14} aria-hidden="true" />
+              <Button variant="secondary" size="icon" onClick={() => doMove('tilt_down')} isLoading={busy === 'tilt_down'} aria-label={t('robot.tilt_down')}>
+                <ChevronDown size={16} aria-hidden="true" />
               </Button>
             </div>
             <Button className="mt-4 w-full" onClick={doCapture} isLoading={busy === 'capture'}>
@@ -204,26 +207,28 @@ export default function RobotPage() {
           <div className="space-y-5 px-5 pb-5 pt-3">
             <div>
               <p className="mb-2 text-xs font-semibold text-[var(--text-secondary)]">{t('robot.title')} — {t('common.manual')}</p>
-              <div className="grid grid-cols-3 gap-2">
-                <span />
-                <Button variant="secondary" size="sm" onClick={() => doAction('move_forward')} isLoading={busy === 'move_forward'} aria-label={t('robot.move_forward')}>
-                  <ArrowUp size={16} aria-hidden="true" />
-                </Button>
-                <span />
-                <Button variant="secondary" size="sm" onClick={() => doAction('move_left')} isLoading={busy === 'move_left'} aria-label={t('robot.move_left')}>
-                  <ArrowLeft size={16} aria-hidden="true" />
-                </Button>
-                <Button variant="secondary" size="sm" onClick={() => doAction('move_stop')} isLoading={busy === 'move_stop'} aria-label={t('robot.move_stop')}>
-                  <Square size={14} aria-hidden="true" />
-                </Button>
-                <Button variant="secondary" size="sm" onClick={() => doAction('move_right')} isLoading={busy === 'move_right'} aria-label={t('robot.move_right')}>
-                  <ArrowRight size={16} aria-hidden="true" />
-                </Button>
-                <span />
-                <Button variant="secondary" size="sm" onClick={() => doAction('move_back')} isLoading={busy === 'move_back'} aria-label={t('robot.move_back')}>
-                  <ArrowDown size={16} aria-hidden="true" />
-                </Button>
-                <span />
+              <div className="rounded-2xl bg-[var(--bg-surface-muted)] py-4">
+                <div className="mx-auto grid w-fit grid-cols-3 gap-2">
+                  <span />
+                  <Button variant="secondary" size="icon" onClick={() => doAction('move_forward')} isLoading={busy === 'move_forward'} aria-label={t('robot.move_forward')}>
+                    <ArrowUp size={18} aria-hidden="true" />
+                  </Button>
+                  <span />
+                  <Button variant="secondary" size="icon" onClick={() => doAction('move_left')} isLoading={busy === 'move_left'} aria-label={t('robot.move_left')}>
+                    <ArrowLeft size={18} aria-hidden="true" />
+                  </Button>
+                  <Button variant="secondary" size="icon" onClick={() => doAction('move_stop')} isLoading={busy === 'move_stop'} aria-label={t('robot.move_stop')}>
+                    <Square size={16} aria-hidden="true" />
+                  </Button>
+                  <Button variant="secondary" size="icon" onClick={() => doAction('move_right')} isLoading={busy === 'move_right'} aria-label={t('robot.move_right')}>
+                    <ArrowRight size={18} aria-hidden="true" />
+                  </Button>
+                  <span />
+                  <Button variant="secondary" size="icon" onClick={() => doAction('move_back')} isLoading={busy === 'move_back'} aria-label={t('robot.move_back')}>
+                    <ArrowDown size={18} aria-hidden="true" />
+                  </Button>
+                  <span />
+                </div>
               </div>
             </div>
 

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
-import { Beaker, Sparkles, TriangleAlert } from 'lucide-react'
+import { Beaker, Sparkles } from 'lucide-react'
 import { api, apiErrorMessage } from '@/lib/api'
 import { Card, CardHeader } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
@@ -117,14 +117,6 @@ export default function FertilizerRecommendation() {
               <div>
                 <p className="mb-1 text-xs font-semibold text-[var(--text-secondary)]">{t('fertilizer.why_recommendation')}</p>
                 <p className="text-sm text-[var(--text-primary)]">{rec.reason}</p>
-              </div>
-
-              <div className="flex items-start gap-2 rounded-xl bg-gold-50 px-4 py-2.5">
-                <TriangleAlert size={16} className="mt-0.5 shrink-0 text-gold-700" aria-hidden="true" />
-                <div>
-                  <p className="text-xs font-semibold text-gold-700">{t('fertilizer.warnings_title')}</p>
-                  <p className="mt-0.5 text-xs text-gold-700">{t('fertilizer.disclaimer')}</p>
-                </div>
               </div>
 
               <Button variant="secondary" size="sm" onClick={getRecommendation} isLoading={loading}>

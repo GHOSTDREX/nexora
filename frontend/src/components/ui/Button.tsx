@@ -3,7 +3,7 @@ import { motion, type HTMLMotionProps } from 'framer-motion'
 import clsx from 'clsx'
 
 type Variant = 'primary' | 'secondary' | 'ghost' | 'danger'
-type Size = 'sm' | 'md' | 'lg'
+type Size = 'sm' | 'md' | 'lg' | 'icon'
 
 const variantClasses: Record<Variant, string> = {
   primary: 'bg-brand-500 text-brand-900 hover:brightness-90 shadow-sm shadow-brand-900/30 font-semibold',
@@ -16,6 +16,9 @@ const sizeClasses: Record<Size, string> = {
   sm: 'px-3 py-1.5 text-xs',
   md: 'px-4 py-2 text-sm',
   lg: 'px-5 py-2.5 text-sm',
+  // Icon-only controls (no visible text) need a real touch target even
+  // when the icon itself is small — h-11/w-11 = 44px, the mobile minimum.
+  icon: 'h-11 w-11 p-0 text-sm',
 }
 
 interface ButtonProps extends Omit<HTMLMotionProps<'button'>, 'children'> {

@@ -50,6 +50,13 @@
     "complete": "सेटअप पूरा करें",
     "submitting": "आपका फार्म सेट किया जा रहा है…"
   },
+  "options": {
+    "region": { "North": "उत्तर", "South": "दक्षिण", "East": "पूर्व", "West": "पश्चिम", "Central": "मध्य" },
+    "soil_type": { "Clay": "चिकनी मिट्टी", "Loamy": "दोमट", "Sandy": "रेतीली", "Silt": "गादयुक्त" },
+    "crop_type": { "Wheat": "गेहूं", "Maize": "मक्का", "Cotton": "कपास", "Rice": "चावल", "Sugarcane": "गन्ना", "Potato": "आलू" },
+    "growth_stage": { "Sowing": "बुवाई", "Vegetative": "वानस्पतिक अवस्था", "Flowering": "फूल आना", "Harvest": "कटाई" },
+    "season": { "Kharif": "खरीफ", "Rabi": "रबी", "Zaid": "जायद" }
+  },
   "common": {
     "loading": "लोड हो रहा है…",
     "save": "बदलाव सहेजें",
@@ -74,7 +81,12 @@
     "live": "लाइव",
     "hectares": "हेक्टेयर",
     "view_all": "सभी देखें",
-    "error_generic": "कुछ गलत हो गया। कृपया पुनः प्रयास करें।"
+    "error_generic": "कुछ गलत हो गया। कृपया पुनः प्रयास करें।",
+    "just_now": "अभी-अभी",
+    "seconds_ago": "{{count}} सेकंड पहले",
+    "minutes_ago": "{{count}} मिनट पहले",
+    "hours_ago": "{{count}} घंटे पहले",
+    "last_seen": "आखिरी बार दिखा"
   },
   "sensors": {
     "temperature": "तापमान",
@@ -89,7 +101,8 @@
     "wind_speed": "हवा की गति",
     "environment": "पर्यावरण",
     "rain_detected": "वर्षा का पता चला",
-    "no_rain": "कोई वर्षा नहीं"
+    "no_rain": "कोई वर्षा नहीं",
+    "last_updated": "आखिरी अपडेट"
   },
   "dashboard": {
     "title": "डैशबोर्ड",
@@ -245,7 +258,13 @@
     "suggested": "सुझाए गए प्रश्न",
     "thinking": "सोच रहा है…",
     "source_llm": "एआई-जनित",
-    "source_rule_based": "ऑफलाइन सहायक"
+    "source_rule_based": "ऑफलाइन सहायक",
+    "voice_start": "अपना सवाल बोलें",
+    "voice_stop": "सुनना बंद करें",
+    "sms_preview_title": "SMS सहायक पूर्वावलोकन",
+    "sms_preview_hint": "प्रोटोटाइप — अभी असली नेटवर्क से जुड़ा नहीं है। बिना स्मार्टफोन वाला किसान SMS से सवाल पूछकर छोटा जवाब कैसे पा सकता है, यह उसी ऑफलाइन सहायक से दिखाता है (हमारी तरफ इंटरनेट/API की ज़रूरत नहीं)।",
+    "sms_preview_placeholder": "जैसे SMS भेजते हैं वैसे सवाल लिखें…",
+    "sms_preview_truncated": "एक SMS (160 अक्षर) में फिट करने के लिए छोटा किया गया।"
   },
   "alerts_page": {
     "title": "अलर्ट",

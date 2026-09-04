@@ -50,6 +50,13 @@
     "complete": "સેટઅપ પૂર્ણ કરો",
     "submitting": "તમારું ફાર્મ સેટ થઈ રહ્યું છે…"
   },
+  "options": {
+    "region": { "North": "ઉત્તર", "South": "દક્ષિણ", "East": "પૂર્વ", "West": "પશ્ચિમ", "Central": "મધ્ય" },
+    "soil_type": { "Clay": "ચીકણી માટી", "Loamy": "ગોરાડુ માટી", "Sandy": "રેતાળ માટી", "Silt": "કાંપવાળી માટી" },
+    "crop_type": { "Wheat": "ઘઉં", "Maize": "મકાઈ", "Cotton": "કપાસ", "Rice": "ચોખા", "Sugarcane": "શેરડી", "Potato": "બટાકા" },
+    "growth_stage": { "Sowing": "વાવણી", "Vegetative": "વૃદ્ધિ તબક્કો", "Flowering": "ફૂલ આવવું", "Harvest": "લણણી" },
+    "season": { "Kharif": "ખરીફ", "Rabi": "રવી", "Zaid": "ઝાયદ" }
+  },
   "common": {
     "loading": "લોડ થઈ રહ્યું છે…",
     "save": "ફેરફારો સાચવો",
@@ -74,7 +81,12 @@
     "live": "લાઇવ",
     "hectares": "હેક્ટર",
     "view_all": "બધું જુઓ",
-    "error_generic": "કંઈક ખોટું થયું. કૃપા કરી ફરી પ્રયાસ કરો."
+    "error_generic": "કંઈક ખોટું થયું. કૃપા કરી ફરી પ્રયાસ કરો.",
+    "just_now": "હમણાં જ",
+    "seconds_ago": "{{count}} સેકન્ડ પહેલાં",
+    "minutes_ago": "{{count}} મિનિટ પહેલાં",
+    "hours_ago": "{{count}} કલાક પહેલાં",
+    "last_seen": "છેલ્લે જોવાયું"
   },
   "sensors": {
     "temperature": "તાપમાન",
@@ -89,7 +101,8 @@
     "wind_speed": "પવનની ઝડપ",
     "environment": "પર્યાવરણ",
     "rain_detected": "વરસાદ મળ્યો",
-    "no_rain": "વરસાદ નથી"
+    "no_rain": "વરસાદ નથી",
+    "last_updated": "છેલ્લે અપડેટ થયું"
   },
   "dashboard": {
     "title": "ડેશબોર્ડ",
@@ -245,7 +258,13 @@
     "suggested": "સૂચવેલા પ્રશ્નો",
     "thinking": "વિચારી રહ્યું છે…",
     "source_llm": "એઆઈ-જનરેટેડ",
-    "source_rule_based": "ઓફલાઇન સહાયક"
+    "source_rule_based": "ઓફલાઇન સહાયક",
+    "voice_start": "તમારો પ્રશ્ન બોલો",
+    "voice_stop": "સાંભળવાનું બંધ કરો",
+    "sms_preview_title": "SMS સહાયક પૂર્વાવલોકન",
+    "sms_preview_hint": "પ્રોટોટાઇપ — હજુ સાચા નેટવર્ક સાથે જોડાયેલ નથી. સ્માર્ટફોન ન ધરાવતો ખેડૂત SMS દ્વારા પ્રશ્ન પૂછીને ટૂંકો જવાબ કેવી રીતે મેળવી શકે તે આ જ ઓફલાઇન સહાયક દ્વારા બતાવે છે.",
+    "sms_preview_placeholder": "SMS મોકલતા હો તેમ પ્રશ્ન લખો…",
+    "sms_preview_truncated": "એક SMS (160 અક્ષરો) માં બંધબેસે તે માટે ટૂંકું કરાયું."
   },
   "alerts_page": {
     "title": "ચેતવણીઓ",

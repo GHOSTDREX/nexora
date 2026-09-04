@@ -161,8 +161,6 @@ export default function CropRecommendation() {
             </Button>
           </div>
 
-          <p className="text-[11px] text-[var(--text-secondary)]">{t('crop.condition_data_note')}</p>
-
           {condition && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-3">
               <div className="flex items-center gap-2">

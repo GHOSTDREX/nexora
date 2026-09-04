@@ -8,13 +8,8 @@ import { Button } from '@/components/ui/Button'
 import { FieldGroup, Input, Select } from '@/components/ui/Field'
 import { LanguageDropdown } from '@/components/LanguageDropdown'
 import { IconBadge } from '@/components/ui/IconBadge'
+import { REGIONS, SOIL_TYPES, CROP_TYPES, GROWTH_STAGES, SEASONS } from '@/lib/farmOptions'
 import type { Farm } from '@/lib/types'
-
-const REGIONS = ['North', 'South', 'East', 'West', 'Central']
-const SOIL_TYPES = ['Clay', 'Loamy', 'Sandy', 'Silt']
-const CROP_TYPES = ['Wheat', 'Maize', 'Cotton', 'Rice', 'Sugarcane', 'Potato']
-const GROWTH_STAGES = ['Sowing', 'Vegetative', 'Flowering', 'Harvest']
-const SEASONS = ['Kharif', 'Rabi', 'Zaid']
 
 export default function Settings() {
   const { t } = useTranslation()
@@ -76,17 +71,9 @@ export default function Settings() {
           <FieldGroup label={t('onboarding.region')}>
             <Select value={form.region} onChange={(e) => update('region', e.target.value)}>
               {REGIONS.map((r) => (
-                <option key={r} value={r}>{r}</option>
+                <option key={r} value={r}>{t(`options.region.${r}`)}</option>
               ))}
             </Select>
-          </FieldGroup>
-
-          <FieldGroup label={t('onboarding.latitude')}>
-            <Input type="number" step="any" value={form.latitude} onChange={(e) => update('latitude', Number(e.target.value))} />
-          </FieldGroup>
-
-          <FieldGroup label={t('onboarding.longitude')}>
-            <Input type="number" step="any" value={form.longitude} onChange={(e) => update('longitude', Number(e.target.value))} />
           </FieldGroup>
 
           <FieldGroup label={t('onboarding.field_area')}>
@@ -96,7 +83,7 @@ export default function Settings() {
           <FieldGroup label={t('onboarding.soil_type')}>
             <Select value={form.soil_type} onChange={(e) => update('soil_type', e.target.value)}>
               {SOIL_TYPES.map((s) => (
-                <option key={s} value={s}>{s}</option>
+                <option key={s} value={s}>{t(`options.soil_type.${s}`)}</option>
               ))}
             </Select>
           </FieldGroup>
@@ -109,14 +96,10 @@ export default function Settings() {
             <Input type="number" step="any" value={form.organic_carbon} onChange={(e) => update('organic_carbon', Number(e.target.value))} />
           </FieldGroup>
 
-          <FieldGroup label={t('onboarding.electrical_conductivity')}>
-            <Input type="number" step="any" value={form.electrical_conductivity} onChange={(e) => update('electrical_conductivity', Number(e.target.value))} />
-          </FieldGroup>
-
           <FieldGroup label={t('onboarding.crop_type')}>
             <Select value={form.crop_type} onChange={(e) => update('crop_type', e.target.value)}>
               {CROP_TYPES.map((c) => (
-                <option key={c} value={c}>{c}</option>
+                <option key={c} value={c}>{t(`options.crop_type.${c}`)}</option>
               ))}
             </Select>
           </FieldGroup>
@@ -124,7 +107,7 @@ export default function Settings() {
           <FieldGroup label={t('onboarding.crop_growth_stage')}>
             <Select value={form.crop_growth_stage} onChange={(e) => update('crop_growth_stage', e.target.value)}>
               {GROWTH_STAGES.map((g) => (
-                <option key={g} value={g}>{g}</option>
+                <option key={g} value={g}>{t(`options.growth_stage.${g}`)}</option>
               ))}
             </Select>
           </FieldGroup>
@@ -132,7 +115,7 @@ export default function Settings() {
           <FieldGroup label={t('onboarding.season')}>
             <Select value={form.season} onChange={(e) => update('season', e.target.value)}>
               {SEASONS.map((s) => (
-                <option key={s} value={s}>{s}</option>
+                <option key={s} value={s}>{t(`options.season.${s}`)}</option>
               ))}
             </Select>
           </FieldGroup>

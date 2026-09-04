@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
 import {
   Thermometer, Droplet, Sprout, FlaskConical, CloudRain, Sun, Cloud, CloudSnow, CloudLightning,
-  Bot, Wheat, Camera, ArrowRight, Wind, Bell, HeartPulse,
+  Bot, Wheat, Camera, ArrowRight, Wind, Bell, HeartPulse, Clock,
 } from 'lucide-react'
 import { api, apiErrorMessage } from '@/lib/api'
 import { useAuth } from '@/context/AuthContext'
@@ -18,6 +18,7 @@ import { AlertRow } from '@/components/AlertRow'
 import { Skeleton } from '@/components/ui/Skeleton'
 import { IconBadge } from '@/components/ui/IconBadge'
 import { staggerContainer } from '@/lib/motion'
+import { useTimeAgo } from '@/lib/useTimeAgo'
 import type { AlertItem, CropRecommendation, Farm, RobotStatus, SoilHealth, WeatherToday } from '@/lib/types'
 
 function weatherVisual(condition?: string) {
@@ -85,6 +86,7 @@ export default function Dashboard() {
 
   const pumpOn = robotLive?.pump_on ?? robot?.pump_on ?? false
   const robotConnected = robotLive?.robot_connected ?? robot?.robot_connected ?? true
+  const lastSeen = useTimeAgo(latestReading?.timestamp)
 
   return (
     <div className="space-y-6">
@@ -131,7 +133,7 @@ export default function Dashboard() {
           <StatCard icon={<FlaskConical size={18} aria-hidden="true" />} label={t('sensors.phosphorus')} value="—" numericValue={latestReading?.phosphorus} unit="mg/kg" tone="gold" live />
           <StatCard icon={<FlaskConical size={18} aria-hidden="true" />} label={t('sensors.potassium')} value="—" numericValue={latestReading?.potassium} unit="mg/kg" tone="brand" live />
           <StatCard icon={<CloudRain size={18} aria-hidden="true" />} label={t('sensors.rain_status')} value={latestReading?.rain_detected ? t('sensors.rain_detected') : t('sensors.no_rain')} tone="water" live />
-          <StatCard icon={<Wind size={18} aria-hidden="true" />} label={t('sensors.wind_speed')} value="—" numericValue={latestReading?.wind_speed} unit="km/h" tone="neutral" live />
+          <StatCard icon={<Clock size={18} aria-hidden="true" />} label={t('sensors.last_updated')} value={lastSeen ?? '—'} tone="neutral" live />
         </motion.div>
       )}
 
@@ -181,6 +183,12 @@ export default function Dashboard() {
               <span className="text-[var(--text-secondary)]">{t('robot.status')}</span>
               <Badge tone={robotConnected ? 'brand' : 'critical'} dot>{robotConnected ? t('common.connected') : t('common.disconnected')}</Badge>
             </div>
+            {lastSeen && (
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-[var(--text-secondary)]">{t('common.last_seen')}</span>
+                <span className="text-[var(--text-primary)]">{lastSeen}</span>
+              </div>
+            )}
             <div className="flex items-center justify-between text-sm">
               <span className="text-[var(--text-secondary)]">{t('robot.control')}: {t('irrigation.pump')}</span>
               <Badge tone={pumpOn ? 'brand' : 'neutral'}>{pumpOn ? t('common.on') : t('common.off')}</Badge>

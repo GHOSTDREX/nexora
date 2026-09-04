@@ -50,6 +50,13 @@
     "complete": "सेटअप पूर्ण करा",
     "submitting": "तुमचे शेत सेट होत आहे…"
   },
+  "options": {
+    "region": { "North": "उत्तर", "South": "दक्षिण", "East": "पूर्व", "West": "पश्चिम", "Central": "मध्य" },
+    "soil_type": { "Clay": "चिकण माती", "Loamy": "पोयट्याची माती", "Sandy": "वाळूची माती", "Silt": "गाळाची माती" },
+    "crop_type": { "Wheat": "गहू", "Maize": "मका", "Cotton": "कापूस", "Rice": "तांदूळ", "Sugarcane": "ऊस", "Potato": "बटाटा" },
+    "growth_stage": { "Sowing": "पेरणी", "Vegetative": "वाढीचा टप्पा", "Flowering": "फुलोरा", "Harvest": "कापणी" },
+    "season": { "Kharif": "खरीप", "Rabi": "रब्बी", "Zaid": "जायद" }
+  },
   "common": {
     "loading": "लोड होत आहे…",
     "save": "बदल जतन करा",
@@ -74,7 +81,12 @@
     "live": "लाइव्ह",
     "hectares": "हेक्टर",
     "view_all": "सर्व पहा",
-    "error_generic": "काहीतरी चूक झाली. कृपया पुन्हा प्रयत्न करा."
+    "error_generic": "काहीतरी चूक झाली. कृपया पुन्हा प्रयत्न करा.",
+    "just_now": "आत्ताच",
+    "seconds_ago": "{{count}} सेकंदांपूर्वी",
+    "minutes_ago": "{{count}} मिनिटांपूर्वी",
+    "hours_ago": "{{count}} तासांपूर्वी",
+    "last_seen": "शेवटचे दिसले"
   },
   "sensors": {
     "temperature": "तापमान",
@@ -89,7 +101,8 @@
     "wind_speed": "वाऱ्याचा वेग",
     "environment": "पर्यावरण",
     "rain_detected": "पाऊस आढळला",
-    "no_rain": "पाऊस नाही"
+    "no_rain": "पाऊस नाही",
+    "last_updated": "शेवटचे अद्यतन"
   },
   "dashboard": {
     "title": "डॅशबोर्ड",
@@ -245,7 +258,13 @@
     "suggested": "सुचवलेले प्रश्न",
     "thinking": "विचार करत आहे…",
     "source_llm": "एआय-निर्मित",
-    "source_rule_based": "ऑफलाइन सहाय्यक"
+    "source_rule_based": "ऑफलाइन सहाय्यक",
+    "voice_start": "तुमचा प्रश्न बोला",
+    "voice_stop": "ऐकणे थांबवा",
+    "sms_preview_title": "SMS सहाय्यक पूर्वावलोकन",
+    "sms_preview_hint": "प्रोटोटाइप — अजून खऱ्या नेटवर्कशी जोडलेले नाही. स्मार्टफोन नसलेला शेतकरी SMS ने प्रश्न विचारून लहान उत्तर कसे मिळवू शकतो, हे त्याच ऑफलाइन सहाय्यकाद्वारे दाखवते.",
+    "sms_preview_placeholder": "SMS पाठवल्यासारखा प्रश्न लिहा…",
+    "sms_preview_truncated": "एका SMS (160 अक्षरे) मध्ये बसवण्यासाठी लहान केले."
   },
   "alerts_page": {
     "title": "सूचना",

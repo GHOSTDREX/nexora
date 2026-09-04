@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
-import { TrendingUp, Sparkles, TriangleAlert } from 'lucide-react'
+import { TrendingUp, Sparkles } from 'lucide-react'
 import { api, apiErrorMessage } from '@/lib/api'
 import { useAuth } from '@/context/AuthContext'
 import { Card, CardHeader } from '@/components/ui/Card'
@@ -140,16 +140,6 @@ export default function YieldPrediction() {
                   <p className="text-sm font-semibold text-[var(--text-primary)]">{result.pesticide_per_ha} kg/ha</p>
                 </div>
               </div>
-
-              {result.warnings.length > 0 && (
-                <div className="flex items-start gap-2 rounded-xl bg-gold-50 px-4 py-2.5">
-                  <TriangleAlert size={16} className="mt-0.5 shrink-0 text-gold-700" aria-hidden="true" />
-                  <div className="space-y-1">
-                    <p className="text-xs font-semibold text-gold-700">{t('yield.warnings_title')}</p>
-                    {result.warnings.map((w, i) => <p key={i} className="text-xs text-gold-700">{w}</p>)}
-                  </div>
-                </div>
-              )}
 
               <Button variant="secondary" size="sm" onClick={predict} isLoading={loading}>
                 <Sparkles size={14} aria-hidden="true" /> {t('yield.predict')}

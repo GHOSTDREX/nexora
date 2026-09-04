@@ -50,6 +50,13 @@
     "complete": "সেটআপ সম্পূর্ণ করুন",
     "submitting": "আপনার খামার সেট আপ হচ্ছে…"
   },
+  "options": {
+    "region": { "North": "উত্তর", "South": "দক্ষিণ", "East": "পূর্ব", "West": "পশ্চিম", "Central": "কেন্দ্রীয়" },
+    "soil_type": { "Clay": "এঁটেল মাটি", "Loamy": "দোআঁশ মাটি", "Sandy": "বেলে মাটি", "Silt": "পলি মাটি" },
+    "crop_type": { "Wheat": "গম", "Maize": "ভুট্টা", "Cotton": "তুলা", "Rice": "ধান", "Sugarcane": "আখ", "Potato": "আলু" },
+    "growth_stage": { "Sowing": "বপন", "Vegetative": "বৃদ্ধি পর্যায়", "Flowering": "ফুল ফোটা", "Harvest": "ফসল কাটা" },
+    "season": { "Kharif": "খরিফ", "Rabi": "রবি", "Zaid": "জায়েদ" }
+  },
   "common": {
     "loading": "লোড হচ্ছে…",
     "save": "পরিবর্তন সংরক্ষণ করুন",
@@ -74,7 +81,12 @@
     "live": "লাইভ",
     "hectares": "হেক্টর",
     "view_all": "সব দেখুন",
-    "error_generic": "কিছু ভুল হয়েছে। আবার চেষ্টা করুন।"
+    "error_generic": "কিছু ভুল হয়েছে। আবার চেষ্টা করুন।",
+    "just_now": "এইমাত্র",
+    "seconds_ago": "{{count}} সেকেন্ড আগে",
+    "minutes_ago": "{{count}} মিনিট আগে",
+    "hours_ago": "{{count}} ঘণ্টা আগে",
+    "last_seen": "সর্বশেষ দেখা গেছে"
   },
   "sensors": {
     "temperature": "তাপমাত্রা",
@@ -89,7 +101,8 @@
     "wind_speed": "বাতাসের গতি",
     "environment": "পরিবেশ",
     "rain_detected": "বৃষ্টি শনাক্ত হয়েছে",
-    "no_rain": "বৃষ্টি নেই"
+    "no_rain": "বৃষ্টি নেই",
+    "last_updated": "সর্বশেষ আপডেট"
   },
   "dashboard": {
     "title": "ড্যাশবোর্ড",
@@ -245,7 +258,13 @@
     "suggested": "প্রস্তাবিত প্রশ্ন",
     "thinking": "ভাবছে…",
     "source_llm": "এআই-উত্পন্ন",
-    "source_rule_based": "অফলাইন সহায়ক"
+    "source_rule_based": "অফলাইন সহায়ক",
+    "voice_start": "আপনার প্রশ্ন বলুন",
+    "voice_stop": "শোনা বন্ধ করুন",
+    "sms_preview_title": "SMS সহায়ক প্রিভিউ",
+    "sms_preview_hint": "প্রোটোটাইপ — এখনও কোনো প্রকৃত নেটওয়ার্কের সাথে যুক্ত নয়। স্মার্টফোন নেই এমন কৃষক কীভাবে SMS-এ প্রশ্ন করে ছোট উত্তর পেতে পারেন তা একই অফলাইন সহায়ক দিয়ে দেখায়।",
+    "sms_preview_placeholder": "SMS পাঠানোর মতো প্রশ্ন লিখুন…",
+    "sms_preview_truncated": "একটি SMS-এ (160 অক্ষর) ফিট করতে ছোট করা হয়েছে।"
   },
   "alerts_page": {
     "title": "সতর্কতা",

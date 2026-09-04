@@ -21,6 +21,38 @@ def _lang(language: str) -> str:
     return language if language in SUPPORTED else "en"
 
 
+# Mirrors frontend/src/i18n/locales/*.json's "options" block — the farm's
+# stored fields (soil_type, crop_type, season, crop_growth_stage,
+# irrigation_mode) are English enum values used verbatim as API/DB values,
+# so replies need this lookup to display them in the reply's own language
+# instead of leaking the raw English value into an otherwise-translated
+# sentence.
+_SOIL_TYPE_TR = {
+    "hi": {"Clay": "चिकनी मिट्टी", "Loamy": "दोमट", "Sandy": "रेतीली", "Silt": "गादयुक्त"},
+    "mr": {"Clay": "चिकण माती", "Loamy": "पोयट्याची माती", "Sandy": "वाळूची माती", "Silt": "गाळाची माती"},
+}
+_CROP_TYPE_TR = {
+    "hi": {"Wheat": "गेहूं", "Maize": "मक्का", "Cotton": "कपास", "Rice": "चावल", "Sugarcane": "गन्ना", "Potato": "आलू"},
+    "mr": {"Wheat": "गहू", "Maize": "मका", "Cotton": "कापूस", "Rice": "तांदूळ", "Sugarcane": "ऊस", "Potato": "बटाटा"},
+}
+_SEASON_TR = {
+    "hi": {"Kharif": "खरीफ", "Rabi": "रबी", "Zaid": "जायद"},
+    "mr": {"Kharif": "खरीप", "Rabi": "रब्बी", "Zaid": "जायद"},
+}
+_GROWTH_STAGE_TR = {
+    "hi": {"Sowing": "बुवाई", "Vegetative": "वानस्पतिक अवस्था", "Flowering": "फूल आना", "Harvest": "कटाई"},
+    "mr": {"Sowing": "पेरणी", "Vegetative": "वाढीचा टप्पा", "Flowering": "फुलोरा", "Harvest": "कापणी"},
+}
+_MODE_TR = {
+    "hi": {"Auto": "स्वचालित", "Manual": "मैनुअल"},
+    "mr": {"Auto": "स्वयंचलित", "Manual": "मॅन्युअल"},
+}
+
+
+def _tr(table: dict, value: str, lang: str) -> str:
+    return table.get(lang, {}).get(value, value)
+
+
 # Order matters — first matching topic wins. Farm-specific topics that need
 # live sensor/farm context are checked before general-knowledge topics so a
 # question like "when should I water" still uses the live temperature.
@@ -87,14 +119,19 @@ def build_reply(query: str, language: str, context: dict) -> str:
     temp = sensor.get("temperature", 0)
     hum = sensor.get("humidity", 0)
     crop = farm.get("crop_type", "Wheat")
+    crop_disp = _tr(_CROP_TYPE_TR, crop, lang)
+    soil_type_disp = _tr(_SOIL_TYPE_TR, farm.get("soil_type", "Loamy"), lang)
+    season_disp = _tr(_SEASON_TR, farm.get("season", "Rabi"), lang)
+    growth_stage_disp = _tr(_GROWTH_STAGE_TR, farm.get("crop_growth_stage", "Vegetative"), lang)
+    irrigation_mode_disp = _tr(_MODE_TR, farm.get("irrigation_mode", "Auto"), lang)
     pred = irrigation.get("prediction", "Medium")
     conf = irrigation.get("confidence", 0)
 
     if topic == "farm_summary":
         return {
-            "en": f"**{farm.get('name', 'Your farm')}** — {farm.get('field_area_hectare', 2.5)} ha of {crop} in {farm.get('region', 'your region')} ({farm.get('season', 'Rabi')} season, {farm.get('crop_growth_stage', 'Vegetative')} stage). Soil: {farm.get('soil_type', 'Loamy')}, pH {farm.get('soil_ph', 6.5)}. Live readings: {sm}% soil moisture, {temp}°C, {hum}% humidity. Irrigation mode is {farm.get('irrigation_mode', 'Auto')} and the model currently predicts **{pred}** water need ({conf}% confidence).",
-            "hi": f"**{farm.get('name', 'आपका खेत')}** — {farm.get('region', 'आपके क्षेत्र')} में {farm.get('field_area_hectare', 2.5)} हेक्टेयर {crop} ({farm.get('season', 'Rabi')} सीज़न, {farm.get('crop_growth_stage', 'Vegetative')} अवस्था)। मिट्टी: {farm.get('soil_type', 'Loamy')}, pH {farm.get('soil_ph', 6.5)}। वर्तमान रीडिंग: {sm}% नमी, {temp}°C, {hum}% आर्द्रता। सिंचाई मोड {farm.get('irrigation_mode', 'Auto')} है और मॉडल फिलहाल **{pred}** पानी की आवश्यकता का अनुमान लगाता है ({conf}% विश्वास)।",
-            "mr": f"**{farm.get('name', 'तुमचे शेत')}** — {farm.get('region', 'तुमच्या भागात')} {farm.get('field_area_hectare', 2.5)} हेक्टर {crop} ({farm.get('season', 'Rabi')} हंगाम, {farm.get('crop_growth_stage', 'Vegetative')} टप्पा). माती: {farm.get('soil_type', 'Loamy')}, pH {farm.get('soil_ph', 6.5)}. सध्याची नोंद: {sm}% ओलावा, {temp}°C, {hum}% आर्द्रता. सिंचन मोड {farm.get('irrigation_mode', 'Auto')} आहे आणि मॉडेल सध्या **{pred}** पाण्याची गरज सांगते ({conf}% विश्वास).",
+            "en": f"**{farm.get('name', 'Your farm')}** — {farm.get('field_area_hectare', 2.5)} ha of {crop_disp} in {farm.get('region', 'your region')} ({season_disp} season, {growth_stage_disp} stage). Soil: {soil_type_disp}, pH {farm.get('soil_ph', 6.5)}. Live readings: {sm}% soil moisture, {temp}°C, {hum}% humidity. Irrigation mode is {irrigation_mode_disp} and the model currently predicts **{pred}** water need ({conf}% confidence).",
+            "hi": f"**{farm.get('name', 'आपका खेत')}** — {farm.get('region', 'आपके क्षेत्र')} में {farm.get('field_area_hectare', 2.5)} हेक्टेयर {crop_disp} ({season_disp} सीज़न, {growth_stage_disp})। मिट्टी: {soil_type_disp}, pH {farm.get('soil_ph', 6.5)}। वर्तमान रीडिंग: {sm}% नमी, {temp}°C, {hum}% आर्द्रता। सिंचाई मोड {irrigation_mode_disp} है और मॉडल फिलहाल **{pred}** पानी की आवश्यकता का अनुमान लगाता है ({conf}% विश्वास)।",
+            "mr": f"**{farm.get('name', 'तुमचे शेत')}** — {farm.get('region', 'तुमच्या भागात')} {farm.get('field_area_hectare', 2.5)} हेक्टर {crop_disp} ({season_disp} हंगाम, {growth_stage_disp}). माती: {soil_type_disp}, pH {farm.get('soil_ph', 6.5)}. सध्याची नोंद: {sm}% ओलावा, {temp}°C, {hum}% आर्द्रता. सिंचन मोड {irrigation_mode_disp} आहे आणि मॉडेल सध्या **{pred}** पाण्याची गरज सांगते ({conf}% विश्वास).",
         }[lang]
 
     if topic == "crop":
@@ -168,37 +205,37 @@ def build_reply(query: str, language: str, context: dict) -> str:
         p = sensor.get("phosphorus")
         k = sensor.get("potassium")
         return {
-            "en": f"Your latest NPK reading is N:{n}, P:{p}, K:{k} (kg/ha). General rule of thumb for {crop}: split nitrogen into 2–3 doses (basal + top-dressing at tillering/flowering) rather than one large dose, since N leaches easily; apply full P and K as basal dose at sowing since they're less mobile in soil. If N is below ~40 or K below ~30, a top-up is usually worth it. Always confirm exact dosage with your local Krishi Vigyan Kendra or soil-testing lab — this is general guidance, not a lab-calibrated recommendation.",
-            "hi": f"आपकी हालिया NPK रीडिंग N:{n}, P:{p}, K:{k} (kg/ha) है। {crop} के लिए सामान्य नियम: नाइट्रोजन को एक बड़ी खुराक के बजाय 2–3 भागों में दें (बुवाई + कल्ले निकलते/फूल आते समय), क्योंकि N आसानी से बह जाता है; P और K को बुवाई के समय ही पूरी मात्रा में दें क्योंकि वे मिट्टी में कम गतिशील होते हैं। यह सामान्य मार्गदर्शन है — सटीक मात्रा के लिए अपनी नज़दीकी कृषि विज्ञान केंद्र या मिट्टी परीक्षण प्रयोगशाला से पुष्टि करें।",
-            "mr": f"तुमची अलीकडील NPK नोंद N:{n}, P:{p}, K:{k} (kg/ha) आहे. {crop} साठी सर्वसाधारण नियम: नत्र (N) एका मोठ्या डोसऐवजी 2–3 वेळा द्या (पेरणी + फुटवे/फुलोरा अवस्थेत), कारण N सहज वाहून जाते; स्फुरद (P) आणि पालाश (K) पेरणीच्या वेळीच पूर्ण द्या कारण ते मातीत कमी हलतात. हे सर्वसाधारण मार्गदर्शन आहे — नेमक्या मात्रेसाठी तुमच्या जवळच्या कृषी विज्ञान केंद्राशी किंवा माती परीक्षण प्रयोगशाळेशी संपर्क साधा.",
+            "en": f"Your latest NPK reading is N:{n}, P:{p}, K:{k} (kg/ha). General rule of thumb for {crop_disp}: split nitrogen into 2–3 doses (basal + top-dressing at tillering/flowering) rather than one large dose, since N leaches easily; apply full P and K as basal dose at sowing since they're less mobile in soil. If N is below ~40 or K below ~30, a top-up is usually worth it. Always confirm exact dosage with your local Krishi Vigyan Kendra or soil-testing lab — this is general guidance, not a lab-calibrated recommendation.",
+            "hi": f"आपकी हालिया NPK रीडिंग N:{n}, P:{p}, K:{k} (kg/ha) है। {crop_disp} के लिए सामान्य नियम: नाइट्रोजन को एक बड़ी खुराक के बजाय 2–3 भागों में दें (बुवाई + कल्ले निकलते/फूल आते समय), क्योंकि N आसानी से बह जाता है; P और K को बुवाई के समय ही पूरी मात्रा में दें क्योंकि वे मिट्टी में कम गतिशील होते हैं। यह सामान्य मार्गदर्शन है — सटीक मात्रा के लिए अपनी नज़दीकी कृषि विज्ञान केंद्र या मिट्टी परीक्षण प्रयोगशाला से पुष्टि करें।",
+            "mr": f"तुमची अलीकडील NPK नोंद N:{n}, P:{p}, K:{k} (kg/ha) आहे. {crop_disp} साठी सर्वसाधारण नियम: नत्र (N) एका मोठ्या डोसऐवजी 2–3 वेळा द्या (पेरणी + फुटवे/फुलोरा अवस्थेत), कारण N सहज वाहून जाते; स्फुरद (P) आणि पालाश (K) पेरणीच्या वेळीच पूर्ण द्या कारण ते मातीत कमी हलतात. हे सर्वसाधारण मार्गदर्शन आहे — नेमक्या मात्रेसाठी तुमच्या जवळच्या कृषी विज्ञान केंद्राशी किंवा माती परीक्षण प्रयोगशाळेशी संपर्क साधा.",
         }[lang]
 
     if topic == "pest_disease":
         return {
-            "en": f"For {crop}, keep an eye out for common issues like leaf-eating caterpillars, aphids, and fungal spots (especially in humid weather — your humidity is {hum}% right now). General IPM approach: (1) scout the field weekly, (2) use yellow/blue sticky traps for flying pests, (3) prefer neem-oil or biological controls before chemical pesticides, (4) remove and destroy visibly infected plants/leaves to stop spread, (5) rotate pesticide chemical groups if you do spray, to avoid resistance. For a specific pest/disease diagnosis, a local agriculture extension officer or a photo-based diagnosis app is more reliable than general advice.",
-            "hi": f"{crop} में आम समस्याओं पर ध्यान दें जैसे पत्ती खाने वाली इल्लियाँ, एफिड्स, और फफूंद के धब्बे (विशेष रूप से नम मौसम में — अभी आपकी आर्द्रता {hum}% है)। सामान्य IPM तरीका: (1) साप्ताहिक खेत का निरीक्षण करें, (2) उड़ने वाले कीटों के लिए पीले/नीले चिपचिपे जाल का उपयोग करें, (3) रासायनिक कीटनाशकों से पहले नीम तेल या जैविक नियंत्रण अपनाएँ, (4) संक्रमित पौधों/पत्तियों को हटाकर नष्ट करें, (5) छिड़काव करें तो कीटनाशक समूह बदलते रहें ताकि प्रतिरोध न बने। सटीक निदान के लिए स्थानीय कृषि विस्तार अधिकारी से संपर्क करें।",
-            "mr": f"{crop} मध्ये सामान्य समस्यांकडे लक्ष द्या जसे की पाने खाणाऱ्या अळ्या, मावा (aphids), आणि बुरशीचे डाग (विशेषतः दमट हवामानात — सध्या आर्द्रता {hum}% आहे). सर्वसाधारण IPM पद्धत: (1) दर आठवड्याला शेताची पाहणी करा, (2) उडणाऱ्या किडींसाठी पिवळे/निळे चिकट सापळे वापरा, (3) रासायनिक कीटकनाशकांआधी निंबोळी तेल किंवा जैविक नियंत्रण वापरा, (4) संक्रमित रोपे/पाने काढून नष्ट करा, (5) फवारणी करत असल्यास कीटकनाशक गट बदलत राहा. नेमक्या निदानासाठी स्थानिक कृषी विस्तार अधिकाऱ्याशी संपर्क साधा.",
+            "en": f"For {crop_disp}, keep an eye out for common issues like leaf-eating caterpillars, aphids, and fungal spots (especially in humid weather — your humidity is {hum}% right now). General IPM approach: (1) scout the field weekly, (2) use yellow/blue sticky traps for flying pests, (3) prefer neem-oil or biological controls before chemical pesticides, (4) remove and destroy visibly infected plants/leaves to stop spread, (5) rotate pesticide chemical groups if you do spray, to avoid resistance. For a specific pest/disease diagnosis, a local agriculture extension officer or a photo-based diagnosis app is more reliable than general advice.",
+            "hi": f"{crop_disp} में आम समस्याओं पर ध्यान दें जैसे पत्ती खाने वाली इल्लियाँ, एफिड्स, और फफूंद के धब्बे (विशेष रूप से नम मौसम में — अभी आपकी आर्द्रता {hum}% है)। सामान्य IPM तरीका: (1) साप्ताहिक खेत का निरीक्षण करें, (2) उड़ने वाले कीटों के लिए पीले/नीले चिपचिपे जाल का उपयोग करें, (3) रासायनिक कीटनाशकों से पहले नीम तेल या जैविक नियंत्रण अपनाएँ, (4) संक्रमित पौधों/पत्तियों को हटाकर नष्ट करें, (5) छिड़काव करें तो कीटनाशक समूह बदलते रहें ताकि प्रतिरोध न बने। सटीक निदान के लिए स्थानीय कृषि विस्तार अधिकारी से संपर्क करें।",
+            "mr": f"{crop_disp} मध्ये सामान्य समस्यांकडे लक्ष द्या जसे की पाने खाणाऱ्या अळ्या, मावा (aphids), आणि बुरशीचे डाग (विशेषतः दमट हवामानात — सध्या आर्द्रता {hum}% आहे). सर्वसाधारण IPM पद्धत: (1) दर आठवड्याला शेताची पाहणी करा, (2) उडणाऱ्या किडींसाठी पिवळे/निळे चिकट सापळे वापरा, (3) रासायनिक कीटकनाशकांआधी निंबोळी तेल किंवा जैविक नियंत्रण वापरा, (4) संक्रमित रोपे/पाने काढून नष्ट करा, (5) फवारणी करत असल्यास कीटकनाशक गट बदलत राहा. नेमक्या निदानासाठी स्थानिक कृषी विस्तार अधिकाऱ्याशी संपर्क साधा.",
         }[lang]
 
     if topic == "weed":
         return {
-            "en": f"For weed control in {crop}: the first 3–6 weeks after sowing are the critical weed-free period — losses are highest if weeds establish then. Options: (1) pre-emergence herbicide right after sowing, (2) one or two hand-weedings/inter-cultivation at 20–25 and 40–45 days, (3) mulching to physically suppress weeds and also conserve soil moisture. Avoid letting weeds seed — that multiplies next season's problem.",
-            "hi": f"{crop} में खरपतवार नियंत्रण के लिए: बुवाई के बाद पहले 3–6 सप्ताह सबसे महत्वपूर्ण होते हैं — इस दौरान खरपतवार बढ़ने पर नुकसान सबसे ज़्यादा होता है। विकल्प: (1) बुवाई के तुरंत बाद प्री-इमरजेंस हर्बिसाइड, (2) 20–25 और 40–45 दिन पर एक या दो निराई/गुड़ाई, (3) मल्चिंग से खरपतवार दबाना और नमी भी बचाना। खरपतवार को बीज बनने न दें, वरना अगले सीज़न समस्या बढ़ती है।",
-            "mr": f"{crop} मध्ये तण नियंत्रणासाठी: पेरणीनंतरचे पहिले 3–6 आठवडे सर्वात महत्त्वाचे असतात — या काळात तण वाढल्यास नुकसान सर्वाधिक होते. पर्याय: (1) पेरणीनंतर लगेच प्री-इमर्जन्स तणनाशक, (2) 20–25 आणि 40–45 दिवसांनी एक-दोन खुरपणी/कोळपणी, (3) आच्छादन (मल्चिंग) ने तण दाबणे आणि ओलावाही टिकवणे. तणाला बी धरू देऊ नका, नाहीतर पुढील हंगामात समस्या वाढते.",
+            "en": f"For weed control in {crop_disp}: the first 3–6 weeks after sowing are the critical weed-free period — losses are highest if weeds establish then. Options: (1) pre-emergence herbicide right after sowing, (2) one or two hand-weedings/inter-cultivation at 20–25 and 40–45 days, (3) mulching to physically suppress weeds and also conserve soil moisture. Avoid letting weeds seed — that multiplies next season's problem.",
+            "hi": f"{crop_disp} में खरपतवार नियंत्रण के लिए: बुवाई के बाद पहले 3–6 सप्ताह सबसे महत्वपूर्ण होते हैं — इस दौरान खरपतवार बढ़ने पर नुकसान सबसे ज़्यादा होता है। विकल्प: (1) बुवाई के तुरंत बाद प्री-इमरजेंस हर्बिसाइड, (2) 20–25 और 40–45 दिन पर एक या दो निराई/गुड़ाई, (3) मल्चिंग से खरपतवार दबाना और नमी भी बचाना। खरपतवार को बीज बनने न दें, वरना अगले सीज़न समस्या बढ़ती है।",
+            "mr": f"{crop_disp} मध्ये तण नियंत्रणासाठी: पेरणीनंतरचे पहिले 3–6 आठवडे सर्वात महत्त्वाचे असतात — या काळात तण वाढल्यास नुकसान सर्वाधिक होते. पर्याय: (1) पेरणीनंतर लगेच प्री-इमर्जन्स तणनाशक, (2) 20–25 आणि 40–45 दिवसांनी एक-दोन खुरपणी/कोळपणी, (3) आच्छादन (मल्चिंग) ने तण दाबणे आणि ओलावाही टिकवणे. तणाला बी धरू देऊ नका, नाहीतर पुढील हंगामात समस्या वाढते.",
         }[lang]
 
     if topic == "seed_sowing":
         return {
-            "en": f"For {crop}, always use certified/disease-free seed and treat it with a fungicide or biocontrol agent (like Trichoderma) before sowing to protect against soil-borne disease. Sow at the depth and row spacing recommended for your variety — too deep delays germination, too shallow risks drying out. Check germination rate on a small sample before full sowing if the seed lot is old or was stored in humid conditions.",
-            "hi": f"{crop} के लिए हमेशा प्रमाणित/रोगमुक्त बीज का उपयोग करें और मिट्टी जनित रोगों से बचाव के लिए बुवाई से पहले फफूंदनाशक या जैव-नियंत्रक (जैसे ट्राइकोडर्मा) से उपचारित करें। अपनी किस्म के लिए अनुशंसित गहराई और पंक्ति दूरी पर बुवाई करें — ज़्यादा गहरी बुवाई अंकुरण में देरी करती है, बहुत उथली बुवाई सूखने का खतरा बढ़ाती है। यदि बीज पुराना है या नम स्थिति में रखा गया था, तो पूरी बुवाई से पहले एक छोटे नमूने पर अंकुरण दर जांच लें।",
-            "mr": f"{crop} साठी नेहमी प्रमाणित/रोगमुक्त बियाणे वापरा आणि मातीजन्य रोगांपासून संरक्षणासाठी पेरणीपूर्वी बुरशीनाशक किंवा जैव-नियंत्रक (उदा. ट्रायकोडर्मा) ने बीजप्रक्रिया करा. तुमच्या जातीसाठी शिफारस केलेल्या खोलीवर आणि ओळींमधील अंतरावर पेरणी करा — जास्त खोल पेरणी उगवण उशिरा करते, खूप उथळ पेरणी वाळण्याचा धोका वाढवते. बियाणे जुने असल्यास किंवा दमट स्थितीत साठवले असल्यास, पूर्ण पेरणीआधी छोट्या नमुन्यावर उगवण दर तपासा.",
+            "en": f"For {crop_disp}, always use certified/disease-free seed and treat it with a fungicide or biocontrol agent (like Trichoderma) before sowing to protect against soil-borne disease. Sow at the depth and row spacing recommended for your variety — too deep delays germination, too shallow risks drying out. Check germination rate on a small sample before full sowing if the seed lot is old or was stored in humid conditions.",
+            "hi": f"{crop_disp} के लिए हमेशा प्रमाणित/रोगमुक्त बीज का उपयोग करें और मिट्टी जनित रोगों से बचाव के लिए बुवाई से पहले फफूंदनाशक या जैव-नियंत्रक (जैसे ट्राइकोडर्मा) से उपचारित करें। अपनी किस्म के लिए अनुशंसित गहराई और पंक्ति दूरी पर बुवाई करें — ज़्यादा गहरी बुवाई अंकुरण में देरी करती है, बहुत उथली बुवाई सूखने का खतरा बढ़ाती है। यदि बीज पुराना है या नम स्थिति में रखा गया था, तो पूरी बुवाई से पहले एक छोटे नमूने पर अंकुरण दर जांच लें।",
+            "mr": f"{crop_disp} साठी नेहमी प्रमाणित/रोगमुक्त बियाणे वापरा आणि मातीजन्य रोगांपासून संरक्षणासाठी पेरणीपूर्वी बुरशीनाशक किंवा जैव-नियंत्रक (उदा. ट्रायकोडर्मा) ने बीजप्रक्रिया करा. तुमच्या जातीसाठी शिफारस केलेल्या खोलीवर आणि ओळींमधील अंतरावर पेरणी करा — जास्त खोल पेरणी उगवण उशिरा करते, खूप उथळ पेरणी वाळण्याचा धोका वाढवते. बियाणे जुने असल्यास किंवा दमट स्थितीत साठवले असल्यास, पूर्ण पेरणीआधी छोट्या नमुन्यावर उगवण दर तपासा.",
         }[lang]
 
     if topic == "harvest_storage":
         return {
-            "en": f"For {crop}, harvest at physiological maturity — too early reduces yield/quality, too late risks shattering/lodging or pest damage in the field. Dry grain to safe moisture (typically 10–12% for cereals) before storage — storing wet grain is the #1 cause of storage losses to mold and insects. Store in clean, dry, well-ventilated containers/bags, and check stored grain periodically for insect activity or heating.",
-            "hi": f"{crop} की कटाई शारीरिक परिपक्वता पर करें — बहुत जल्दी करने से उपज/गुणवत्ता घटती है, बहुत देर करने से दाना झड़ने, गिरने या खेत में कीट क्षति का खतरा रहता है। भंडारण से पहले अनाज को सुरक्षित नमी स्तर (अनाज के लिए आमतौर पर 10–12%) तक सुखाएं — गीला अनाज भंडारित करना फफूंद और कीटों से होने वाले नुकसान का सबसे बड़ा कारण है। साफ, सूखे, हवादार बर्तनों/बोरियों में भंडारण करें और समय-समय पर कीट गतिविधि या गर्मी की जांच करें।",
-            "mr": f"{crop} ची काढणी शारीरिक परिपक्वतेच्या वेळी करा — खूप लवकर केल्यास उत्पादन/गुणवत्ता कमी होते, खूप उशिरा केल्यास दाणे गळणे, लोळणे किंवा शेतातच किडीचे नुकसान होण्याचा धोका असतो. साठवणीपूर्वी धान्य सुरक्षित ओलाव्यापर्यंत (धान्यासाठी साधारण 10–12%) वाळवा — ओले धान्य साठवणे हे बुरशी आणि किडींमुळे होणाऱ्या नुकसानाचे प्रमुख कारण आहे. स्वच्छ, कोरड्या, हवेशीर भांड्यांत/पोत्यांत साठवा आणि वेळोवेळी कीड किंवा गरमी तपासा.",
+            "en": f"For {crop_disp}, harvest at physiological maturity — too early reduces yield/quality, too late risks shattering/lodging or pest damage in the field. Dry grain to safe moisture (typically 10–12% for cereals) before storage — storing wet grain is the #1 cause of storage losses to mold and insects. Store in clean, dry, well-ventilated containers/bags, and check stored grain periodically for insect activity or heating.",
+            "hi": f"{crop_disp} की कटाई शारीरिक परिपक्वता पर करें — बहुत जल्दी करने से उपज/गुणवत्ता घटती है, बहुत देर करने से दाना झड़ने, गिरने या खेत में कीट क्षति का खतरा रहता है। भंडारण से पहले अनाज को सुरक्षित नमी स्तर (अनाज के लिए आमतौर पर 10–12%) तक सुखाएं — गीला अनाज भंडारित करना फफूंद और कीटों से होने वाले नुकसान का सबसे बड़ा कारण है। साफ, सूखे, हवादार बर्तनों/बोरियों में भंडारण करें और समय-समय पर कीट गतिविधि या गर्मी की जांच करें।",
+            "mr": f"{crop_disp} ची काढणी शारीरिक परिपक्वतेच्या वेळी करा — खूप लवकर केल्यास उत्पादन/गुणवत्ता कमी होते, खूप उशिरा केल्यास दाणे गळणे, लोळणे किंवा शेतातच किडीचे नुकसान होण्याचा धोका असतो. साठवणीपूर्वी धान्य सुरक्षित ओलाव्यापर्यंत (धान्यासाठी साधारण 10–12%) वाळवा — ओले धान्य साठवणे हे बुरशी आणि किडींमुळे होणाऱ्या नुकसानाचे प्रमुख कारण आहे. स्वच्छ, कोरड्या, हवेशीर भांड्यांत/पोत्यांत साठवा आणि वेळोवेळी कीड किंवा गरमी तपासा.",
         }[lang]
 
     if topic == "organic":
@@ -211,17 +248,17 @@ def build_reply(query: str, language: str, context: dict) -> str:
     if topic == "soil":
         ph = farm.get("soil_ph", 6.5)
         return {
-            "en": f"Soil type: {farm.get('soil_type', 'Loamy')}, pH {ph}. " + (
+            "en": f"Soil type: {soil_type_disp}, pH {ph}. " + (
                 "Slightly acidic — consider agricultural lime." if ph < 5.5
                 else "Slightly alkaline — organic compost can help." if ph > 7.8
                 else "Your pH is in a healthy range for most crops."
             ),
-            "hi": f"मिट्टी का प्रकार: {farm.get('soil_type', 'Loamy')}, pH {ph}। " + (
+            "hi": f"मिट्टी का प्रकार: {soil_type_disp}, pH {ph}। " + (
                 "थोड़ी अम्लीय — कृषि चूना डालने पर विचार करें।" if ph < 5.5
                 else "थोड़ी क्षारीय — जैविक खाद मदद कर सकती है।" if ph > 7.8
                 else "आपका pH अधिकांश फसलों के लिए स्वस्थ सीमा में है।"
             ),
-            "mr": f"मातीचा प्रकार: {farm.get('soil_type', 'Loamy')}, pH {ph}. " + (
+            "mr": f"मातीचा प्रकार: {soil_type_disp}, pH {ph}. " + (
                 "किंचित आम्लयुक्त — शेतीसाठी चुना वापरण्याचा विचार करा." if ph < 5.5
                 else "किंचित अल्कधर्मी — सेंद्रिय खत उपयुक्त ठरू शकते." if ph > 7.8
                 else "तुमचा pH बहुतेक पिकांसाठी योग्य श्रेणीत आहे."
@@ -230,9 +267,9 @@ def build_reply(query: str, language: str, context: dict) -> str:
 
     if topic == "why":
         return {
-            "en": f"The irrigation model predicted **{pred}** water requirement with {conf}% confidence, based on soil moisture ({sm}%), temperature ({temp}°C), and your crop's growth stage ({farm.get('crop_growth_stage', 'Vegetative')}).",
-            "hi": f"सिंचाई मॉडल ने मिट्टी की नमी ({sm}%), तापमान ({temp}°C), और फसल की वृद्धि अवस्था ({farm.get('crop_growth_stage', 'Vegetative')}) के आधार पर **{pred}** पानी की आवश्यकता का अनुमान {conf}% विश्वास के साथ लगाया।",
-            "mr": f"सिंचन मॉडेलने मातीतील ओलावा ({sm}%), तापमान ({temp}°C), आणि पिकाच्या वाढीच्या टप्प्यावर ({farm.get('crop_growth_stage', 'Vegetative')}) आधारित **{pred}** पाण्याची गरज {conf}% विश्वासाने सांगितली.",
+            "en": f"The irrigation model predicted **{pred}** water requirement with {conf}% confidence, based on soil moisture ({sm}%), temperature ({temp}°C), and your crop's growth stage ({growth_stage_disp}).",
+            "hi": f"सिंचाई मॉडल ने मिट्टी की नमी ({sm}%), तापमान ({temp}°C), और फसल की वृद्धि अवस्था ({growth_stage_disp}) के आधार पर **{pred}** पानी की आवश्यकता का अनुमान {conf}% विश्वास के साथ लगाया।",
+            "mr": f"सिंचन मॉडेलने मातीतील ओलावा ({sm}%), तापमान ({temp}°C), आणि पिकाच्या वाढीच्या टप्प्यावर ({growth_stage_disp}) आधारित **{pred}** पाण्याची गरज {conf}% विश्वासाने सांगितली.",
         }[lang]
 
     if topic == "robot":
@@ -244,9 +281,9 @@ def build_reply(query: str, language: str, context: dict) -> str:
         }[lang]
 
     return {
-        "en": f"Hi! I'm your AgriNova AI Assistant for your {farm.get('field_area_hectare', 2.5)} hectare {crop} field. Soil moisture is {sm}%, temperature {temp}°C. Ask me about irrigation, fertilizer dosage, pests & disease, weeds, seeds & sowing, harvest & storage, organic practices, crop recommendations, weather, soil health, or the robot's status.",
-        "hi": f"नमस्ते! मैं आपके {farm.get('field_area_hectare', 2.5)} हेक्टेयर {crop} खेत के लिए AgriNova AI सहायक हूँ। मिट्टी की नमी {sm}% है, तापमान {temp}°C है। सिंचाई, उर्वरक मात्रा, कीट व रोग, खरपतवार, बीज व बुवाई, कटाई व भंडारण, जैविक तरीकों, फसल सिफारिशों, मौसम, मिट्टी के स्वास्थ्य या रोबोट की स्थिति के बारे में पूछें।",
-        "mr": f"नमस्कार! मी तुमच्या {farm.get('field_area_hectare', 2.5)} हेक्टर {crop} शेतासाठी AgriNova AI सहाय्यक आहे. मातीतील ओलावा {sm}% आहे, तापमान {temp}°C आहे. सिंचन, खताची मात्रा, कीड व रोग, तण, बियाणे व पेरणी, काढणी व साठवण, सेंद्रिय पद्धती, पीक शिफारसी, हवामान, मातीचे आरोग्य किंवा रोबोटच्या स्थितीबद्दल विचारा.",
+        "en": f"Hi! I'm your AgriNova AI Assistant for your {farm.get('field_area_hectare', 2.5)} hectare {crop_disp} field. Soil moisture is {sm}%, temperature {temp}°C. Ask me about irrigation, fertilizer dosage, pests & disease, weeds, seeds & sowing, harvest & storage, organic practices, crop recommendations, weather, soil health, or the robot's status.",
+        "hi": f"नमस्ते! मैं आपके {farm.get('field_area_hectare', 2.5)} हेक्टेयर {crop_disp} खेत के लिए AgriNova AI सहायक हूँ। मिट्टी की नमी {sm}% है, तापमान {temp}°C है। सिंचाई, उर्वरक मात्रा, कीट व रोग, खरपतवार, बीज व बुवाई, कटाई व भंडारण, जैविक तरीकों, फसल सिफारिशों, मौसम, मिट्टी के स्वास्थ्य या रोबोट की स्थिति के बारे में पूछें।",
+        "mr": f"नमस्कार! मी तुमच्या {farm.get('field_area_hectare', 2.5)} हेक्टर {crop_disp} शेतासाठी AgriNova AI सहाय्यक आहे. मातीतील ओलावा {sm}% आहे, तापमान {temp}°C आहे. सिंचन, खताची मात्रा, कीड व रोग, तण, बियाणे व पेरणी, काढणी व साठवण, सेंद्रिय पद्धती, पीक शिफारसी, हवामान, मातीचे आरोग्य किंवा रोबोटच्या स्थितीबद्दल विचारा.",
     }[lang]
 
 
