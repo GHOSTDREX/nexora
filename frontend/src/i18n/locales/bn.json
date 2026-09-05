@@ -10,6 +10,9 @@
     "fertilizer": "সার",
     "soil_health": "মাটির স্বাস্থ্য",
     "yield_prediction": "ফলন পূর্বাভাস",
+    "disease_detection": "রোগ সনাক্তকরণ",
+    "schemes": "প্রকল্প",
+    "market": "মান্ডি দাম",
     "ai_assistant": "এআই সহায়ক",
     "alerts": "সতর্কতা",
     "settings": "সেটিংস"
@@ -36,6 +39,7 @@
     "subtitle": "এতে মাত্র এক মিনিট সময় লাগবে — এটি আপনার ড্যাশবোর্ডের প্রতিটি সুপারিশকে শক্তি জোগায়।",
     "farm_name": "খামারের নাম",
     "region": "অঞ্চল",
+    "state": "রাজ্য",
     "latitude": "অক্ষাংশ",
     "longitude": "দ্রাঘিমাংশ",
     "field_area": "জমির আয়তন (হেক্টর)",
@@ -81,6 +85,7 @@
     "live": "লাইভ",
     "hectares": "হেক্টর",
     "view_all": "সব দেখুন",
+    "offline_banner": "আপনি অফলাইনে আছেন — আমাদের কাছে থাকা সর্বশেষ তথ্য দেখানো হচ্ছে।",
     "error_generic": "কিছু ভুল হয়েছে। আবার চেষ্টা করুন।",
     "just_now": "এইমাত্র",
     "seconds_ago": "{{count}} সেকেন্ড আগে",
@@ -102,7 +107,8 @@
     "environment": "পরিবেশ",
     "rain_detected": "বৃষ্টি শনাক্ত হয়েছে",
     "no_rain": "বৃষ্টি নেই",
-    "last_updated": "সর্বশেষ আপডেট"
+    "last_updated": "সর্বশেষ আপডেট",
+    "ph": "মাটির pH"
   },
   "dashboard": {
     "title": "ড্যাশবোর্ড",
@@ -121,7 +127,19 @@
     "set_auto_mode": "অটো মোডে স্যুইচ করুন",
     "manual_sensor_hint": "ম্যানুয়াল মোড চালু আছে — আপনি নতুন রিডিং জমা না দেওয়া বা অটোতে ফিরে না যাওয়া পর্যন্ত সেন্সরের মান আপনি সেট করা অবস্থাতেই থাকবে। AI সুপারিশ যাচাই করতে নিচে রিডিং লিখুন।",
     "submit_reading": "রিডিং সংরক্ষণ করুন",
-    "reading_saved": "সংরক্ষিত হয়েছে — এখন সুপারিশগুলো এই মান ব্যবহার করবে।"
+    "reading_saved": "সংরক্ষিত হয়েছে — এখন সুপারিশগুলো এই মান ব্যবহার করবে।",
+    "schemes_title": "আপনার খামারের জন্য সরকারি প্রকল্প",
+    "market_title": "মান্ডি দাম — {{crop}}",
+    "market_market": "বাজার",
+    "market_modal_price": "মডেল দাম",
+    "market_range": "মূল্য পরিসীমা",
+    "market_date": "তারিখ",
+    "market_no_data": "আপনার রাজ্যে এই ফসলের জন্য সাম্প্রতিক দামের তথ্য পাওয়া যায়নি।",
+    "market_not_configured": "লাইভ মান্ডি দামের জন্য data.gov.in-এর একটি বিনামূল্যের API কী প্রয়োজন — আপনার অ্যাডমিনকে AGMARKNET_API_KEY সেট করতে বলুন।",
+    "market_find_dealer": "নিকটবর্তী ডিলার খুঁজুন",
+    "market_kvk_portal": "কৃষি বিজ্ঞান কেন্দ্র",
+    "schemes_matched": "প্রকল্প মিলেছে",
+    "schemes_no_match": "আপনার খামারের প্রোফাইলের সাথে এখনও কোনো প্রকল্প মেলেনি।"
   },
   "irrigation": {
     "title": "সেচ",
@@ -230,6 +248,27 @@
     "factor_temperature": "তাপমাত্রা",
     "factor_soil_ph": "মাটির pH"
   },
+  "disease": {
+    "title": "রোগ সনাক্তকরণ",
+    "subtitle": "রোগ পরীক্ষা করতে ধানের পাতার ছবি আপলোড করুন।",
+    "upload_title": "পাতার ছবি আপলোড করুন",
+    "choose_photo": "ছবি নির্বাচন করুন",
+    "choose_different": "অন্য ছবি নির্বাচন করুন",
+    "upload_hint": "JPG, PNG বা WEBP, 15 MB পর্যন্ত",
+    "analyze": "বিশ্লেষণ করুন",
+    "result_title": "ফলাফল",
+    "confidence": "আত্মবিশ্বাস",
+    "top_matches": "শীর্ষ মিল",
+    "symptoms": "সাধারণ লক্ষণ",
+    "management": "ব্যবস্থাপনা",
+    "prevention": "প্রতিরোধ",
+    "source": "উৎস",
+    "state_accepted": "রোগ নির্ণয় পাওয়া গেছে",
+    "state_uncertain": "অনিশ্চিত",
+    "state_image_unsuitable": "ছবি অনুপযুক্ত",
+    "state_subject_unsuitable": "এটি ধানের পাতা নয়",
+    "disclaimer": "শুধুমাত্র ধান পাতার জন্য AI-সহায়ক নির্ণয় — স্থানীয় কৃষি সম্প্রসারণ কর্মকর্তার বিকল্প নয়। কোনো সুপারিশে কাজ করার আগে যাচাই করুন।"
+  },
   "yield": {
     "title": "ফলন পূর্বাভাস",
     "subtitle": "প্রদত্ত জমি, ফসল, মরসুম এবং ইনপুট স্তরের জন্য ফসলের ফলন অনুমান করুন।",
@@ -299,7 +338,17 @@
     "sensor_node_host": "সেন্সর নোড ঠিকানা",
     "robot_host": "মোটর কন্ট্রোলার ঠিকানা",
     "camera_host": "ক্যামেরা ঠিকানা",
-    "hardware_host_placeholder": "যেমন agrinova-sensors.local বা 192.168.1.42"
+    "hardware_host_placeholder": "যেমন agrinova-sensors.local বা 192.168.1.42",
+    "whatsapp_title": "হোয়াটসঅ্যাপ বট",
+    "whatsapp_live": "লাইভ",
+    "whatsapp_not_configured": "কনফিগার করা হয়নি",
+    "whatsapp_hint": "এই খামারের AI সহায়ককে সরাসরি হোয়াটসঅ্যাপে বার্তা পাঠান। আগত বার্তাগুলো আপনার খামারের সাথে মেলাতে নিচে আপনার নম্বর যোগ করুন।",
+    "whatsapp_number": "হোয়াটসঅ্যাপ নম্বর",
+    "whatsapp_number_status": "আপনার নম্বর",
+    "whatsapp_number_saved": "সংরক্ষিত",
+    "whatsapp_number_missing": "সেট করা হয়নি",
+    "whatsapp_bot_status": "বট সংযোগ",
+    "whatsapp_admin_hint": "আপনার নম্বর সংরক্ষিত এবং প্রস্তুত। বটটি এখনও হোয়াটসঅ্যাপের সাথে সংযুক্ত নয় — এর জন্য এই অ্যাপের সার্ভার পরিচালনাকারীকে একবার সেটআপ করতে হবে (একটি বিনামূল্যের Meta ডেভেলপার অ্যাকাউন্ট)। তাদের জিজ্ঞাসা করুন, অথবা backend/.env.example দেখুন।"
   },
   "landing": {
     "nav_features": "বৈশিষ্ট্য",

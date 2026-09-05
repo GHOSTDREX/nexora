@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
 import {
   Thermometer, Droplet, Sprout, FlaskConical, CloudRain, Sun, Cloud, CloudSnow, CloudLightning,
-  Bot, Wheat, Camera, ArrowRight, Wind, Bell, HeartPulse, Clock,
+  Bot, Wheat, Camera, ArrowRight, Wind, Bell, HeartPulse, Clock, Landmark, Store,
 } from 'lucide-react'
 import { api, apiErrorMessage } from '@/lib/api'
 import { useAuth } from '@/context/AuthContext'
@@ -19,7 +19,7 @@ import { Skeleton } from '@/components/ui/Skeleton'
 import { IconBadge } from '@/components/ui/IconBadge'
 import { staggerContainer } from '@/lib/motion'
 import { useTimeAgo } from '@/lib/useTimeAgo'
-import type { AlertItem, CropRecommendation, Farm, RobotStatus, SoilHealth, WeatherToday } from '@/lib/types'
+import type { AlertItem, CropRecommendation, Farm, MarketOverview, RobotStatus, SchemeMatchResponse, SoilHealth, WeatherToday } from '@/lib/types'
 
 function weatherVisual(condition?: string) {
   const c = condition ?? ''
@@ -35,7 +35,7 @@ function weatherVisual(condition?: string) {
 }
 
 export default function Dashboard() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const { user, farm, setFarm } = useAuth()
   const { latestReading, robotLive, liveAlerts } = useFarmData()
 
@@ -48,6 +48,8 @@ export default function Dashboard() {
   const [streamUrl, setStreamUrl] = useState<string | null>(null)
   const [switchingSensorMode, setSwitchingSensorMode] = useState(false)
   const [sensorModeError, setSensorModeError] = useState('')
+  const [schemes, setSchemes] = useState<SchemeMatchResponse | null>(null)
+  const [market, setMarket] = useState<MarketOverview | null>(null)
 
   useEffect(() => {
     api.get<WeatherToday>('/api/weather/today').then(({ data }) => setWeather(data)).catch(() => {})
@@ -55,6 +57,7 @@ export default function Dashboard() {
     api.get<CropRecommendation>('/api/crop/recommend/latest').then(({ data }) => setCropRec(data)).catch(() => {})
     api.get<SoilHealth>('/api/soil-health/latest').then(({ data }) => setSoilHealth(data)).catch(() => {})
     api.get<AlertItem[]>('/api/alerts?limit=5').then(({ data }) => setAlerts(data)).catch(() => {})
+    api.get<MarketOverview>('/api/market/overview').then(({ data }) => setMarket(data)).catch(() => {})
 
     function loadFrame() {
       api.get('/api/camera/frame').then(({ data }) => {
@@ -66,6 +69,12 @@ export default function Dashboard() {
     const interval = setInterval(loadFrame, 6000)
     return () => clearInterval(interval)
   }, [])
+
+  useEffect(() => {
+    api.get<SchemeMatchResponse>('/api/schemes/match', { params: { language: i18n.language } })
+      .then(({ data }) => setSchemes(data))
+      .catch(() => {})
+  }, [i18n.language])
 
   const mergedAlerts = [...liveAlerts.filter((a) => a.id < 0), ...alerts].slice(0, 5)
 
@@ -262,6 +271,46 @@ export default function Dashboard() {
               mergedAlerts.map((a) => <AlertRow key={a.id} alert={a} />)
             )}
             <Link to="/alerts" className="ml-2 mt-1 flex items-center gap-1 text-xs font-semibold text-brand-700 hover:underline">
+              {t('common.view_all')} <ArrowRight size={12} aria-hidden="true" />
+            </Link>
+          </div>
+        </Card>
+      </div>
+
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <Card interactive>
+          <CardHeader title={t('dashboard.schemes_title')} action={<IconBadge icon={<Landmark size={16} aria-hidden="true" />} tone="brand" />} />
+          <div className="px-5 pb-5 pt-3">
+            {!schemes ? (
+              <Skeleton className="h-6 w-24" />
+            ) : (
+              <p className="text-xl font-bold text-[var(--text-primary)]">
+                {schemes.schemes.length}
+                <span className="ml-1 text-sm font-medium text-[var(--text-secondary)]">{t('dashboard.schemes_matched')}</span>
+              </p>
+            )}
+            <Link to="/schemes" className="mt-3 flex items-center gap-1 text-xs font-semibold text-brand-700 hover:underline">
+              {t('common.view_all')} <ArrowRight size={12} aria-hidden="true" />
+            </Link>
+          </div>
+        </Card>
+
+        <Card interactive>
+          <CardHeader title={t('dashboard.market_title', { crop: market ? t(`options.crop_type.${market.crop}`, market.crop) : '' })} action={<IconBadge icon={<Store size={16} aria-hidden="true" />} tone="amber" />} />
+          <div className="px-5 pb-5 pt-3">
+            {!market ? (
+              <Skeleton className="h-6 w-24" />
+            ) : market.mandi.configured && market.mandi.prices.length > 0 ? (
+              <p className="text-xl font-bold text-[var(--text-primary)]">
+                ₹{market.mandi.prices[0].modal_price}
+                <span className="ml-1 text-sm font-medium text-[var(--text-secondary)]">{t('dashboard.market_modal_price')}</span>
+              </p>
+            ) : (
+              <p className="text-sm text-[var(--text-secondary)]">
+                {market.mandi.configured ? t('dashboard.market_no_data') : t('dashboard.market_not_configured')}
+              </p>
+            )}
+            <Link to="/market" className="mt-3 flex items-center gap-1 text-xs font-semibold text-brand-700 hover:underline">
               {t('common.view_all')} <ArrowRight size={12} aria-hidden="true" />
             </Link>
           </div>

@@ -18,7 +18,7 @@ const predictionTone: Record<string, 'brand' | 'warning' | 'critical'> = {
 }
 
 export default function Irrigation() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const { farm, setFarm } = useAuth()
   const [prediction, setPrediction] = useState<IrrigationPrediction | null>(null)
   const [loading, setLoading] = useState(true)
@@ -29,19 +29,31 @@ export default function Irrigation() {
   function load() {
     setLoading(true)
     api
-      .get<IrrigationPrediction>('/api/irrigation/predict')
+      .get<IrrigationPrediction>('/api/irrigation/predict', { params: { language: i18n.language } })
       .then(({ data }) => setPrediction(data))
       .catch((err) => setError(apiErrorMessage(err)))
       .finally(() => setLoading(false))
   }
 
+  // Initial load runs a fresh prediction; a later language switch just
+  // re-localizes the existing one via /latest instead of triggering (and
+  // storing) a brand new prediction on every language change.
   useEffect(load, [])
+
+  useEffect(() => {
+    if (!prediction) return
+    api
+      .get<IrrigationPrediction>('/api/irrigation/latest', { params: { language: i18n.language } })
+      .then(({ data }) => setPrediction(data))
+      .catch(() => {})
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [i18n.language])
 
   async function refresh() {
     setRefreshing(true)
     setError('')
     try {
-      const { data } = await api.get<IrrigationPrediction>('/api/irrigation/predict')
+      const { data } = await api.get<IrrigationPrediction>('/api/irrigation/predict', { params: { language: i18n.language } })
       setPrediction(data)
     } catch (err) {
       setError(apiErrorMessage(err))

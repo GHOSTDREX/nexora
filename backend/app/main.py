@@ -8,7 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import CORS_ORIGINS
 from app.core.security_headers import BodySizeLimitMiddleware, SecurityHeadersMiddleware
 from app.db.database import init_db
-from app.routers import alerts, auth, camera, chat, crop, farms, fertilizer, irrigation, robot, sensors, sms, soil_health, weather, ws, yield_prediction
+from app.routers import alerts, auth, camera, chat, crop, disease, farms, fertilizer, irrigation, market, robot, schemes, sensors, sms, soil_health, weather, whatsapp, ws, yield_prediction
 from app.services.hardware_poller import run_hardware_poller_loop
 from app.services.simulator import run_simulator_loop
 
@@ -59,6 +59,10 @@ app.include_router(alerts.router)
 app.include_router(weather.router)
 app.include_router(chat.router)
 app.include_router(sms.router)
+app.include_router(schemes.router)
+app.include_router(market.router)
+app.include_router(disease.router)
+app.include_router(whatsapp.router)
 app.include_router(ws.router)
 
 

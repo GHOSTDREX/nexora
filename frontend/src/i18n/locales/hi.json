@@ -10,6 +10,9 @@
     "fertilizer": "उर्वरक",
     "soil_health": "मृदा स्वास्थ्य",
     "yield_prediction": "उपज पूर्वानुमान",
+    "disease_detection": "रोग पहचान",
+    "schemes": "योजनाएं",
+    "market": "मंडी भाव",
     "ai_assistant": "एआई सहायक",
     "alerts": "अलर्ट",
     "settings": "सेटिंग्स"
@@ -36,6 +39,7 @@
     "subtitle": "इसमें बस एक मिनट लगेगा — यह आपके डैशबोर्ड की हर सिफारिश को शक्ति देता है।",
     "farm_name": "फार्म का नाम",
     "region": "क्षेत्र",
+    "state": "राज्य",
     "latitude": "अक्षांश",
     "longitude": "देशांतर",
     "field_area": "खेत का क्षेत्रफल (हेक्टेयर)",
@@ -81,6 +85,7 @@
     "live": "लाइव",
     "hectares": "हेक्टेयर",
     "view_all": "सभी देखें",
+    "offline_banner": "आप ऑफ़लाइन हैं — हमारे पास मौजूद अंतिम डेटा दिखाया जा रहा है।",
     "error_generic": "कुछ गलत हो गया। कृपया पुनः प्रयास करें।",
     "just_now": "अभी-अभी",
     "seconds_ago": "{{count}} सेकंड पहले",
@@ -102,7 +107,8 @@
     "environment": "पर्यावरण",
     "rain_detected": "वर्षा का पता चला",
     "no_rain": "कोई वर्षा नहीं",
-    "last_updated": "आखिरी अपडेट"
+    "last_updated": "आखिरी अपडेट",
+    "ph": "मिट्टी pH"
   },
   "dashboard": {
     "title": "डैशबोर्ड",
@@ -121,7 +127,19 @@
     "set_auto_mode": "ऑटो मोड पर स्विच करें",
     "manual_sensor_hint": "मैनुअल मोड चालू है — जब तक आप नई रीडिंग सबमिट नहीं करते या ऑटो पर वापस नहीं जाते, तब तक सेंसर वैल्यू ठीक वैसी ही रहेंगी जैसी आपने सेट की हैं। AI सिफारिशों को परखने के लिए नीचे रीडिंग दर्ज करें।",
     "submit_reading": "रीडिंग सेव करें",
-    "reading_saved": "सेव हो गया — अब सिफारिशें इन्हीं वैल्यू पर आधारित होंगी।"
+    "reading_saved": "सेव हो गया — अब सिफारिशें इन्हीं वैल्यू पर आधारित होंगी।",
+    "schemes_title": "आपके खेत के लिए सरकारी योजनाएं",
+    "market_title": "मंडी भाव — {{crop}}",
+    "market_market": "मंडी",
+    "market_modal_price": "मॉडल भाव",
+    "market_range": "भाव सीमा",
+    "market_date": "तारीख",
+    "market_no_data": "आपके राज्य में इस फसल के लिए हाल का भाव डेटा नहीं मिला।",
+    "market_not_configured": "लाइव मंडी भाव के लिए data.gov.in की निःशुल्क API कुंजी चाहिए — अपने एडमिन से AGMARKNET_API_KEY सेट करने को कहें।",
+    "market_find_dealer": "नज़दीकी डीलर खोजें",
+    "market_kvk_portal": "कृषि विज्ञान केंद्र",
+    "schemes_matched": "योजनाएं मिलीं",
+    "schemes_no_match": "आपके खेत की प्रोफ़ाइल से अभी कोई योजना मेल नहीं खाती।"
   },
   "irrigation": {
     "title": "सिंचाई",
@@ -230,6 +248,27 @@
     "factor_temperature": "तापमान",
     "factor_soil_ph": "मृदा pH"
   },
+  "disease": {
+    "title": "रोग पहचान",
+    "subtitle": "रोग की जाँच के लिए धान की पत्ती की फोटो अपलोड करें।",
+    "upload_title": "पत्ती की फोटो अपलोड करें",
+    "choose_photo": "फोटो चुनें",
+    "choose_different": "दूसरी फोटो चुनें",
+    "upload_hint": "JPG, PNG या WEBP, 15 MB तक",
+    "analyze": "विश्लेषण करें",
+    "result_title": "परिणाम",
+    "confidence": "विश्वास स्तर",
+    "top_matches": "शीर्ष मिलान",
+    "symptoms": "सामान्य लक्षण",
+    "management": "प्रबंधन",
+    "prevention": "रोकथाम",
+    "source": "स्रोत",
+    "state_accepted": "निदान मिला",
+    "state_uncertain": "अनिश्चित",
+    "state_image_unsuitable": "छवि अनुपयुक्त",
+    "state_subject_unsuitable": "यह धान की पत्ती नहीं है",
+    "disclaimer": "केवल धान (चावल) की पत्तियों के लिए AI-सहायता प्राप्त निदान — स्थानीय कृषि विस्तार अधिकारी का विकल्प नहीं है। किसी भी सिफ़ारिश पर कार्य करने से पहले पुष्टि करें।"
+  },
   "yield": {
     "title": "उपज पूर्वानुमान",
     "subtitle": "किसी खेत, फसल, मौसम और इनपुट स्तर के लिए फसल उपज का अनुमान लगाएं।",
@@ -299,7 +338,17 @@
     "sensor_node_host": "सेंसर नोड का पता",
     "robot_host": "मोटर नियंत्रक का पता",
     "camera_host": "कैमरा का पता",
-    "hardware_host_placeholder": "जैसे agrinova-sensors.local या 192.168.1.42"
+    "hardware_host_placeholder": "जैसे agrinova-sensors.local या 192.168.1.42",
+    "whatsapp_title": "व्हाट्सएप बॉट",
+    "whatsapp_live": "लाइव",
+    "whatsapp_not_configured": "कॉन्फ़िगर नहीं किया गया",
+    "whatsapp_hint": "इस खेत के AI सहायक को सीधे व्हाट्सएप पर मैसेज करें। आने वाले संदेशों को आपके खेत से मिलाने के लिए नीचे अपना नंबर जोड़ें।",
+    "whatsapp_number": "व्हाट्सएप नंबर",
+    "whatsapp_number_status": "आपका नंबर",
+    "whatsapp_number_saved": "सहेजा गया",
+    "whatsapp_number_missing": "सेट नहीं है",
+    "whatsapp_bot_status": "बॉट कनेक्शन",
+    "whatsapp_admin_hint": "आपका नंबर सहेजा जा चुका है और तैयार है। बॉट अभी तक व्हाट्सएप से कनेक्ट नहीं है — इसके लिए इस ऐप के सर्वर को संभालने वाले व्यक्ति को एक बार सेटअप करना होगा (एक निःशुल्क Meta डेवलपर खाता)। उनसे पूछें, या backend/.env.example देखें।"
   },
   "landing": {
     "nav_features": "विशेषताएँ",

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
 import { HeartPulse, Sparkles } from 'lucide-react'
@@ -17,7 +17,7 @@ const statusTone: Record<string, 'brand' | 'warning' | 'critical' | 'neutral'> =
 }
 
 export default function SoilHealth() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const [result, setResult] = useState<SoilHealthType | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -26,7 +26,7 @@ export default function SoilHealth() {
     setLoading(true)
     setError('')
     try {
-      const { data } = await api.get<SoilHealthType>('/api/soil-health/analyze')
+      const { data } = await api.get<SoilHealthType>('/api/soil-health/analyze', { params: { language: i18n.language } })
       setResult(data)
     } catch (err) {
       setError(apiErrorMessage(err))
@@ -34,6 +34,17 @@ export default function SoilHealth() {
       setLoading(false)
     }
   }
+
+  // Re-localize the existing analysis on a language switch instead of
+  // re-running the analysis.
+  useEffect(() => {
+    if (!result) return
+    api
+      .get<SoilHealthType>('/api/soil-health/latest', { params: { language: i18n.language } })
+      .then(({ data }) => setResult(data))
+      .catch(() => {})
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [i18n.language])
 
   return (
     <div className="space-y-6">

@@ -33,6 +33,19 @@ DISCONNECT_PROBABILITY_PER_TICK = 0.004
 RECONNECT_PROBABILITY_PER_TICK = 0.6
 NPK_ALERT_EVERY_N_TICKS = 45
 
+# Battery has no real sensor yet (no hardware farm's firmware reports one) —
+# this stands in wherever a live value isn't available, same rationale as
+# the rest of this module, so the UI never shows a frozen number.
+BATTERY_LOW_THRESHOLD = 20.0
+BATTERY_RECHARGE_RANGE = (92.0, 100.0)
+BATTERY_DRAIN_PER_TICK = (0.01, 0.06)
+
+
+def simulate_battery_drift(rng: random.Random, current: float) -> float:
+    if current <= BATTERY_LOW_THRESHOLD:
+        return round(rng.uniform(*BATTERY_RECHARGE_RANGE), 1)
+    return round(_clamp(current - rng.uniform(*BATTERY_DRAIN_PER_TICK), 0, 100), 1)
+
 # Per-process RNG continuity per farm (reseeded from FarmState.rng_seed the
 # first time a farm is seen so restarts stay reproducible-ish but each farm
 # is independent of every other farm).
@@ -134,6 +147,8 @@ async def _tick_farm(db: Session, farm: Farm, state: FarmState):
 
     if tick_no % NPK_ALERT_EVERY_N_TICKS == 0:
         new_alerts.append(Alert(farm_id=farm.id, code="npk_reading_updated", severity="info", params={}))
+
+    state.robot_battery_pct = simulate_battery_drift(rng, state.robot_battery_pct)
 
     reading = SensorReading(
         farm_id=farm.id,

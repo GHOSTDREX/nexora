@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
@@ -10,7 +10,7 @@ import { FieldGroup, Input, Select } from '@/components/ui/Field'
 import { LanguageDropdown } from '@/components/LanguageDropdown'
 import { ThemeToggle } from '@/components/ThemeToggle'
 import { REGIONS, SOIL_TYPES, CROP_TYPES, GROWTH_STAGES, SEASONS } from '@/lib/farmOptions'
-import type { Farm } from '@/lib/types'
+import type { Farm, YieldOptions } from '@/lib/types'
 
 export default function Onboarding() {
   const { t } = useTranslation()
@@ -18,10 +18,18 @@ export default function Onboarding() {
   const navigate = useNavigate()
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [states, setStates] = useState<string[]>(['Maharashtra'])
+
+  useEffect(() => {
+    api.get<YieldOptions>('/api/yield/options').then(({ data }) => {
+      if (data.states.length) setStates(data.states)
+    }).catch(() => {})
+  }, [])
 
   const [form, setForm] = useState({
     name: 'My Farm',
     region: 'North',
+    state: 'Maharashtra',
     latitude: 28.6139,
     longitude: 77.209,
     field_area_hectare: 2.5,
@@ -91,22 +99,12 @@ export default function Onboarding() {
             </Select>
           </FieldGroup>
 
-          <FieldGroup label={t('onboarding.latitude')}>
-            <Input
-              type="number"
-              step="any"
-              value={form.latitude}
-              onChange={(e) => update('latitude', Number(e.target.value))}
-            />
-          </FieldGroup>
-
-          <FieldGroup label={t('onboarding.longitude')}>
-            <Input
-              type="number"
-              step="any"
-              value={form.longitude}
-              onChange={(e) => update('longitude', Number(e.target.value))}
-            />
+          <FieldGroup label={t('onboarding.state')}>
+            <Select value={form.state} onChange={(e) => update('state', e.target.value)}>
+              {states.map((s) => (
+                <option key={s} value={s}>{s}</option>
+              ))}
+            </Select>
           </FieldGroup>
 
           <FieldGroup label={t('onboarding.field_area')}>
@@ -135,24 +133,6 @@ export default function Onboarding() {
               max="10.5"
               value={form.soil_ph}
               onChange={(e) => update('soil_ph', Number(e.target.value))}
-            />
-          </FieldGroup>
-
-          <FieldGroup label={t('onboarding.organic_carbon')}>
-            <Input
-              type="number"
-              step="any"
-              value={form.organic_carbon}
-              onChange={(e) => update('organic_carbon', Number(e.target.value))}
-            />
-          </FieldGroup>
-
-          <FieldGroup label={t('onboarding.electrical_conductivity')}>
-            <Input
-              type="number"
-              step="any"
-              value={form.electrical_conductivity}
-              onChange={(e) => update('electrical_conductivity', Number(e.target.value))}
             />
           </FieldGroup>
 

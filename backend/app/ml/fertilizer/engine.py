@@ -30,7 +30,7 @@ def _load_model():
     return _MODEL
 
 
-def recommend_fertilizer(**values: Any) -> dict[str, Any]:
+def recommend_fertilizer(language: str = "en", **values: Any) -> dict[str, Any]:
     validation = validate_inputs(values)
     if not validation["valid"]:
         raise ValueError(" ".join(validation["errors"]))
@@ -67,7 +67,7 @@ def recommend_fertilizer(**values: Any) -> dict[str, Any]:
         "recommended_fertilizer": prediction,
         "model_probability": probability,
         "nutrient_status": statuses,
-        "reason": explain_recommendation(prediction, statuses, clean["soil_ph"]),
+        "reason": explain_recommendation(prediction, statuses, clean["soil_ph"], language),
         "input_features": {
             "soil_type": clean["soil_type"],
             "crop_growth_stage": clean["crop_growth_stage"],

@@ -1,0 +1,213 @@
+{
+  "bacterial_leaf_blight": {
+    "disease_id": "bacterial_leaf_blight",
+    "display_name": "Bacterial Leaf Blight",
+    "short_description": "A serious bacterial disease of rice caused by Xanthomonas oryzae pv. oryzae that causes wilting of seedlings and yellowing and drying of leaves, potentially causing up to 70% yield loss in susceptible varieties under favorable conditions.",
+    "common_symptoms": [
+      "Wilting of seedlings, yellowing and drying of leaves",
+      "On seedlings, grayish-green leaves roll up, turn yellow to straw-colored, then wilt and dry",
+      "On mature plants, water-soaked yellow-orange stripes with wavy margins on leaf blades or tips",
+      "Milky bacterial ooze droplets visible on young lesions in the early morning, drying into yellowish beads",
+      "Old lesions turn yellow to grayish-white, sometimes with black dots"
+    ],
+    "management": "Plant resistant rice varieties, which is the most efficient and reliable control method; apply balanced nitrogen fertilization rather than excess nitrogen; ensure proper field and nursery drainage; remove weeds and plow under infected plant residues. Consult a local agricultural extension officer for approved chemical control options.",
+    "prevention": [
+      "Keep fields clean by removing weed hosts and volunteer seedlings",
+      "Dry fallow fields to suppress the bacteria in soil and residue",
+      "Avoid conditions that favor the disease where possible (it thrives at 25-34°C with high humidity and heavy rain/wind)",
+      "Use resistant varieties",
+      "Maintain proper field and nursery drainage"
+    ],
+    "source_name": "IRRI Rice Knowledge Bank",
+    "source_url": "http://www.knowledgebank.irri.org/decision-tools/rice-doctor/rice-doctor-fact-sheets/item/bacterial-blight"
+  },
+  "bacterial_leaf_streak": {
+    "disease_id": "bacterial_leaf_streak",
+    "display_name": "Bacterial Leaf Streak",
+    "short_description": "A bacterial disease of rice caused by Xanthomonas oryzae pv. oryzicola that causes browning and drying of leaves, which under severe conditions can reduce grain weight by decreasing the plant's photosynthetic area.",
+    "common_symptoms": [
+      "Small, water-soaked, linear lesions between leaf veins",
+      "Lesions progress from dark green to light brown or yellowish-gray",
+      "Lesions appear translucent when held up to light",
+      "Under severe infection, entire leaves turn brown and die",
+      "Yellow bacterial ooze containing bacterial cells may appear on leaf surfaces under humid conditions"
+    ],
+    "management": "Use balanced amounts of plant nutrients, especially nitrogen; ensure adequate field drainage; drain fields during the fallow period. Consult a local agricultural extension officer for approved chemical control options.",
+    "prevention": [
+      "Plant resistant rice varieties",
+      "Treat seeds with hot water before planting",
+      "Remove weed hosts and plow under rice stubble, straw, ratoons, and volunteer seedlings that may harbor the bacteria",
+      "Keep fields clean of infected plant material",
+      "Dry fields during the fallow period to kill bacteria in soil and plant residue"
+    ],
+    "source_name": "IRRI Rice Knowledge Bank",
+    "source_url": "http://www.knowledgebank.irri.org/training/fact-sheets/pest-management/diseases/item/bacterial-leaf-streak"
+  },
+  "bacterial_panicle_blight": {
+    "disease_id": "bacterial_panicle_blight",
+    "display_name": "Bacterial Panicle Blight",
+    "short_description": "Bacterial panicle blight, caused by Burkholderia glumae (and B. gladioli), usually develops late in the season and is associated with hot conditions. The pathogen overwinters in infected seed and soil and spreads via rain splash, and can severely reduce grain yield.",
+    "common_symptoms": [
+      "Green panicle branches extending down to the diseased, discolored grain",
+      "Two-toned grain, with brown discoloration on the lower third to half of the hull",
+      "Discolored florets that remain upright as grain filling ceases",
+      "Floret/panicle stems stay green after unaffected grain has matured",
+      "Occasional sheath-rot-like symptoms on the flag leaf sheath",
+      "Circular patches of blighted plants visible across affected fields"
+    ],
+    "management": "No pesticides are currently established as reliably effective against this disease. Select rice varieties with partial resistance where locally available, avoid excessive nitrogen application, and do not use seed harvested from severely affected fields. Consult a local agricultural extension officer for any additional approved control options.",
+    "prevention": [
+      "Plant early to avoid late-season hot temperatures, when disease risk is highest",
+      "Select moderately resistant or partially resistant rice varieties for planting",
+      "Scout fields early in the season, even though no formal scouting method is established",
+      "Avoid excessive nitrogen fertilization"
+    ],
+    "source_name": "LSU AgCenter",
+    "source_url": "https://www.lsuagcenter.com/~/media/files/bacterial-panicle-blight.pdf"
+  },
+  "blast": {
+    "disease_id": "blast",
+    "display_name": "Rice Blast",
+    "short_description": "A fungal disease caused by Magnaporthe oryzae that can affect all above-ground parts of a rice plant — leaf, collar, node, neck, parts of the panicle, and sometimes the leaf sheath.",
+    "common_symptoms": [
+      "Initial lesions appear whitish to gray-green with dark green borders",
+      "Mature leaf lesions are elliptical or spindle-shaped (sometimes diamond-shaped) with whitish-gray centers and reddish-brown necrotic borders",
+      "Lesions can merge and destroy entire leaves",
+      "Node blast causes necrotic black lesions that weaken and break nodes",
+      "Neck blast turns the panicle neck black, brittle and necrotic; early neck infection can kill the entire panicle, leaving it white and blank with unfilled kernels"
+    ],
+    "management": "Plant resistant varieties, which is the primary control method; avoid excessive nitrogen fertilizer application; where soils are silicon-deficient, silicon fertilizer or high-silicon rice straw can help reduce severity. Consult a local agricultural extension officer for approved fungicide options, particularly around the heading stage.",
+    "prevention": [
+      "Use certified, disease-free seed and straw",
+      "Sow seeds early after the onset of the rainy season",
+      "Maintain field flooding as frequently/consistently as possible",
+      "Remove collateral weed hosts from bunds and channels",
+      "Monitor for weather conditions favoring disease (cool temperatures, high moisture, prolonged rainfall)"
+    ],
+    "source_name": "IRRI Rice Knowledge Bank",
+    "source_url": "http://www.knowledgebank.irri.org/training/fact-sheets/pest-management/diseases/item/blast-leaf-collar"
+  },
+  "brown_spot": {
+    "disease_id": "brown_spot",
+    "display_name": "Brown Spot",
+    "short_description": "A fungal disease of rice that infects the coleoptile, leaves, leaf sheath, panicle branches, glumes, and spikelets, causing leaf spotting and grain discoloration that reduces grain quality and weight.",
+    "common_symptoms": [
+      "Small, circular, yellow-brown to brown lesions on infected seedlings that can distort leaves",
+      "Circular to oval mature leaf lesions with light brown/gray centers and reddish-brown margins",
+      "Lesions range roughly 5-14 mm on susceptible varieties, pinhead-sized on resistant ones",
+      "Dark brown or black spots on glumes and panicle branches",
+      "'Pecky rice' — spotted, discolored grains — when florets are infected"
+    ],
+    "management": "Use resistant rice varieties where available; treat seed with hot water before planting to reduce primary seedling infection; ensure adequate soil fertility (including silicon in deficient soils) and avoid water stress, which increases susceptibility. Consult a local agricultural extension officer for approved chemical seed-treatment or foliar-spray options.",
+    "prevention": [
+      "Use certified, disease-free seed, since the disease is seed-borne",
+      "Grow resistant varieties, the most economical means of control",
+      "Maintain proper soil fertility and avoid water stress",
+      "Remove infected crop debris",
+      "Address silicon-deficient soils through appropriate nutrient management"
+    ],
+    "source_name": "IRRI Rice Knowledge Bank",
+    "source_url": "http://www.knowledgebank.irri.org/training/fact-sheets/pest-management/diseases/item/brown-spot"
+  },
+  "dead_heart": {
+    "disease_id": "dead_heart",
+    "display_name": "Dead Heart (Stem Borer Damage)",
+    "short_description": "Dead heart is not a disease but a damage symptom — the drying and death of the central shoot/tiller of a rice plant — caused by larvae of stem borer moths (including yellow, white, striped, gold-fringed, dark-headed striped, and pink stem borers) feeding and tunneling inside the stem during the vegetative stage.",
+    "common_symptoms": [
+      "Dead, dried-out central tiller ('deadheart') that can be easily pulled out from the base during the vegetative stage",
+      "Tiny holes visible on stems and tillers",
+      "Frass (insect fecal matter) present inside damaged stems",
+      "In the reproductive stage, related larval feeding produces 'whiteheads' — whitish, unfilled emerging panicles"
+    ],
+    "management": "Use resistant rice varieties where available; hand-pick and destroy egg masses at the seedbed and transplanting stages; periodically raise irrigation water levels to submerge eggs on lower plant parts; trim leaf tops before transplanting; harvest at ground level and remove stubble to eliminate remaining larvae; conserve natural predators such as wasps, beetles, flies, spiders, and birds; apply nitrogen fertilizer in split doses rather than all at once. Consult a local agricultural extension officer for approved insecticide options if damage exceeds locally recommended thresholds.",
+    "prevention": [
+      "Practice synchronized planting across neighboring fields",
+      "Remove volunteer rice plants and field stubble after harvest",
+      "Plow and flood fields after harvest to destroy larvae and pupae",
+      "Avoid excessive nitrogen application, which favors pest buildup",
+      "Ensure proper, well-timed planting"
+    ],
+    "source_name": "IRRI Rice Knowledge Bank",
+    "source_url": "http://www.knowledgebank.irri.org/training/fact-sheets/pest-management/insects/item/stem-borer"
+  },
+  "downy_mildew": {
+    "disease_id": "downy_mildew",
+    "display_name": "Downy Mildew",
+    "short_description": "A fungal (oomycete) disease caused by Sclerophthora macrospora that affects wheat, oats, barley, rye, corn, sorghum, and rice, among roughly 140 grass species. The pathogen thrives in waterlogged conditions and is most common in flooded and low-lying field areas.",
+    "common_symptoms": [
+      "Excessive tillering, with many shoots dying before reaching full height",
+      "Severe stunting and deformation of the plant",
+      "Short, thickened or warty leaves that appear stiff and upright",
+      "Yellow striping or complete yellowing of foliage",
+      "Distorted, abnormally enlarged panicles/heads that fail to produce viable grain",
+      "Thickened, deformed stems"
+    ],
+    "management": "Improve field drainage (surface and subsurface); rotate with non-cereal crops; eliminate grassy weeds that serve as hosts; avoid planting in flood-prone areas; use clean seed sourced from disease-free fields (note: seed treatment is generally not effective against this pathogen). Consult a local agricultural extension officer for any additional recommended control options.",
+    "prevention": [
+      "Ensure good field drainage",
+      "Practice crop rotation with non-cereal crops",
+      "Remove grassy weed hosts in and around fields",
+      "Avoid low-lying, flood-prone planting sites",
+      "Use certified, disease-free seed"
+    ],
+    "source_name": "University of Illinois Extension",
+    "source_url": "http://ipm.illinois.edu/diseases/series100/rpd122/"
+  },
+  "hispa": {
+    "disease_id": "hispa",
+    "display_name": "Rice Hispa",
+    "short_description": "Rice hispa (Dicladispa armigera) is an insect pest, not a pathogen — a leaf beetle whose adults and larvae damage rice leaves by scraping and tunneling through leaf tissue, reducing plant vigor when infestations are severe.",
+    "common_symptoms": [
+      "White streaks parallel to the leaf midrib where adults scrape the upper leaf surface, leaving only the lower epidermis",
+      "Irregular translucent white patches parallel to leaf veins, caused by larvae tunneling through leaf tissue",
+      "Withering of damaged leaves with a whitish, membranous appearance",
+      "Severely infested fields can appear burnt/scorched from a distance",
+      "Potential yield losses of up to 20% under heavy infestation"
+    ],
+    "management": "Encourage natural biological control agents such as small parasitic wasps that attack eggs and larvae, reduviid bugs that prey on adults, and fungal pathogens that infect adults; clip and bury shoot tips showing early damage in mud to reduce grub populations; avoid over-fertilizing fields with nitrogen. Consult a local agricultural extension officer for approved insecticide options if infestation is severe.",
+    "prevention": [
+      "Remove grassy weeds in and around rice fields that serve as alternate hosts",
+      "Use closer plant spacing at transplanting to increase tolerance to infestation",
+      "Avoid excessive nitrogen fertilization",
+      "Monitor fields for early scraping damage and act promptly"
+    ],
+    "source_name": "IRRI Rice Knowledge Bank",
+    "source_url": "http://www.knowledgebank.irri.org/training/fact-sheets/pest-management/insects/item/rice-hispa"
+  },
+  "normal": {
+    "disease_id": "normal",
+    "display_name": "Normal",
+    "short_description": "No obvious target disease was identified by the classifier among the 10 conditions it was trained to recognize. This is a classification result, not a complete plant-health diagnosis — the model was not trained to detect every possible paddy condition.",
+    "common_symptoms": ["No target disease symptoms detected by the classifier."],
+    "management": "Not applicable — this class indicates no detected disease or pest damage among the trained categories. Continue routine good agronomic practices and regular field monitoring.",
+    "prevention": [
+      "Practice regular field scouting to catch problems early",
+      "Maintain balanced fertilization and proper water management",
+      "Use certified, disease-free seed and resistant varieties",
+      "Practice field sanitation and crop rotation"
+    ],
+    "source_name": "N/A (healthy/no-target-disease classification, not a sourced disease entry)",
+    "source_url": "N/A"
+  },
+  "tungro": {
+    "disease_id": "tungro",
+    "display_name": "Tungro",
+    "short_description": "Rice tungro disease is caused by a combination of two viruses transmitted by leafhoppers (chiefly the green leafhopper). It significantly impacts rice production in South and Southeast Asia and can cause complete crop failure in susceptible varieties.",
+    "common_symptoms": [
+      "Leaf discoloration ranging from yellow to orange-yellow, starting at the leaf tip",
+      "Mottled or striped leaf appearance with rust-colored spots",
+      "Stunted plant growth and delayed flowering",
+      "Reduced tiller production",
+      "Small panicles with sterile or partially filled grains marked by dark brown blotches"
+    ],
+    "management": "Infected plants cannot be cured, so management focuses on prevention: plant resistant varieties where available, coordinate/synchronize planting dates with neighboring farms to reduce leafhopper vector populations, time planting for periods when green leafhoppers are least abundant, and plow under infected crop residues immediately after harvest. Avoidance of unnecessary insecticide spraying is often advised since it is frequently ineffective at preventing tungro spread; consult a local agricultural extension officer for vector management guidance.",
+    "prevention": [
+      "Grow tungro-resistant cultivars — described as the most economical means of managing the disease",
+      "Practice synchronized planting across a region",
+      "Remove infected stubble and destroy leafhopper breeding sites promptly",
+      "Source seedlings from tungro-free nursery areas"
+    ],
+    "source_name": "IRRI Rice Knowledge Bank",
+    "source_url": "http://www.knowledgebank.irri.org/training/fact-sheets/pest-management/diseases/item/tungro"
+  }
+}

@@ -1,9 +1,13 @@
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { test, expect, type Page, type ConsoleMessage } from '@playwright/test'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 // Every nav destination that requires an authenticated + onboarded farm.
 const NAV_PAGES = [
   '/dashboard', '/robot', '/monitoring', '/irrigation', '/crop-recommendation',
-  '/fertilizer', '/soil-health', '/yield-prediction', '/assistant', '/alerts', '/settings',
+  '/fertilizer', '/soil-health', '/disease-detection', '/yield-prediction', '/schemes', '/market', '/assistant', '/alerts', '/settings',
 ]
 
 // Two categories of expected, correctly-handled network "errors" that the
@@ -156,6 +160,49 @@ test.describe('AgriNova smoke suite', () => {
   test('dashboard shows a live "last seen" heartbeat for hardware status', async ({ page }) => {
     await page.goto('/dashboard')
     await expect(page.getByText(/last seen/i)).toBeVisible({ timeout: 10_000 })
+  })
+
+  test('dashboard shows scheme and market teaser cards linking to their own pages', async ({ page }) => {
+    await page.goto('/dashboard')
+    await expect(page.getByText(/schemes matched/i)).toBeVisible({ timeout: 10_000 })
+    await expect(page.getByRole('heading', { name: /mandi price/i })).toBeVisible({ timeout: 10_000 })
+  })
+
+  test('disease detection page analyzes an uploaded photo end-to-end', async ({ page }) => {
+    // CPU inference is slow on a cold model (first call after backend
+    // startup warms up torch kernels) — longer budget than the suite default.
+    test.setTimeout(60_000)
+    const errors = trackConsoleErrors(page)
+    await page.goto('/disease-detection')
+    await page.waitForLoadState('networkidle')
+
+    const fileInput = page.locator('input[type="file"]')
+    await fileInput.setInputFiles(path.join(__dirname, 'fixtures', 'sample-non-paddy.jpg'))
+
+    await Promise.all([
+      page.waitForResponse((r) => r.url().includes('/api/disease/predict') && r.request().method() === 'POST', { timeout: 20_000 }),
+      page.getByRole('button', { name: /^analyze$/i }).click(),
+    ])
+
+    await expect(page.getByText(/confidence/i).first()).toBeVisible({ timeout: 20_000 })
+    expect(errors, `console errors on disease detection page: ${errors.join('\n')}`).toHaveLength(0)
+  })
+
+  test('schemes page shows matched government schemes for the farm profile', async ({ page }) => {
+    const errors = trackConsoleErrors(page)
+    await page.goto('/schemes')
+    await expect(page.getByText(/government schemes/i).first()).toBeVisible({ timeout: 10_000 })
+    await expect(page.getByText('PM-KISAN')).toBeVisible()
+    expect(errors, `console errors on schemes page: ${errors.join('\n')}`).toHaveLength(0)
+  })
+
+  test('market page shows mandi price section and dealer links', async ({ page }) => {
+    const errors = trackConsoleErrors(page)
+    await page.goto('/market')
+    await expect(page.getByRole('heading', { name: /mandi price/i })).toBeVisible({ timeout: 10_000 })
+    await expect(page.getByRole('link', { name: /find nearby dealer/i })).toHaveAttribute('href', /google\.com\/maps/)
+    await expect(page.getByRole('link', { name: /krishi vigyan kendra/i })).toHaveAttribute('href', /kvk\.icar\.gov\.in/)
+    expect(errors, `console errors on market page: ${errors.join('\n')}`).toHaveLength(0)
   })
 
   test('SMS assistant preview returns a plain-text reply capped at 160 chars', async ({ page }) => {

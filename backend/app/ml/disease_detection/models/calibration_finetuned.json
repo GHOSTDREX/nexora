@@ -1,0 +1,11 @@
+{
+  "temperature": 0.9857,
+  "confidence_threshold": 0.9,
+  "validation_accuracy": 0.9622,
+  "accepted_rate": 0.886,
+  "accepted_accuracy": 0.9899,
+  "test_accuracy": 0.9673,
+  "model": "MobileNetV3 Small (fine-tuned, augmented)",
+  "image_size": 224,
+  "base_checkpoint": "C:\\Users\\khota\\Desktop\\nexora\\backend\\app\\ml\\disease_detection\\models\\paddy_mobilenetv3_best.pth"
+}

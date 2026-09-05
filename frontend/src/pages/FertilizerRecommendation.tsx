@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
 import { Beaker, Sparkles } from 'lucide-react'
@@ -20,7 +20,7 @@ const NUTRIENT_TONE: Record<string, 'warning' | 'brand' | 'info'> = {
 }
 
 export default function FertilizerRecommendation() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const [crop, setCrop] = useState('Rice')
   const [rec, setRec] = useState<FertilizerRecType | null>(null)
   const [loading, setLoading] = useState(false)
@@ -47,7 +47,7 @@ export default function FertilizerRecommendation() {
     setLoading(true)
     setError('')
     try {
-      const { data } = await api.post<FertilizerRecType>('/api/fertilizer/recommend', { crop })
+      const { data } = await api.post<FertilizerRecType>('/api/fertilizer/recommend', { crop, language: i18n.language })
       setRec(data)
     } catch (err) {
       setError(apiErrorMessage(err))
@@ -55,6 +55,17 @@ export default function FertilizerRecommendation() {
       setLoading(false)
     }
   }
+
+  // Re-localize the existing recommendation's reason text on a language
+  // switch instead of re-running the recommendation.
+  useEffect(() => {
+    if (!rec) return
+    api
+      .get<FertilizerRecType>('/api/fertilizer/latest', { params: { language: i18n.language } })
+      .then(({ data }) => setRec(data))
+      .catch(() => {})
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [i18n.language])
 
   return (
     <div className="space-y-6">

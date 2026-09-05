@@ -1,0 +1,10 @@
+{
+    "temperature": 1.19,
+    "confidence_threshold": 0.9,
+    "validation_accuracy": 0.952,
+    "accepted_rate": 0.8578,
+    "accepted_accuracy": 0.9895,
+    "test_accuracy": 0.9577,
+    "model": "MobileNetV3 Small",
+    "image_size": 224
+}

@@ -15,6 +15,9 @@ import {
   Settings,
   Leaf,
   TrendingUp,
+  Landmark,
+  Store,
+  Bug,
 } from 'lucide-react'
 
 const items = [
@@ -25,7 +28,10 @@ const items = [
   { to: '/crop-recommendation', icon: Wheat, key: 'crop_recommendation' },
   { to: '/fertilizer', icon: Beaker, key: 'fertilizer' },
   { to: '/soil-health', icon: HeartPulse, key: 'soil_health' },
+  { to: '/disease-detection', icon: Bug, key: 'disease_detection' },
   { to: '/yield-prediction', icon: TrendingUp, key: 'yield_prediction' },
+  { to: '/schemes', icon: Landmark, key: 'schemes' },
+  { to: '/market', icon: Store, key: 'market' },
   { to: '/assistant', icon: MessageCircle, key: 'ai_assistant' },
   { to: '/alerts', icon: Bell, key: 'alerts' },
   { to: '/settings', icon: Settings, key: 'settings' },

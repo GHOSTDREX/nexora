@@ -57,6 +57,12 @@ def _migrate_additive_columns():
             conn.exec_driver_sql("ALTER TABLE farms ADD COLUMN robot_host VARCHAR(128) DEFAULT ''")
             conn.exec_driver_sql("ALTER TABLE farms ADD COLUMN camera_host VARCHAR(128) DEFAULT ''")
             conn.commit()
+        if "state" not in cols:
+            conn.exec_driver_sql("ALTER TABLE farms ADD COLUMN state VARCHAR(64) DEFAULT 'Maharashtra'")
+            conn.commit()
+        if "whatsapp_number" not in cols:
+            conn.exec_driver_sql("ALTER TABLE farms ADD COLUMN whatsapp_number VARCHAR(32) DEFAULT ''")
+            conn.commit()
 
         state_cols = {row[1] for row in conn.exec_driver_sql("PRAGMA table_info(farm_state)")}
         if "motor_speed" not in state_cols:

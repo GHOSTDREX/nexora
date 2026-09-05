@@ -32,6 +32,13 @@ Thumbs.db
 # SQLite journal files
 backend/data/*.db-journal
 
+# Reference source repo for the paddy disease model (3.9GB, not app source —
+# see backend/app/ml/disease_detection/ for the ported production pipeline)
+Smart-Farming-AI/
+
+# Local ngrok tunnel logs
+ngrok.log
+
 # Real device WiFi credentials (never commit — see secrets.h.example in
 # each firmware sketch folder for the placeholder template)
 sensors/secrets.h

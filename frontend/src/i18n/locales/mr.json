@@ -10,6 +10,9 @@
     "fertilizer": "खत",
     "soil_health": "मृदा आरोग्य",
     "yield_prediction": "उत्पन्न अंदाज",
+    "disease_detection": "रोग ओळख",
+    "schemes": "योजना",
+    "market": "बाजार भाव",
     "ai_assistant": "एआय सहाय्यक",
     "alerts": "सूचना",
     "settings": "सेटिंग्ज"
@@ -36,6 +39,7 @@
     "subtitle": "यासाठी फक्त एक मिनिट लागेल — हे तुमच्या डॅशबोर्डवरील प्रत्येक शिफारशीला चालना देते.",
     "farm_name": "शेताचे नाव",
     "region": "प्रदेश",
+    "state": "राज्य",
     "latitude": "अक्षांश",
     "longitude": "रेखांश",
     "field_area": "शेत क्षेत्रफळ (हेक्टर)",
@@ -81,6 +85,7 @@
     "live": "लाइव्ह",
     "hectares": "हेक्टर",
     "view_all": "सर्व पहा",
+    "offline_banner": "तुम्ही ऑफलाइन आहात — आमच्याकडे असलेला शेवटचा डेटा दाखवत आहोत.",
     "error_generic": "काहीतरी चूक झाली. कृपया पुन्हा प्रयत्न करा.",
     "just_now": "आत्ताच",
     "seconds_ago": "{{count}} सेकंदांपूर्वी",
@@ -102,7 +107,8 @@
     "environment": "पर्यावरण",
     "rain_detected": "पाऊस आढळला",
     "no_rain": "पाऊस नाही",
-    "last_updated": "शेवटचे अद्यतन"
+    "last_updated": "शेवटचे अद्यतन",
+    "ph": "मातीचा pH"
   },
   "dashboard": {
     "title": "डॅशबोर्ड",
@@ -121,7 +127,19 @@
     "set_auto_mode": "ऑटो मोडवर स्विच करा",
     "manual_sensor_hint": "मॅन्युअल मोड सुरू आहे — तुम्ही नवीन रीडिंग सबमिट करेपर्यंत किंवा ऑटोवर परत जाईपर्यंत सेन्सर व्हॅल्यूज तुम्ही सेट केल्याप्रमाणेच राहतील. AI शिफारशी तपासण्यासाठी खाली रीडिंग एंटर करा.",
     "submit_reading": "रीडिंग सेव्ह करा",
-    "reading_saved": "सेव्ह झाले — आता शिफारशी याच व्हॅल्यूजवर आधारित असतील."
+    "reading_saved": "सेव्ह झाले — आता शिफारशी याच व्हॅल्यूजवर आधारित असतील.",
+    "schemes_title": "तुमच्या शेतासाठी सरकारी योजना",
+    "market_title": "बाजार भाव — {{crop}}",
+    "market_market": "बाजार",
+    "market_modal_price": "मॉडेल भाव",
+    "market_range": "भाव श्रेणी",
+    "market_date": "तारीख",
+    "market_no_data": "तुमच्या राज्यात या पिकासाठी अलीकडील भाव डेटा आढळला नाही.",
+    "market_not_configured": "थेट बाजार भावासाठी data.gov.in ची मोफत API की आवश्यक आहे — तुमच्या अ‍ॅडमिनला AGMARKNET_API_KEY सेट करण्यास सांगा.",
+    "market_find_dealer": "जवळचा विक्रेता शोधा",
+    "market_kvk_portal": "कृषी विज्ञान केंद्र",
+    "schemes_matched": "योजना जुळल्या",
+    "schemes_no_match": "तुमच्या शेत प्रोफाइलशी अद्याप कोणतीही योजना जुळली नाही."
   },
   "irrigation": {
     "title": "सिंचन",
@@ -230,6 +248,27 @@
     "factor_temperature": "तापमान",
     "factor_soil_ph": "मातीचा pH"
   },
+  "disease": {
+    "title": "रोग ओळख",
+    "subtitle": "रोग तपासण्यासाठी भाताच्या पानाचा फोटो अपलोड करा.",
+    "upload_title": "पानाचा फोटो अपलोड करा",
+    "choose_photo": "फोटो निवडा",
+    "choose_different": "वेगळा फोटो निवडा",
+    "upload_hint": "JPG, PNG किंवा WEBP, 15 MB पर्यंत",
+    "analyze": "विश्लेषण करा",
+    "result_title": "निकाल",
+    "confidence": "विश्वासार्हता",
+    "top_matches": "सर्वोत्तम जुळणी",
+    "symptoms": "सामान्य लक्षणे",
+    "management": "व्यवस्थापन",
+    "prevention": "प्रतिबंध",
+    "source": "स्रोत",
+    "state_accepted": "निदान सापडले",
+    "state_uncertain": "अनिश्चित",
+    "state_image_unsuitable": "प्रतिमा अयोग्य",
+    "state_subject_unsuitable": "हे भाताचे पान नाही",
+    "disclaimer": "केवळ भात (तांदूळ) पानांसाठी AI-सहाय्यित निदान — स्थानिक कृषी विस्तार अधिकाऱ्याचा पर्याय नाही. कोणतीही शिफारस अंमलात आणण्यापूर्वी खात्री करा."
+  },
   "yield": {
     "title": "उत्पन्न अंदाज",
     "subtitle": "दिलेल्या शेत, पीक, हंगाम आणि निविष्ठा पातळीसाठी पीक उत्पन्नाचा अंदाज लावा.",
@@ -299,7 +338,17 @@
     "sensor_node_host": "सेन्सर नोड पत्ता",
     "robot_host": "मोटर कंट्रोलर पत्ता",
     "camera_host": "कॅमेरा पत्ता",
-    "hardware_host_placeholder": "उदा. agrinova-sensors.local किंवा 192.168.1.42"
+    "hardware_host_placeholder": "उदा. agrinova-sensors.local किंवा 192.168.1.42",
+    "whatsapp_title": "व्हॉट्सअॅप बॉट",
+    "whatsapp_live": "लाइव्ह",
+    "whatsapp_not_configured": "कॉन्फिगर केलेले नाही",
+    "whatsapp_hint": "या शेताच्या AI सहाय्यकाला थेट व्हॉट्सअॅपवर संदेश पाठवा. येणारे संदेश तुमच्या शेताशी जुळवण्यासाठी खाली तुमचा नंबर जोडा.",
+    "whatsapp_number": "व्हॉट्सअॅप नंबर",
+    "whatsapp_number_status": "तुमचा नंबर",
+    "whatsapp_number_saved": "सेव्ह झाले",
+    "whatsapp_number_missing": "सेट नाही",
+    "whatsapp_bot_status": "बॉट कनेक्शन",
+    "whatsapp_admin_hint": "तुमचा नंबर सेव्ह झाला आहे आणि तयार आहे. बॉट अजून व्हॉट्सअॅपशी जोडलेला नाही — यासाठी हे अॅप सांभाळणाऱ्या व्यक्तीला एकदा सेटअप करावे लागेल (मोफत Meta डेव्हलपर खाते). त्यांना विचारा, किंवा backend/.env.example पहा."
   },
   "landing": {
     "nav_features": "वैशिष्ट्ये",

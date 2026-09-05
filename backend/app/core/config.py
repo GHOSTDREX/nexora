@@ -32,6 +32,14 @@ if JWT_SECRET == _DEFAULT_JWT_SECRET:
 ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "").strip()
 ANTHROPIC_MODEL = os.getenv("ANTHROPIC_MODEL", "claude-sonnet-5")
 
+# --- Mandi (market) prices — data.gov.in Agmarknet dataset ---
+AGMARKNET_API_KEY = os.getenv("AGMARKNET_API_KEY", "").strip()
+
+# --- WhatsApp bot — Meta WhatsApp Cloud API ---
+WHATSAPP_VERIFY_TOKEN = os.getenv("WHATSAPP_VERIFY_TOKEN", "").strip()
+WHATSAPP_ACCESS_TOKEN = os.getenv("WHATSAPP_ACCESS_TOKEN", "").strip()
+WHATSAPP_PHONE_NUMBER_ID = os.getenv("WHATSAPP_PHONE_NUMBER_ID", "").strip()
+
 # --- Database ---
 DB_PATH = os.getenv("DB_PATH", str(BACKEND_DIR / "data" / "agrinova.db"))
 os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)

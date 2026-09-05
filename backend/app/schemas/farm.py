@@ -4,6 +4,7 @@ from pydantic import BaseModel
 class FarmCreate(BaseModel):
     name: str = "My Farm"
     region: str = "North"
+    state: str = "Maharashtra"
     latitude: float = 28.6139
     longitude: float = 77.2090
     field_area_hectare: float = 2.5
@@ -19,6 +20,7 @@ class FarmCreate(BaseModel):
     sensor_node_host: str = ""
     robot_host: str = ""
     camera_host: str = ""
+    whatsapp_number: str = ""
 
 
 class FarmUpdate(FarmCreate):

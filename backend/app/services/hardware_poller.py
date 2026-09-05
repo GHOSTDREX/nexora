@@ -18,6 +18,7 @@ than fabricated.
 
 import asyncio
 import logging
+import random
 
 import httpx
 from sqlalchemy.orm import Session
@@ -27,11 +28,17 @@ from app.core.network_safety import is_safe_hardware_host
 from app.db.database import SessionLocal
 from app.db.models import Alert, Farm, FarmState, SensorReading
 from app.services.connection_manager import build_sensor_update_message, manager
-from app.services.simulator import LOW_MOISTURE_THRESHOLD, TARGET_MOISTURE
+from app.services.simulator import LOW_MOISTURE_THRESHOLD, TARGET_MOISTURE, simulate_battery_drift
 
 logger = logging.getLogger("agrinova.hardware")
 
 HTTP_TIMEOUT_SECONDS = 3.0
+
+# Battery falls back to the same simulated drift as sensor-less farms
+# whenever there's no real reading — disconnected, or firmware that
+# doesn't report "battery_pct" yet. One shared RNG is fine here (unlike
+# the sensor simulator, this doesn't need per-farm reproducibility).
+_battery_rng = random.Random()
 
 
 def _get_state(db: Session, farm: Farm) -> FarmState:
@@ -68,7 +75,8 @@ async def _poll_farm(client: httpx.AsyncClient, db: Session, farm: Farm):
         if state.robot_connected:
             state.robot_connected = False
             db.add(Alert(farm_id=farm.id, code="robot_disconnected", severity="critical", params={}))
-            db.commit()
+        state.robot_battery_pct = simulate_battery_drift(_battery_rng, state.robot_battery_pct)
+        db.commit()
         return
 
     new_alerts: list[Alert] = []
@@ -78,6 +86,11 @@ async def _poll_farm(client: httpx.AsyncClient, db: Session, farm: Farm):
         new_alerts.append(Alert(farm_id=farm.id, code="robot_reconnected", severity="info", params={}))
 
     soil_moisture = float(payload.get("soil_moisture", 0.0))
+
+    if "battery_pct" in payload:
+        state.robot_battery_pct = round(float(payload["battery_pct"]), 1)
+    else:
+        state.robot_battery_pct = simulate_battery_drift(_battery_rng, state.robot_battery_pct)
 
     if farm.irrigation_mode == "Auto":
         if not state.pump_on and soil_moisture < LOW_MOISTURE_THRESHOLD:

@@ -10,6 +10,9 @@
     "fertilizer": "ਖਾਦ",
     "soil_health": "ਮਿੱਟੀ ਦੀ ਸਿਹਤ",
     "yield_prediction": "ਝਾੜ ਪੂਰਵ ਅਨੁਮਾਨ",
+    "disease_detection": "ਬਿਮਾਰੀ ਪਛਾਣ",
+    "schemes": "ਯੋਜਨਾਵਾਂ",
+    "market": "ਮੰਡੀ ਭਾਅ",
     "ai_assistant": "AI ਸਹਾਇਕ",
     "alerts": "ਚੇਤਾਵਨੀਆਂ",
     "settings": "ਸੈਟਿੰਗਾਂ"
@@ -36,6 +39,7 @@
     "subtitle": "ਇਸ ਵਿੱਚ ਸਿਰਫ਼ ਇੱਕ ਮਿੰਟ ਲੱਗੇਗਾ — ਇਹ ਤੁਹਾਡੇ ਡੈਸ਼ਬੋਰਡ ਦੀ ਹਰ ਸਿਫ਼ਾਰਸ਼ ਨੂੰ ਸ਼ਕਤੀ ਦਿੰਦਾ ਹੈ।",
     "farm_name": "ਫਾਰਮ ਦਾ ਨਾਮ",
     "region": "ਖੇਤਰ",
+    "state": "ਰਾਜ",
     "latitude": "ਅਕਸ਼ਾਂਸ਼",
     "longitude": "ਦੇਸ਼ਾਂਤਰ",
     "field_area": "ਖੇਤ ਦਾ ਖੇਤਰਫਲ (ਹੈਕਟੇਅਰ)",
@@ -81,6 +85,7 @@
     "live": "ਲਾਈਵ",
     "hectares": "ਹੈਕਟੇਅਰ",
     "view_all": "ਸਭ ਦੇਖੋ",
+    "offline_banner": "ਤੁਸੀਂ ਆਫ਼ਲਾਈਨ ਹੋ — ਸਾਡੇ ਕੋਲ ਮੌਜੂਦ ਆਖਰੀ ਡਾਟਾ ਦਿਖਾਇਆ ਜਾ ਰਿਹਾ ਹੈ।",
     "error_generic": "ਕੁਝ ਗਲਤ ਹੋ ਗਿਆ। ਕਿਰਪਾ ਕਰਕੇ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।",
     "just_now": "ਹੁਣੇ",
     "seconds_ago": "{{count}} ਸਕਿੰਟ ਪਹਿਲਾਂ",
@@ -102,7 +107,8 @@
     "environment": "ਵਾਤਾਵਰਣ",
     "rain_detected": "ਬਾਰਿਸ਼ ਦਾ ਪਤਾ ਲੱਗਾ",
     "no_rain": "ਬਾਰਿਸ਼ ਨਹੀਂ",
-    "last_updated": "ਆਖਰੀ ਵਾਰ ਅੱਪਡੇਟ ਕੀਤਾ"
+    "last_updated": "ਆਖਰੀ ਵਾਰ ਅੱਪਡੇਟ ਕੀਤਾ",
+    "ph": "ਮਿੱਟੀ ਦਾ pH"
   },
   "dashboard": {
     "title": "ਡੈਸ਼ਬੋਰਡ",
@@ -121,7 +127,19 @@
     "set_auto_mode": "ਆਟੋ ਮੋਡ 'ਤੇ ਸਵਿੱਚ ਕਰੋ",
     "manual_sensor_hint": "ਮੈਨੂਅਲ ਮੋਡ ਚਾਲੂ ਹੈ — ਜਦੋਂ ਤੱਕ ਤੁਸੀਂ ਨਵੀਆਂ ਰੀਡਿੰਗਾਂ ਸਬਮਿਟ ਨਹੀਂ ਕਰਦੇ ਜਾਂ ਆਟੋ 'ਤੇ ਵਾਪਸ ਨਹੀਂ ਜਾਂਦੇ, ਸੈਂਸਰ ਮੁੱਲ ਬਿਲਕੁਲ ਉਸੇ ਤਰ੍ਹਾਂ ਰਹਿਣਗੇ ਜਿਵੇਂ ਤੁਸੀਂ ਸੈੱਟ ਕੀਤੇ ਸਨ। AI ਸਿਫ਼ਾਰਸ਼ਾਂ ਨੂੰ ਪਰਖਣ ਲਈ ਹੇਠਾਂ ਰੀਡਿੰਗਾਂ ਦਰਜ ਕਰੋ।",
     "submit_reading": "ਰੀਡਿੰਗ ਸੇਵ ਕਰੋ",
-    "reading_saved": "ਸੇਵ ਹੋ ਗਿਆ — ਹੁਣ ਸਿਫ਼ਾਰਸ਼ਾਂ ਇਹਨਾਂ ਮੁੱਲਾਂ ਦੀ ਵਰਤੋਂ ਕਰਨਗੀਆਂ।"
+    "reading_saved": "ਸੇਵ ਹੋ ਗਿਆ — ਹੁਣ ਸਿਫ਼ਾਰਸ਼ਾਂ ਇਹਨਾਂ ਮੁੱਲਾਂ ਦੀ ਵਰਤੋਂ ਕਰਨਗੀਆਂ।",
+    "schemes_title": "ਤੁਹਾਡੇ ਖੇਤ ਲਈ ਸਰਕਾਰੀ ਯੋਜਨਾਵਾਂ",
+    "market_title": "ਮੰਡੀ ਭਾਅ — {{crop}}",
+    "market_market": "ਮੰਡੀ",
+    "market_modal_price": "ਮਾਡਲ ਭਾਅ",
+    "market_range": "ਭਾਅ ਸੀਮਾ",
+    "market_date": "ਮਿਤੀ",
+    "market_no_data": "ਤੁਹਾਡੇ ਰਾਜ ਵਿੱਚ ਇਸ ਫਸਲ ਲਈ ਹਾਲ ਹੀ ਦਾ ਭਾਅ ਡਾਟਾ ਨਹੀਂ ਮਿਲਿਆ।",
+    "market_not_configured": "ਲਾਈਵ ਮੰਡੀ ਭਾਅ ਲਈ data.gov.in ਦੀ ਮੁਫ਼ਤ API ਕੁੰਜੀ ਚਾਹੀਦੀ ਹੈ — ਆਪਣੇ ਐਡਮਿਨ ਨੂੰ AGMARKNET_API_KEY ਸੈੱਟ ਕਰਨ ਲਈ ਕਹੋ।",
+    "market_find_dealer": "ਨੇੜਲਾ ਡੀਲਰ ਲੱਭੋ",
+    "market_kvk_portal": "ਕ੍ਰਿਸ਼ੀ ਵਿਗਿਆਨ ਕੇਂਦਰ",
+    "schemes_matched": "ਯੋਜਨਾਵਾਂ ਮਿਲੀਆਂ",
+    "schemes_no_match": "ਤੁਹਾਡੇ ਖੇਤ ਦੀ ਪ੍ਰੋਫਾਈਲ ਨਾਲ ਅਜੇ ਤੱਕ ਕੋਈ ਯੋਜਨਾ ਮੇਲ ਨਹੀਂ ਖਾਂਦੀ।"
   },
   "irrigation": {
     "title": "ਸਿੰਚਾਈ",
@@ -230,6 +248,27 @@
     "factor_temperature": "ਤਾਪਮਾਨ",
     "factor_soil_ph": "ਮਿੱਟੀ ਦਾ pH"
   },
+  "disease": {
+    "title": "ਬਿਮਾਰੀ ਪਛਾਣ",
+    "subtitle": "ਬਿਮਾਰੀ ਦੀ ਜਾਂਚ ਲਈ ਝੋਨੇ ਦੇ ਪੱਤੇ ਦੀ ਫੋਟੋ ਅੱਪਲੋਡ ਕਰੋ।",
+    "upload_title": "ਪੱਤੇ ਦੀ ਫੋਟੋ ਅੱਪਲੋਡ ਕਰੋ",
+    "choose_photo": "ਫੋਟੋ ਚੁਣੋ",
+    "choose_different": "ਵੱਖਰੀ ਫੋਟੋ ਚੁਣੋ",
+    "upload_hint": "JPG, PNG ਜਾਂ WEBP, 15 MB ਤੱਕ",
+    "analyze": "ਵਿਸ਼ਲੇਸ਼ਣ ਕਰੋ",
+    "result_title": "ਨਤੀਜਾ",
+    "confidence": "ਭਰੋਸਾ",
+    "top_matches": "ਚੋਟੀ ਦੇ ਮੇਲ",
+    "symptoms": "ਆਮ ਲੱਛਣ",
+    "management": "ਪ੍ਰਬੰਧਨ",
+    "prevention": "ਰੋਕਥਾਮ",
+    "source": "ਸਰੋਤ",
+    "state_accepted": "ਨਿਦਾਨ ਮਿਲਿਆ",
+    "state_uncertain": "ਅਨਿਸ਼ਚਿਤ",
+    "state_image_unsuitable": "ਤਸਵੀਰ ਅਢੁਕਵੀਂ",
+    "state_subject_unsuitable": "ਇਹ ਝੋਨੇ ਦਾ ਪੱਤਾ ਨਹੀਂ ਹੈ",
+    "disclaimer": "ਸਿਰਫ਼ ਝੋਨੇ (ਚੌਲ) ਦੇ ਪੱਤਿਆਂ ਲਈ AI-ਸਹਾਇਤਾ ਪ੍ਰਾਪਤ ਨਿਦਾਨ — ਸਥਾਨਕ ਖੇਤੀਬਾੜੀ ਵਿਸਤਾਰ ਅਧਿਕਾਰੀ ਦਾ ਬਦਲ ਨਹੀਂ। ਕਿਸੇ ਵੀ ਸਿਫ਼ਾਰਸ਼ 'ਤੇ ਕਾਰਵਾਈ ਕਰਨ ਤੋਂ ਪਹਿਲਾਂ ਪੁਸ਼ਟੀ ਕਰੋ।"
+  },
   "yield": {
     "title": "ਝਾੜ ਪੂਰਵ ਅਨੁਮਾਨ",
     "subtitle": "ਦਿੱਤੇ ਗਏ ਖੇਤ, ਫ਼ਸਲ, ਮੌਸਮ ਅਤੇ ਇਨਪੁੱਟ ਪੱਧਰ ਲਈ ਫ਼ਸਲ ਦੇ ਝਾੜ ਦਾ ਅਨੁਮਾਨ ਲਗਾਓ।",
@@ -299,7 +338,17 @@
     "sensor_node_host": "ਸੈਂਸਰ ਨੋਡ ਪਤਾ",
     "robot_host": "ਮੋਟਰ ਕੰਟਰੋਲਰ ਪਤਾ",
     "camera_host": "ਕੈਮਰਾ ਪਤਾ",
-    "hardware_host_placeholder": "ਜਿਵੇਂ agrinova-sensors.local ਜਾਂ 192.168.1.42"
+    "hardware_host_placeholder": "ਜਿਵੇਂ agrinova-sensors.local ਜਾਂ 192.168.1.42",
+    "whatsapp_title": "ਵਟਸਐਪ ਬੋਟ",
+    "whatsapp_live": "ਲਾਈਵ",
+    "whatsapp_not_configured": "ਕੌਂਫਿਗਰ ਨਹੀਂ ਕੀਤਾ",
+    "whatsapp_hint": "ਇਸ ਖੇਤ ਦੇ AI ਸਹਾਇਕ ਨੂੰ ਸਿੱਧਾ ਵਟਸਐਪ 'ਤੇ ਸੁਨੇਹਾ ਭੇਜੋ। ਆਉਣ ਵਾਲੇ ਸੁਨੇਹਿਆਂ ਨੂੰ ਤੁਹਾਡੇ ਖੇਤ ਨਾਲ ਮਿਲਾਉਣ ਲਈ ਹੇਠਾਂ ਆਪਣਾ ਨੰਬਰ ਜੋੜੋ।",
+    "whatsapp_number": "ਵਟਸਐਪ ਨੰਬਰ",
+    "whatsapp_number_status": "ਤੁਹਾਡਾ ਨੰਬਰ",
+    "whatsapp_number_saved": "ਸੇਵ ਹੋ ਗਿਆ",
+    "whatsapp_number_missing": "ਸੈੱਟ ਨਹੀਂ",
+    "whatsapp_bot_status": "ਬੋਟ ਕਨੈਕਸ਼ਨ",
+    "whatsapp_admin_hint": "ਤੁਹਾਡਾ ਨੰਬਰ ਸੇਵ ਹੋ ਗਿਆ ਹੈ ਅਤੇ ਤਿਆਰ ਹੈ। ਬੋਟ ਅਜੇ ਵਟਸਐਪ ਨਾਲ ਕਨੈਕਟ ਨਹੀਂ ਹੈ — ਇਸ ਲਈ ਇਸ ਐਪ ਦੇ ਸਰਵਰ ਦਾ ਪ੍ਰਬੰਧਨ ਕਰਨ ਵਾਲੇ ਨੂੰ ਇੱਕ ਵਾਰ ਸੈੱਟਅਪ ਕਰਨਾ ਹੋਵੇਗਾ (ਇੱਕ ਮੁਫ਼ਤ Meta ਡਿਵੈਲਪਰ ਖਾਤਾ)। ਉਹਨਾਂ ਨੂੰ ਪੁੱਛੋ, ਜਾਂ backend/.env.example ਦੇਖੋ।"
   },
   "landing": {
     "nav_features": "ਵਿਸ਼ੇਸ਼ਤਾਵਾਂ",

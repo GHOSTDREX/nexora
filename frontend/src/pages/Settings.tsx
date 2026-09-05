@@ -1,15 +1,16 @@
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Save, User, Sprout, Cpu } from 'lucide-react'
+import { Save, User, Sprout, Cpu, MessageCircle } from 'lucide-react'
 import { useAuth } from '@/context/AuthContext'
 import { api, apiErrorMessage } from '@/lib/api'
 import { Card, CardHeader } from '@/components/ui/Card'
+import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
 import { FieldGroup, Input, Select } from '@/components/ui/Field'
 import { LanguageDropdown } from '@/components/LanguageDropdown'
 import { IconBadge } from '@/components/ui/IconBadge'
 import { REGIONS, SOIL_TYPES, CROP_TYPES, GROWTH_STAGES, SEASONS } from '@/lib/farmOptions'
-import type { Farm } from '@/lib/types'
+import type { Farm, YieldOptions } from '@/lib/types'
 
 export default function Settings() {
   const { t } = useTranslation()
@@ -17,8 +18,17 @@ export default function Settings() {
   const [form, setForm] = useState<Farm | null>(farm)
   const [saving, setSaving] = useState(false)
   const [message, setMessage] = useState('')
+  const [states, setStates] = useState<string[]>(['Maharashtra'])
+  const [whatsappConfigured, setWhatsappConfigured] = useState<boolean | null>(null)
 
   useEffect(() => setForm(farm), [farm])
+
+  useEffect(() => {
+    api.get<YieldOptions>('/api/yield/options').then(({ data }) => {
+      if (data.states.length) setStates(data.states)
+    }).catch(() => {})
+    api.get<{ configured: boolean }>('/api/whatsapp/status').then(({ data }) => setWhatsappConfigured(data.configured)).catch(() => {})
+  }, [])
 
   function update<K extends keyof Farm>(key: K, value: Farm[K]) {
     setForm((f) => (f ? { ...f, [key]: value } : f))
@@ -76,6 +86,14 @@ export default function Settings() {
             </Select>
           </FieldGroup>
 
+          <FieldGroup label={t('onboarding.state')}>
+            <Select value={form.state} onChange={(e) => update('state', e.target.value)}>
+              {states.map((s) => (
+                <option key={s} value={s}>{s}</option>
+              ))}
+            </Select>
+          </FieldGroup>
+
           <FieldGroup label={t('onboarding.field_area')}>
             <Input type="number" step="any" min="0.01" value={form.field_area_hectare} onChange={(e) => update('field_area_hectare', Number(e.target.value))} />
           </FieldGroup>
@@ -90,10 +108,6 @@ export default function Settings() {
 
           <FieldGroup label={t('onboarding.soil_ph')}>
             <Input type="number" step="any" min="3.5" max="10.5" value={form.soil_ph} onChange={(e) => update('soil_ph', Number(e.target.value))} />
-          </FieldGroup>
-
-          <FieldGroup label={t('onboarding.organic_carbon')}>
-            <Input type="number" step="any" value={form.organic_carbon} onChange={(e) => update('organic_carbon', Number(e.target.value))} />
           </FieldGroup>
 
           <FieldGroup label={t('onboarding.crop_type')}>
@@ -159,6 +173,47 @@ export default function Settings() {
 
           <FieldGroup label={t('settings.camera_host')}>
             <Input placeholder={t('settings.hardware_host_placeholder')} value={form.camera_host} onChange={(e) => update('camera_host', e.target.value)} />
+          </FieldGroup>
+
+          <Button type="submit" className="sm:col-span-2" isLoading={saving}>
+            <Save size={15} aria-hidden="true" /> {t('common.save')}
+          </Button>
+        </form>
+      </Card>
+
+      <Card>
+        <CardHeader
+          title={t('settings.whatsapp_title')}
+          action={<IconBadge icon={<MessageCircle size={16} aria-hidden="true" />} tone="brand" />}
+        />
+        <form onSubmit={save} className="grid grid-cols-1 gap-4 px-5 pb-5 pt-3 sm:grid-cols-2">
+          <div className="flex flex-col gap-1.5 text-sm sm:col-span-2">
+            <div className="flex items-center justify-between">
+              <span className="text-[var(--text-secondary)]">{t('settings.whatsapp_number_status')}</span>
+              <Badge tone={form.whatsapp_number ? 'brand' : 'neutral'} dot>
+                {form.whatsapp_number ? t('settings.whatsapp_number_saved') : t('settings.whatsapp_number_missing')}
+              </Badge>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-[var(--text-secondary)]">{t('settings.whatsapp_bot_status')}</span>
+              <Badge tone={whatsappConfigured ? 'brand' : 'neutral'} dot>
+                {whatsappConfigured ? t('settings.whatsapp_live') : t('settings.whatsapp_not_configured')}
+              </Badge>
+            </div>
+          </div>
+          {!whatsappConfigured && (
+            <p className="rounded-lg bg-gold-50 px-3 py-2 text-xs text-gold-700 sm:col-span-2">
+              {t('settings.whatsapp_admin_hint')}
+            </p>
+          )}
+          <p className="text-xs text-[var(--text-secondary)] sm:col-span-2">{t('settings.whatsapp_hint')}</p>
+
+          <FieldGroup label={t('settings.whatsapp_number')}>
+            <Input
+              placeholder="+91 98765 43210"
+              value={form.whatsapp_number}
+              onChange={(e) => update('whatsapp_number', e.target.value)}
+            />
           </FieldGroup>
 
           <Button type="submit" className="sm:col-span-2" isLoading={saving}>

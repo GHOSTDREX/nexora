@@ -10,6 +10,9 @@
     "fertilizer": "Fertilizer",
     "soil_health": "Soil Health",
     "yield_prediction": "Yield Prediction",
+    "disease_detection": "Disease Detection",
+    "schemes": "Schemes",
+    "market": "Market Price",
     "ai_assistant": "AI Assistant",
     "alerts": "Alerts",
     "settings": "Settings"
@@ -36,6 +39,7 @@
     "subtitle": "This takes a minute — it powers every recommendation on your dashboard.",
     "farm_name": "Farm name",
     "region": "Region",
+    "state": "State",
     "latitude": "Latitude",
     "longitude": "Longitude",
     "field_area": "Field area (hectares)",
@@ -81,6 +85,7 @@
     "live": "Live",
     "hectares": "ha",
     "view_all": "View all",
+    "offline_banner": "You're offline — showing the last data we have.",
     "error_generic": "Something went wrong. Please try again.",
     "just_now": "just now",
     "seconds_ago": "{{count}}s ago",
@@ -102,7 +107,8 @@
     "environment": "Environment",
     "rain_detected": "Rain detected",
     "no_rain": "No rain",
-    "last_updated": "Last Updated"
+    "last_updated": "Last Updated",
+    "ph": "Soil pH"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -121,7 +127,19 @@
     "set_auto_mode": "Switch to Auto",
     "manual_sensor_hint": "Manual mode is on — sensor values stay exactly as you set them until you submit new ones or switch back to Auto. Enter readings below to test the AI recommendations against them.",
     "submit_reading": "Save reading",
-    "reading_saved": "Saved — recommendations will now use these values."
+    "reading_saved": "Saved — recommendations will now use these values.",
+    "schemes_title": "Government Schemes for Your Farm",
+    "market_title": "Mandi Price — {{crop}}",
+    "market_market": "Market",
+    "market_modal_price": "Modal Price",
+    "market_range": "Price Range",
+    "market_date": "Date",
+    "market_no_data": "No recent price data found for this crop in your state.",
+    "market_not_configured": "Live mandi prices need a free data.gov.in API key — ask your admin to set AGMARKNET_API_KEY.",
+    "market_find_dealer": "Find Nearby Dealer",
+    "market_kvk_portal": "Krishi Vigyan Kendra",
+    "schemes_matched": "schemes matched",
+    "schemes_no_match": "No schemes matched your farm profile yet."
   },
   "irrigation": {
     "title": "Irrigation",
@@ -230,6 +248,27 @@
     "factor_temperature": "Temperature",
     "factor_soil_ph": "Soil pH"
   },
+  "disease": {
+    "title": "Disease Detection",
+    "subtitle": "Upload a photo of a paddy leaf to check for disease.",
+    "upload_title": "Upload a leaf photo",
+    "choose_photo": "Choose photo",
+    "choose_different": "Choose a different photo",
+    "upload_hint": "JPG, PNG or WEBP, up to 15 MB",
+    "analyze": "Analyze",
+    "result_title": "Result",
+    "confidence": "Confidence",
+    "top_matches": "Top matches",
+    "symptoms": "Common symptoms",
+    "management": "Management",
+    "prevention": "Prevention",
+    "source": "Source",
+    "state_accepted": "Diagnosis found",
+    "state_uncertain": "Uncertain",
+    "state_image_unsuitable": "Image unsuitable",
+    "state_subject_unsuitable": "Not a paddy leaf",
+    "disclaimer": "AI-assisted diagnosis for paddy (rice) leaves only — not a substitute for a local agricultural extension officer. Verify before acting on any recommendation."
+  },
   "yield": {
     "title": "Yield Prediction",
     "subtitle": "Estimate crop yield for a given field, crop, season and input level.",
@@ -299,7 +338,17 @@
     "sensor_node_host": "Sensor node address",
     "robot_host": "Motor controller address",
     "camera_host": "Camera address",
-    "hardware_host_placeholder": "e.g. agrinova-sensors.local or 192.168.1.42"
+    "hardware_host_placeholder": "e.g. agrinova-sensors.local or 192.168.1.42",
+    "whatsapp_title": "WhatsApp Bot",
+    "whatsapp_live": "Live",
+    "whatsapp_not_configured": "Not configured",
+    "whatsapp_hint": "Message this farm's AI Assistant directly on WhatsApp. Add your number below so incoming messages can be matched to your farm.",
+    "whatsapp_number": "WhatsApp number",
+    "whatsapp_number_status": "Your number",
+    "whatsapp_number_saved": "Saved",
+    "whatsapp_number_missing": "Not set",
+    "whatsapp_bot_status": "Bot connection",
+    "whatsapp_admin_hint": "Your number is saved and ready. The bot itself isn't connected to WhatsApp yet — that needs a one-time setup by whoever manages this app's server (a free Meta developer account). Ask them, or see backend/.env.example."
   },
   "landing": {
     "nav_features": "Features",

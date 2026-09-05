@@ -5,6 +5,7 @@ import { X } from 'lucide-react'
 import { Sidebar } from '@/components/Sidebar'
 import { Topbar } from '@/components/Topbar'
 import { PageTransition } from '@/components/PageTransition'
+import { OfflineBanner } from '@/components/OfflineBanner'
 import { FarmDataProvider } from '@/context/FarmDataContext'
 
 export function AppLayout() {
@@ -50,6 +51,7 @@ export function AppLayout() {
         </AnimatePresence>
 
         <div className="flex min-w-0 flex-1 flex-col">
+          <OfflineBanner />
           <Topbar onMenuClick={() => setMobileOpen(true)} />
           <main className="flex-1 overflow-y-auto px-4 py-5 sm:px-6 sm:py-6">
             <PageTransition>

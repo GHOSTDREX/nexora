@@ -1,0 +1,76 @@
+{
+  "history": {
+    "train_loss": [
+      0.8654305868787728,
+      0.6013264056747265,
+      0.5099284073469863,
+      0.4696430062802528,
+      0.42377310384111966,
+      0.4103438713961679,
+      0.3893282002371003,
+      0.3693770207853385,
+      0.3610018080142355,
+      0.35930244914291326
+    ],
+    "train_accuracy": [
+      0.7447830862163647,
+      0.7910488742449203,
+      0.8157605711147721,
+      0.8382756727073036,
+      0.8474739154310819,
+      0.8539264140582098,
+      0.8618890719384953,
+      0.8697144426139484,
+      0.8677924217462932,
+      0.8699890170236134
+    ],
+    "val_loss": [
+      0.11713983413502621,
+      0.11416874670356149,
+      0.1274478270181244,
+      0.1175043980216919,
+      0.11787811154589142,
+      0.11565626085682758,
+      0.11092661459578833,
+      0.11327072594274243,
+      0.11204009914077451,
+      0.11307747571381295
+    ],
+    "val_accuracy": [
+      0.9532351057014734,
+      0.9557975656630365,
+      0.9545163356822549,
+      0.9551569506726457,
+      0.9609224855861627,
+      0.9622037155669443,
+      0.9634849455477258,
+      0.9609224855861627,
+      0.9615631005765535,
+      0.9622037155669443
+    ]
+  },
+  "best_epoch": 7,
+  "temperature": 0.9857248663902283,
+  "test_metrics_at_threshold": {
+    "accepted_rate": 0.8860435339308579,
+    "accepted_accuracy": 0.9898843930635838,
+    "overall_accuracy": 0.9673495292663574
+  },
+  "test_metrics_uncalibrated_temp1": {
+    "accepted_rate": 0.8809218950064021,
+    "accepted_accuracy": 0.9898255813953488,
+    "overall_accuracy": 0.9673495292663574
+  },
+  "reference_calibration_for_comparison": {
+    "temperature": 1.19,
+    "confidence_threshold": 0.9,
+    "validation_accuracy": 0.952,
+    "accepted_rate": 0.8578,
+    "accepted_accuracy": 0.9895,
+    "test_accuracy": 0.9577,
+    "model": "MobileNetV3 Small",
+    "image_size": 224
+  },
+  "checkpoint_path": "C:\\Users\\khota\\Desktop\\nexora\\backend\\app\\ml\\disease_detection\\models\\paddy_mobilenetv3_finetuned.pth",
+  "calibration_path": "C:\\Users\\khota\\Desktop\\nexora\\backend\\app\\ml\\disease_detection\\models\\calibration_finetuned.json"
+}

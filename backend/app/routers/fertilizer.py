@@ -6,6 +6,7 @@ from app.db.database import get_db
 from app.db.models import Farm, FertilizerRecommendation, SensorReading
 from app.deps import get_current_farm
 from app.ml.fertilizer.engine import recommend_fertilizer
+from app.ml.fertilizer.explanation_engine import explain_recommendation
 from app.schemas.fertilizer import FertilizerRecommendationOut, FertilizerRequest
 
 router = APIRouter(prefix="/api/fertilizer", tags=["fertilizer"])
@@ -32,6 +33,7 @@ def fertilizer_recommend(
     reading = _latest_reading(db, farm)
     try:
         result = recommend_fertilizer(
+            language=payload.language,
             crop_type=payload.crop,
             soil_type=farm.soil_type,
             crop_growth_stage=farm.crop_growth_stage,
@@ -71,7 +73,7 @@ def fertilizer_recommend(
 
 
 @router.get("/latest", response_model=FertilizerRecommendationOut)
-def fertilizer_latest(farm: Farm = Depends(get_current_farm), db: Session = Depends(get_db)):
+def fertilizer_latest(language: str = "en", farm: Farm = Depends(get_current_farm), db: Session = Depends(get_db)):
     record = (
         db.query(FertilizerRecommendation)
         .filter(FertilizerRecommendation.farm_id == farm.id)
@@ -80,12 +82,13 @@ def fertilizer_latest(farm: Farm = Depends(get_current_farm), db: Session = Depe
     )
     if not record:
         raise HTTPException(status_code=404, detail="No fertilizer recommendation yet — call /recommend first.")
+    soil_ph = record.input_features.get("soil_ph", 6.5)
     return FertilizerRecommendationOut(
         crop=record.crop,
         recommended_fertilizer=record.recommended_fertilizer,
         model_probability=record.model_probability,
         nutrient_status=record.nutrient_status,
-        reason=record.reason,
+        reason=explain_recommendation(record.recommended_fertilizer, record.nutrient_status, soil_ph, language),
         input_features=record.input_features,
         warnings=record.warnings,
         timestamp=record.timestamp,

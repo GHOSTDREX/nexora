@@ -18,3 +18,11 @@ numpy==2.5.2
 Pillow==12.3.0
 anthropic==1.1.0
 websockets==17.1
+python-multipart==0.0.20
+
+# Paddy disease detection (app/ml/disease_detection) — CPU wheel, pinned
+# to match the checkpoint the reference Smart-Farming-AI backend trained
+# and verified against (paddy_mobilenetv3_best.pth, strict=True load).
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch==2.13.0
+torchvision==0.28.0

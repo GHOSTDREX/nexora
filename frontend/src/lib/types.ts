@@ -9,6 +9,7 @@ export interface Farm {
   id: number
   name: string
   region: string
+  state: string
   latitude: number
   longitude: number
   field_area_hectare: number
@@ -26,6 +27,7 @@ export interface Farm {
   sensor_node_host: string
   robot_host: string
   camera_host: string
+  whatsapp_number: string
 }
 
 export interface SensorReading {
@@ -175,4 +177,76 @@ export interface ChatMessage {
   role: 'user' | 'assistant'
   content: string
   created_at: string
+}
+
+export interface SchemeMatch {
+  id: string
+  name: string
+  link: string
+  description: string
+}
+
+export interface SchemeMatchResponse {
+  schemes: SchemeMatch[]
+  disclaimer: string
+}
+
+export interface MandiPrice {
+  market: string | null
+  district: string | null
+  commodity: string | null
+  variety: string | null
+  min_price: number | null
+  max_price: number | null
+  modal_price: number | null
+  arrival_date: string | null
+}
+
+export interface MarketOverview {
+  state: string
+  crop: string
+  mandi: { configured: boolean; prices: MandiPrice[]; error?: string }
+  dealers: { nearest_search_url: string; kvk_portal_url: string }
+}
+
+export interface DiseaseRecommendation {
+  disease_id: string
+  display_name: string
+  short_description: string
+  common_symptoms: string[]
+  management: string
+  prevention: string[]
+  source_name: string
+  source_url: string
+}
+
+export interface DiseaseClassScore {
+  class: string
+  display_name: string
+  confidence: number
+}
+
+export interface DiseasePrediction {
+  prediction: string
+  display_name: string
+  confidence: number
+  accepted: boolean
+  decision_state: 'accepted' | 'uncertain' | 'image_unsuitable' | 'subject_unsuitable'
+  decision_message: string
+  guidance: string[]
+  top3: DiseaseClassScore[]
+  image: { width: number; height: number; megapixels: number; file_size_bytes: number }
+  quality: { status: 'good' | 'warning' | 'poor'; brightness: number; blur_score: number; reasons: string[] }
+  readiness: {
+    status: 'suitable' | 'borderline' | 'unsuitable'
+    vegetation_ratio: number
+    largest_component_ratio: number
+    reasons: string[]
+    guidance: string[]
+    note: string
+  } | null
+  uncertainty: { normalized_entropy: number; margin: number; ood_flagged: boolean }
+  domain_gate: { status: string; note: string }
+  inference_time_ms: number
+  recommendation: DiseaseRecommendation | null
 }

@@ -5,6 +5,7 @@ from pydantic import BaseModel
 
 class FertilizerRequest(BaseModel):
     crop: str  # Rice | Sugarcane
+    language: str = "en"
 
 
 class FertilizerRecommendationOut(BaseModel):

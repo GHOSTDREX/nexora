@@ -24,7 +24,30 @@ def _latest_reading(db: Session, farm: Farm) -> SensorReading:
     return reading
 
 
-def _out(record: SoilHealthRecord) -> SoilHealthOut:
+def _out(record: SoilHealthRecord, language: str = "en") -> SoilHealthOut:
+    # Stored factors/recommendation are whatever language was active at
+    # /analyze time — re-derive fresh from the stored raw values so a later
+    # language switch is reflected immediately without re-analyzing.
+    try:
+        readings = {key: f["value"] for key, f in record.factors.items() if f.get("value") is not None}
+        result = predict_soil_health(language=language, **readings)
+    except (ValueError, KeyError):
+        result = None
+
+    if result:
+        return SoilHealthOut(
+            overall_status=result["overall_status"],
+            health_score=result["health_score"],
+            factors=result["factors"],
+            stress_factors=result["stress_factors"],
+            primary_issue=result["primary_issue"],
+            recommendation=result["recommendation"],
+            explanation=result["explanation"],
+            rule_version=RULE_VERSION,
+            rule_source=RULE_SOURCE,
+            disclaimer=DISCLAIMER,
+            timestamp=record.timestamp,
+        )
     return SoilHealthOut(
         overall_status=record.overall_status,
         health_score=record.health_score,
@@ -41,10 +64,11 @@ def _out(record: SoilHealthRecord) -> SoilHealthOut:
 
 
 @router.get("/analyze", response_model=SoilHealthOut)
-def soil_health_analyze(farm: Farm = Depends(get_current_farm), db: Session = Depends(get_db)):
+def soil_health_analyze(language: str = "en", farm: Farm = Depends(get_current_farm), db: Session = Depends(get_db)):
     reading = _latest_reading(db, farm)
     try:
         result = predict_soil_health(
+            language=language,
             nitrogen=reading.nitrogen,
             phosphorus=reading.phosphorus,
             potassium=reading.potassium,
@@ -69,11 +93,11 @@ def soil_health_analyze(farm: Farm = Depends(get_current_farm), db: Session = De
     db.add(record)
     db.commit()
     db.refresh(record)
-    return _out(record)
+    return _out(record, language)
 
 
 @router.get("/latest", response_model=SoilHealthOut)
-def soil_health_latest(farm: Farm = Depends(get_current_farm), db: Session = Depends(get_db)):
+def soil_health_latest(language: str = "en", farm: Farm = Depends(get_current_farm), db: Session = Depends(get_db)):
     record = (
         db.query(SoilHealthRecord)
         .filter(SoilHealthRecord.farm_id == farm.id)
@@ -82,4 +106,4 @@ def soil_health_latest(farm: Farm = Depends(get_current_farm), db: Session = Dep
     )
     if not record:
         raise HTTPException(status_code=404, detail="No soil health analysis yet — call /analyze first.")
-    return _out(record)
+    return _out(record, language)

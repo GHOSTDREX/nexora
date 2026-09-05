@@ -10,6 +10,9 @@
     "fertilizer": "ખાતર",
     "soil_health": "જમીન આરોગ્ય",
     "yield_prediction": "ઉપજ આગાહી",
+    "disease_detection": "રોગ ઓળખ",
+    "schemes": "યોજનાઓ",
+    "market": "બજાર ભાવ",
     "ai_assistant": "એઆઈ સહાયક",
     "alerts": "ચેતવણીઓ",
     "settings": "સેટિંગ્સ"
@@ -36,6 +39,7 @@
     "subtitle": "આમાં ફક્ત એક મિનિટ લાગશે — આ તમારા ડેશબોર્ડ પરની દરેક ભલામણને શક્તિ આપે છે.",
     "farm_name": "ફાર્મનું નામ",
     "region": "પ્રદેશ",
+    "state": "રાજ્ય",
     "latitude": "અક્ષાંશ",
     "longitude": "રેખાંશ",
     "field_area": "ખેતરનું ક્ષેત્રફળ (હેક્ટર)",
@@ -81,6 +85,7 @@
     "live": "લાઇવ",
     "hectares": "હેક્ટર",
     "view_all": "બધું જુઓ",
+    "offline_banner": "તમે ઓફલાઇન છો — અમારી પાસે રહેલો છેલ્લો ડેટા બતાવી રહ્યા છીએ.",
     "error_generic": "કંઈક ખોટું થયું. કૃપા કરી ફરી પ્રયાસ કરો.",
     "just_now": "હમણાં જ",
     "seconds_ago": "{{count}} સેકન્ડ પહેલાં",
@@ -102,7 +107,8 @@
     "environment": "પર્યાવરણ",
     "rain_detected": "વરસાદ મળ્યો",
     "no_rain": "વરસાદ નથી",
-    "last_updated": "છેલ્લે અપડેટ થયું"
+    "last_updated": "છેલ્લે અપડેટ થયું",
+    "ph": "માટીનું pH"
   },
   "dashboard": {
     "title": "ડેશબોર્ડ",
@@ -121,7 +127,19 @@
     "set_auto_mode": "ઓટો મોડ પર સ્વિચ કરો",
     "manual_sensor_hint": "મેન્યુઅલ મોડ ચાલુ છે — તમે નવી રીડિંગ સબમિટ ન કરો અથવા ઓટો પર પાછા ન જાઓ ત્યાં સુધી સેન્સર વેલ્યુ તમે સેટ કરી છે તે જ રહેશે. AI ભલામણો ચકાસવા માટે નીચે રીડિંગ દાખલ કરો.",
     "submit_reading": "રીડિંગ સેવ કરો",
-    "reading_saved": "સેવ થયું — હવે ભલામણો આ વેલ્યુનો ઉપયોગ કરશે."
+    "reading_saved": "સેવ થયું — હવે ભલામણો આ વેલ્યુનો ઉપયોગ કરશે.",
+    "schemes_title": "તમારા ખેતર માટે સરકારી યોજનાઓ",
+    "market_title": "બજાર ભાવ — {{crop}}",
+    "market_market": "બજાર",
+    "market_modal_price": "મોડલ ભાવ",
+    "market_range": "ભાવ શ્રેણી",
+    "market_date": "તારીખ",
+    "market_no_data": "તમારા રાજ્યમાં આ પાક માટે તાજેતરનો ભાવ ડેટા મળ્યો નથી.",
+    "market_not_configured": "લાઇવ મંડી ભાવ માટે data.gov.in ની મફત API કી જરૂરી છે — તમારા એડમિનને AGMARKNET_API_KEY સેટ કરવા કહો.",
+    "market_find_dealer": "નજીકનો ડીલર શોધો",
+    "market_kvk_portal": "કૃષિ વિજ્ઞાન કેન્દ્ર",
+    "schemes_matched": "યોજનાઓ મળી",
+    "schemes_no_match": "તમારા ખેતરની પ્રોફાઇલ સાથે હજુ સુધી કોઈ યોજના મેળ ખાતી નથી."
   },
   "irrigation": {
     "title": "સિંચાઈ",
@@ -230,6 +248,27 @@
     "factor_temperature": "તાપમાન",
     "factor_soil_ph": "જમીનનો pH"
   },
+  "disease": {
+    "title": "રોગ ઓળખ",
+    "subtitle": "રોગ તપાસવા માટે ડાંગરના પાનનો ફોટો અપલોડ કરો.",
+    "upload_title": "પાનનો ફોટો અપલોડ કરો",
+    "choose_photo": "ફોટો પસંદ કરો",
+    "choose_different": "અલગ ફોટો પસંદ કરો",
+    "upload_hint": "JPG, PNG અથવા WEBP, 15 MB સુધી",
+    "analyze": "વિશ્લેષણ કરો",
+    "result_title": "પરિણામ",
+    "confidence": "વિશ્વાસપાત્રતા",
+    "top_matches": "ટોચની મેચ",
+    "symptoms": "સામાન્ય લક્ષણો",
+    "management": "વ્યવસ્થાપન",
+    "prevention": "નિવારણ",
+    "source": "સ્ત્રોત",
+    "state_accepted": "નિદાન મળ્યું",
+    "state_uncertain": "અનિશ્ચિત",
+    "state_image_unsuitable": "છબી અયોગ્ય",
+    "state_subject_unsuitable": "આ ડાંગરનું પાન નથી",
+    "disclaimer": "ફક્ત ડાંગર (ચોખા) ના પાન માટે AI-સહાયિત નિદાન — સ્થાનિક કૃષિ વિસ્તરણ અધિકારીનો વિકલ્પ નથી. કોઈપણ ભલામણ પર કાર્ય કરતા પહેલા ચકાસો."
+  },
   "yield": {
     "title": "ઉપજ આગાહી",
     "subtitle": "આપેલ ખેતર, પાક, ઋતુ અને ઇનપુટ સ્તર માટે પાકની ઉપજનો અંદાજ કાઢો.",
@@ -299,7 +338,17 @@
     "sensor_node_host": "સેન્સર નોડ સરનામું",
     "robot_host": "મોટર કંટ્રોલર સરનામું",
     "camera_host": "કેમેરા સરનામું",
-    "hardware_host_placeholder": "દા.ત. agrinova-sensors.local અથવા 192.168.1.42"
+    "hardware_host_placeholder": "દા.ત. agrinova-sensors.local અથવા 192.168.1.42",
+    "whatsapp_title": "વોટ્સએપ બોટ",
+    "whatsapp_live": "લાઇવ",
+    "whatsapp_not_configured": "ગોઠવેલ નથી",
+    "whatsapp_hint": "આ ખેતરના AI સહાયકને સીધો વોટ્સએપ પર સંદેશ મોકલો. આવતા સંદેશા તમારા ખેતર સાથે મેળવવા માટે નીચે તમારો નંબર ઉમેરો.",
+    "whatsapp_number": "વોટ્સએપ નંબર",
+    "whatsapp_number_status": "તમારો નંબર",
+    "whatsapp_number_saved": "સેવ થયું",
+    "whatsapp_number_missing": "સેટ નથી",
+    "whatsapp_bot_status": "બોટ કનેક્શન",
+    "whatsapp_admin_hint": "તમારો નંબર સેવ થઈ ગયો છે અને તૈયાર છે. બોટ હજુ વોટ્સએપ સાથે જોડાયેલ નથી — આ માટે આ એપ સંભાળનાર વ્યક્તિએ એકવાર સેટઅપ કરવું પડશે (મફત Meta ડેવલપર એકાઉન્ટ). તેમને પૂછો, અથવા backend/.env.example જુઓ."
   },
   "landing": {
     "nav_features": "સુવિધાઓ",

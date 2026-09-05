@@ -172,7 +172,7 @@ export default function CropRecommendation() {
               <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
                 {Object.entries(condition.parameters).map(([param, info]) => (
                   <div key={param} className="rounded-xl border border-[var(--border-subtle)] p-3">
-                    <p className="text-[11px] text-[var(--text-secondary)]">{param.replace('_', ' ')}</p>
+                    <p className="text-[11px] text-[var(--text-secondary)]">{t(`sensors.${param}`, param.replace('_', ' '))}</p>
                     <p className="text-sm font-semibold text-[var(--text-primary)]">{info.value}</p>
                     <Badge tone={conditionTone[info.status] ?? 'neutral'}>
                       {t(`crop.${info.status.toLowerCase()}`, info.status)}

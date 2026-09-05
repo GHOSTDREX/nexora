@@ -44,6 +44,7 @@ class Farm(Base):
 
     name: Mapped[str] = mapped_column(String(255), default="My Farm")
     region: Mapped[str] = mapped_column(String(64), default="North")
+    state: Mapped[str] = mapped_column(String(64), default="Maharashtra")
     latitude: Mapped[float] = mapped_column(Float, default=28.6139)
     longitude: Mapped[float] = mapped_column(Float, default=77.2090)
 
@@ -69,6 +70,11 @@ class Farm(Base):
     sensor_node_host: Mapped[str] = mapped_column(String(128), default="")
     robot_host: Mapped[str] = mapped_column(String(128), default="")
     camera_host: Mapped[str] = mapped_column(String(128), default="")
+
+    # Digits-only phone number (any punctuation the user types is stripped
+    # before storing/matching) used to route inbound WhatsApp messages to
+    # this farm — see app/routers/whatsapp.py.
+    whatsapp_number: Mapped[str] = mapped_column(String(32), default="")
 
     created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow, onupdate=utcnow)

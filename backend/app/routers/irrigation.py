@@ -41,6 +41,10 @@ def run_prediction(db: Session, farm: Farm, reading: SensorReading) -> Irrigatio
     }
     mapped_features = FeatureMapper.map_to_model_features(sensor_data, _farm_data_dict(farm))
     result = engine.predict(mapped_features)
+    # Stored indicators are English — just an audit trail of what was shown
+    # at prediction time. The response always regenerates them fresh in the
+    # requested language from mapped_features (see _localized_out below), so
+    # switching language doesn't require a new prediction to see it reflected.
     agri_support = ExplanationEngine.generate_agricultural_decision_support(
         mapped_features, result["prediction"]
     )
@@ -59,8 +63,22 @@ def run_prediction(db: Session, farm: Farm, reading: SensorReading) -> Irrigatio
     return record
 
 
+def _localized_out(record: IrrigationPrediction, language: str) -> IrrigationPredictionOut:
+    agri_support = ExplanationEngine.generate_agricultural_decision_support(
+        record.mapped_features, record.prediction, language
+    )
+    return IrrigationPredictionOut(
+        prediction=record.prediction,
+        confidence=record.confidence,
+        probabilities=record.probabilities,
+        mapped_features=record.mapped_features,
+        indicators=agri_support["indicators"],
+        timestamp=record.timestamp,
+    )
+
+
 @router.get("/predict", response_model=IrrigationPredictionOut)
-def predict(farm: Farm = Depends(get_current_farm), db: Session = Depends(get_db)):
+def predict(language: str = "en", farm: Farm = Depends(get_current_farm), db: Session = Depends(get_db)):
     reading = (
         db.query(SensorReading)
         .filter(SensorReading.farm_id == farm.id)
@@ -75,18 +93,11 @@ def predict(farm: Farm = Depends(get_current_farm), db: Session = Depends(get_db
     except (ValueError, KeyError) as exc:
         raise HTTPException(status_code=400, detail=str(exc))
 
-    return IrrigationPredictionOut(
-        prediction=record.prediction,
-        confidence=record.confidence,
-        probabilities=record.probabilities,
-        mapped_features=record.mapped_features,
-        indicators=record.indicators,
-        timestamp=record.timestamp,
-    )
+    return _localized_out(record, language)
 
 
 @router.get("/latest", response_model=IrrigationPredictionOut)
-def latest(farm: Farm = Depends(get_current_farm), db: Session = Depends(get_db)):
+def latest(language: str = "en", farm: Farm = Depends(get_current_farm), db: Session = Depends(get_db)):
     record = (
         db.query(IrrigationPrediction)
         .filter(IrrigationPrediction.farm_id == farm.id)
@@ -95,11 +106,4 @@ def latest(farm: Farm = Depends(get_current_farm), db: Session = Depends(get_db)
     )
     if not record:
         raise HTTPException(status_code=404, detail="No irrigation prediction yet — call /predict first.")
-    return IrrigationPredictionOut(
-        prediction=record.prediction,
-        confidence=record.confidence,
-        probabilities=record.probabilities,
-        mapped_features=record.mapped_features,
-        indicators=record.indicators,
-        timestamp=record.timestamp,
-    )
+    return _localized_out(record, language)

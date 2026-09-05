@@ -17,6 +17,9 @@ import CropRecommendation from '@/pages/CropRecommendation'
 import FertilizerRecommendation from '@/pages/FertilizerRecommendation'
 import SoilHealth from '@/pages/SoilHealth'
 import YieldPrediction from '@/pages/YieldPrediction'
+import Schemes from '@/pages/Schemes'
+import MarketPrice from '@/pages/MarketPrice'
+import DiseaseDetection from '@/pages/DiseaseDetection'
 import AIAssistant from '@/pages/AIAssistant'
 import Alerts from '@/pages/Alerts'
 import Settings from '@/pages/Settings'
@@ -44,6 +47,9 @@ export default function App() {
                 <Route path="/fertilizer" element={<FertilizerRecommendation />} />
                 <Route path="/soil-health" element={<SoilHealth />} />
                 <Route path="/yield-prediction" element={<YieldPrediction />} />
+                <Route path="/schemes" element={<Schemes />} />
+                <Route path="/market" element={<MarketPrice />} />
+                <Route path="/disease-detection" element={<DiseaseDetection />} />
                 <Route path="/assistant" element={<AIAssistant />} />
                 <Route path="/alerts" element={<Alerts />} />
                 <Route path="/settings" element={<Settings />} />

@@ -1,0 +1,41 @@
+Device: cpu
+Train/val/test sizes: 7284/1561/1562
+Warm-started from C:\Users\khota\Desktop\nexora\backend\app\ml\disease_detection\models\paddy_mobilenetv3_best.pth (epoch=12, val_acc=0.9519538757206919)
+Epoch 1/10  train_loss=0.8654 train_acc=0.7448 val_loss=0.1171 val_acc=0.9532  (364s)
+  -> saved new best to C:\Users\khota\Desktop\nexora\backend\app\ml\disease_detection\models\paddy_mobilenetv3_finetuned.pth
+Epoch 2/10  train_loss=0.6013 train_acc=0.7910 val_loss=0.1142 val_acc=0.9558  (358s)
+  -> saved new best to C:\Users\khota\Desktop\nexora\backend\app\ml\disease_detection\models\paddy_mobilenetv3_finetuned.pth
+Epoch 3/10  train_loss=0.5099 train_acc=0.8158 val_loss=0.1274 val_acc=0.9545  (326s)
+Epoch 4/10  train_loss=0.4696 train_acc=0.8383 val_loss=0.1175 val_acc=0.9552  (347s)
+Epoch 5/10  train_loss=0.4238 train_acc=0.8475 val_loss=0.1179 val_acc=0.9609  (374s)
+Epoch 6/10  train_loss=0.4103 train_acc=0.8539 val_loss=0.1157 val_acc=0.9622  (364s)
+Epoch 7/10  train_loss=0.3893 train_acc=0.8619 val_loss=0.1109 val_acc=0.9635  (345s)
+  -> saved new best to C:\Users\khota\Desktop\nexora\backend\app\ml\disease_detection\models\paddy_mobilenetv3_finetuned.pth
+Epoch 8/10  train_loss=0.3694 train_acc=0.8697 val_loss=0.1133 val_acc=0.9609  (311s)
+Epoch 9/10  train_loss=0.3610 train_acc=0.8678 val_loss=0.1120 val_acc=0.9616  (343s)
+Epoch 10/10  train_loss=0.3593 train_acc=0.8700 val_loss=0.1131 val_acc=0.9622  (434s)
+
+=== DONE ===
+{
+  "new": {
+    "temperature": 0.9857,
+    "confidence_threshold": 0.9,
+    "validation_accuracy": 0.9622,
+    "accepted_rate": 0.886,
+    "accepted_accuracy": 0.9899,
+    "test_accuracy": 0.9673,
+    "model": "MobileNetV3 Small (fine-tuned, augmented)",
+    "image_size": 224,
+    "base_checkpoint": "C:\\Users\\khota\\Desktop\\nexora\\backend\\app\\ml\\disease_detection\\models\\paddy_mobilenetv3_best.pth"
+  },
+  "reference": {
+    "temperature": 1.19,
+    "confidence_threshold": 0.9,
+    "validation_accuracy": 0.952,
+    "accepted_rate": 0.8578,
+    "accepted_accuracy": 0.9895,
+    "test_accuracy": 0.9577,
+    "model": "MobileNetV3 Small",
+    "image_size": 224
+  }
+}
