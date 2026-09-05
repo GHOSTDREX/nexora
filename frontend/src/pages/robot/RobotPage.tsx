@@ -31,6 +31,7 @@ export default function RobotPage() {
   const [error, setError] = useState('')
   const [speed, setSpeed] = useState(100)
   const speedDebounce = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const streamFailed = useRef(false)
 
   const loadStatus = useCallback(() => {
     api.get<RobotStatus>('/api/robot/status').then(({ data }) => setStatus(data)).catch(() => {})
@@ -39,7 +40,11 @@ export default function RobotPage() {
   const loadFrame = useCallback(() => {
     api.get('/api/camera/frame').then(({ data }) => {
       setCameraFrame(data.image_data_url)
-      setStreamUrl(data.stream_url ?? null)
+      // Once the live stream has failed to load once, stop offering it back —
+      // the backend reports stream_url whenever a camera host is configured,
+      // not whether it's actually reachable, so re-polling would just make
+      // the <img> flicker broken every 5s instead of settling on the fallback.
+      setStreamUrl(streamFailed.current ? null : data.stream_url ?? null)
     }).catch(() => {})
   }, [])
 
@@ -161,6 +166,10 @@ export default function RobotPage() {
                 src={streamUrl}
                 alt="Live camera feed of the field"
                 className="aspect-video w-full rounded-xl object-cover"
+                onError={() => {
+                  streamFailed.current = true
+                  setStreamUrl(null)
+                }}
               />
             ) : cameraFrame ? (
               <motion.img
