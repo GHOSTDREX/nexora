@@ -1,31 +1,27 @@
 #include <WiFi.h>
 #include <WebServer.h>
 #include <ESPmDNS.h>
-#include <DHT.h>
 
 // ====================================================================
 // WIFI CREDENTIALS
 // Defined in secrets.h (gitignored — copy secrets.h.example to secrets.h
 // and fill in your own values). Must match motor_controls.ino and
-// AI_THINKER_CAM.ino — all three boards join the same LAN so the AgriNova
-// backend can reach each of them and motor_controls.ino's pump relay can
-// reach this node's readings indirectly via the backend's hardware poller.
+// AI_THINKER_CAM.ino — all three boards join the same LAN.
 // ====================================================================
 #include "secrets.h"
 
-// mDNS hostname -> reachable on the LAN as agrinova-sensors.local, so the
-// backend's Farm.sensor_node_host setting doesn't break when DHCP hands out
-// a different IP after a reboot.
-const char* MDNS_HOSTNAME = "agrinova-sensors";
+// Standalone soil-moisture + NPK probe board — deliberately off the robot
+// chassis (per judges' feedback) so it can be walked to a spot in the
+// field, separate from motor_controls.ino which now carries the DHT22 and
+// rain sensor. mDNS hostname -> reachable on the LAN as
+// agrinova-probe.local, so the backend's Farm.sensor_node_host setting
+// doesn't break when DHCP hands out a different IP after a reboot.
+const char* MDNS_HOSTNAME = "agrinova-probe";
 
 // ====================================================================
 // PIN DEFINITIONS
 // ====================================================================
-#define DHTPIN 4
-#define DHTTYPE DHT22
-
 #define SOIL_PIN 5
-#define RAIN_PIN 6
 
 // MAX485 to RS485 Pins
 #define RX_PIN 16
@@ -36,13 +32,7 @@ const char* MDNS_HOSTNAME = "agrinova-sensors";
 // HARDWARE INITIALIZATION
 // ====================================================================
 HardwareSerial rs485(1);
-DHT dht(DHTPIN, DHTTYPE);
 WebServer server(80);
-
-// Rain sensor is a resistive analog probe, not a mm rain gauge — treat
-// intensity above this percent as "rain detected" for the automation logic
-// on the AgriNova backend (rainwater harvesting lid, alerts).
-#define RAIN_DETECTED_THRESHOLD 20
 
 // ====================================================================
 // NPK MODBUS QUERIES
@@ -71,11 +61,7 @@ uint16_t valN = 0;
 uint16_t valP = 0;
 uint16_t valK = 0;
 
-float temp = 0.0;
-float hum = 0.0;
-
 int soilPercent = 0;
-int rainPercent = 0;
 
 // ====================================================================
 // SETUP
@@ -86,13 +72,8 @@ void setup() {
 
   Serial.println();
   Serial.println("================================");
-  Serial.println("     SMART AGRICULTURE NODE");
+  Serial.println("   AGRINOVA SOIL/NPK PROBE");
   Serial.println("================================");
-
-  // ------------------------------------------------------------------
-  // DHT22
-  // ------------------------------------------------------------------
-  dht.begin();
 
   // ------------------------------------------------------------------
   // RS485
@@ -174,21 +155,6 @@ void loop() {
     delay(200);
 
     // ================================================================
-    // READ DHT22
-    // ================================================================
-
-    temp = dht.readTemperature();
-    hum = dht.readHumidity();
-
-    if (isnan(temp)) {
-      temp = 0.0;
-    }
-
-    if (isnan(hum)) {
-      hum = 0.0;
-    }
-
-    // ================================================================
     // READ SOIL MOISTURE
     // ================================================================
 
@@ -204,26 +170,6 @@ void loop() {
 
     soilPercent = constrain(
       soilPercent,
-      0,
-      100
-    );
-
-    // ================================================================
-    // READ RAIN SENSOR
-    // ================================================================
-
-    int rawRain = analogRead(RAIN_PIN);
-
-    rainPercent = map(
-      rawRain,
-      4095,
-      1500,
-      0,
-      100
-    );
-
-    rainPercent = constrain(
-      rainPercent,
       0,
       100
     );
@@ -247,20 +193,8 @@ void loop() {
     Serial.print(valK);
     Serial.println(" mg/kg");
 
-    Serial.print("Temperature:    ");
-    Serial.print(temp);
-    Serial.println(" °C");
-
-    Serial.print("Humidity:       ");
-    Serial.print(hum);
-    Serial.println(" %");
-
     Serial.print("Soil Moisture:  ");
     Serial.print(soilPercent);
-    Serial.println(" %");
-
-    Serial.print("Rain Intensity:  ");
-    Serial.print(rainPercent);
     Serial.println(" %");
 
     Serial.println("--------------------------------");
@@ -279,19 +213,12 @@ void loop() {
 // ====================================================================
 void handleSensors() {
 
-  bool rainDetected = rainPercent > RAIN_DETECTED_THRESHOLD;
-
   String json = "{";
-  json += "\"device\":\"ESP32_SENSOR_NODE\",";
+  json += "\"device\":\"ESP32_PROBE_01\",";
+  json += "\"soil_moisture\":" + String(soilPercent) + ",";
   json += "\"nitrogen\":" + String(valN) + ",";
   json += "\"phosphorus\":" + String(valP) + ",";
-  json += "\"potassium\":" + String(valK) + ",";
-  json += "\"temperature\":" + String(temp, 1) + ",";
-  json += "\"humidity\":" + String(hum, 1) + ",";
-  json += "\"soil_moisture\":" + String(soilPercent) + ",";
-  json += "\"rain_intensity\":" + String(rainPercent) + ",";
-  json += "\"rain_detected\":";
-  json += rainDetected ? "true" : "false";
+  json += "\"potassium\":" + String(valK);
   json += "}";
 
   server.send(200, "application/json", json);

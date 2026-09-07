@@ -1,6 +1,7 @@
 #include <WiFi.h>
 #include <WebServer.h>
 #include <ESPmDNS.h>
+#include <DHT.h>
 
 // ==============================================================================
 // WIFI CREDENTIALS
@@ -36,6 +37,18 @@ const int CAM_IN1 = 9;
 const int CAM_IN2 = 11;
 const int SEED_IN3 = 14;
 const int SEED_IN4 = 15;
+
+// Environment sensors — consolidated onto this board per judges' feedback
+// (previously on the standalone sensors.ino node, which now carries only
+// the soil-moisture/NPK probe — see sensors/sensors.ino).
+const int DHT_PIN = 16;
+const int RAIN_PIN = 17;
+#define DHTTYPE DHT22
+
+// Rain sensor is a resistive analog probe, not a mm rain gauge — treat
+// intensity above this percent as "rain detected" (matches the threshold
+// sensors.ino used before this sensor moved here).
+#define RAIN_DETECTED_THRESHOLD 20
 
 // ==============================================================================
 // ROBOT STATE
@@ -79,11 +92,18 @@ unsigned long seedHomeStart = 0;
 // closed, or lower it once you've timed how long a real sweep takes.
 const unsigned long seedHomeDuration = 500;
 
+// --- Environment sensors ---
+float currentTemp = 0.0;
+float currentHum = 0.0;
+int rainPercent = 0;
+unsigned long lastEnvRead = 0;
+
 // ==============================================================================
 // OBJECTS
 // ==============================================================================
 
 WebServer server(80);
+DHT dht(DHT_PIN, DHTTYPE);
 
 // ==============================================================================
 // MOTOR CONTROL
@@ -197,6 +217,34 @@ void processSeedMovement() {
 }
 
 // ==============================================================================
+// ENVIRONMENT SENSORS
+// ==============================================================================
+
+// DHT22 is slow (~2s per reading and occasionally fails) — read on a timer
+// rather than blocking every loop iteration; the rain probe is a plain
+// analogRead so it's cheap enough to refresh every cycle.
+void processEnvSensors() {
+
+  int rawRain = analogRead(RAIN_PIN);
+
+  rainPercent = map(rawRain, 4095, 1500, 0, 100);
+  rainPercent = constrain(rainPercent, 0, 100);
+
+  if (millis() - lastEnvRead >= 2000) {
+
+    lastEnvRead = millis();
+
+    float t = dht.readTemperature();
+    float h = dht.readHumidity();
+
+    // DHT22 reads fail occasionally — keep the last good value rather than
+    // overwriting it with NaN.
+    if (!isnan(t)) currentTemp = t;
+    if (!isnan(h)) currentHum = h;
+  }
+}
+
+// ==============================================================================
 // ROBOT STATUS API
 // ==============================================================================
 
@@ -204,8 +252,13 @@ void handleStatus() {
 
   String json = "{";
 
+  bool rainDetected = rainPercent > RAIN_DETECTED_THRESHOLD;
+
   json += "\"device\":\"ESP32_ROBOT_01\",";
   json += "\"ip\":\"" + WiFi.localIP().toString() + "\",";
+  json += "\"temp\":" + String(currentTemp, 1) + ",";
+  json += "\"hum\":" + String(currentHum, 1) + ",";
+  json += "\"rain\":" + String(rainDetected ? "true" : "false") + ",";
   json += "\"motor_speed\":" + String(motorSpeed) + ",";
   json += "\"pump\":" + String(pumpState ? "true" : "false") + ",";
   json += "\"plow\":" + String(plowState ? "true" : "false") + ",";
@@ -468,6 +521,13 @@ void setup() {
   digitalWrite(SEED_IN4, LOW);
 
   // ==========================================================================
+  // ENVIRONMENT SENSORS
+  // ==========================================================================
+
+  dht.begin();
+  pinMode(RAIN_PIN, INPUT);
+
+  // ==========================================================================
   // WIFI
   // ==========================================================================
 
@@ -554,4 +614,5 @@ void loop() {
   server.handleClient();
 
   processSeedMovement();
+  processEnvSensors();
 }
