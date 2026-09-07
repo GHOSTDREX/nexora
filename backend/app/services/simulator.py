@@ -69,7 +69,13 @@ def _drift(rng: random.Random, current: float, baseline: float, low: float, high
     return _clamp(pulled + noise, low, high)
 
 
-async def _tick_farm(db: Session, farm: Farm, state: FarmState):
+def _tick_farm(db: Session, farm: Farm, state: FarmState) -> tuple[SensorReading, list[Alert], bool, bool]:
+    """Pure DB work for one farm's tick — deliberately synchronous (no
+    awaits) so the whole loop body can run inside asyncio.to_thread (see
+    run_simulator_loop) instead of blocking the event loop directly.
+    Against local SQLite that never mattered; against a real network-hop
+    database (e.g. managed Postgres) a blocking call here would otherwise
+    stall every other request in the process for its duration."""
     rng = _rng_for(farm.id, state.rng_seed)
     baseline = state.sim_baseline or {}
     tick_no = _tick_counts.get(farm.id, 0) + 1
@@ -171,34 +177,46 @@ async def _tick_farm(db: Session, farm: Farm, state: FarmState):
     db.commit()
     db.refresh(reading)
 
-    await manager.broadcast(farm.id, build_sensor_update_message(
-        reading, state.pump_on, state.robot_connected, new_alerts,
-    ))
+    return reading, new_alerts, state.pump_on, state.robot_connected
+
+
+def _run_tick_sync() -> list[tuple[int, SensorReading, list[Alert], bool, bool]]:
+    """All the blocking DB work for one tick, across every farm — run via
+    asyncio.to_thread so it never blocks the event loop (see _tick_farm's
+    docstring)."""
+    results: list[tuple[int, SensorReading, list[Alert], bool, bool]] = []
+    db = SessionLocal()
+    try:
+        farms = db.query(Farm).all()
+        for farm in farms:
+            if farm.sensor_mode == "Manual" or farm.hardware_enabled:
+                continue
+            state = db.query(FarmState).filter(FarmState.farm_id == farm.id).first()
+            if state is None:
+                seed = farm.id * 7919 + 13
+                state = FarmState(farm_id=farm.id, rng_seed=seed, sim_baseline={})
+                db.add(state)
+                db.commit()
+                db.refresh(state)
+            try:
+                reading, new_alerts, pump_on, robot_connected = _tick_farm(db, farm, state)
+                results.append((farm.id, reading, new_alerts, pump_on, robot_connected))
+            except Exception:
+                logger.exception("Simulator tick failed for farm %s", farm.id)
+                db.rollback()
+    finally:
+        db.close()
+    return results
 
 
 async def run_simulator_loop(stop_event: asyncio.Event):
     logger.info("AgriNova simulator loop started (tick=%ss)", SIMULATOR_TICK_SECONDS)
     while not stop_event.is_set():
-        db = SessionLocal()
-        try:
-            farms = db.query(Farm).all()
-            for farm in farms:
-                if farm.sensor_mode == "Manual" or farm.hardware_enabled:
-                    continue
-                state = db.query(FarmState).filter(FarmState.farm_id == farm.id).first()
-                if state is None:
-                    seed = farm.id * 7919 + 13
-                    state = FarmState(farm_id=farm.id, rng_seed=seed, sim_baseline={})
-                    db.add(state)
-                    db.commit()
-                    db.refresh(state)
-                try:
-                    await _tick_farm(db, farm, state)
-                except Exception:
-                    logger.exception("Simulator tick failed for farm %s", farm.id)
-                    db.rollback()
-        finally:
-            db.close()
+        results = await asyncio.to_thread(_run_tick_sync)
+        for farm_id, reading, new_alerts, pump_on, robot_connected in results:
+            await manager.broadcast(farm_id, build_sensor_update_message(
+                reading, pump_on, robot_connected, new_alerts,
+            ))
 
         try:
             await asyncio.wait_for(stop_event.wait(), timeout=SIMULATOR_TICK_SECONDS)
