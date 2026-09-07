@@ -126,6 +126,8 @@
     "set_manual_mode": "Switch to Manual",
     "set_auto_mode": "Switch to Auto",
     "manual_sensor_hint": "Manual mode is on — sensor values stay exactly as you set them until you submit new ones or switch back to Auto. Enter readings below to test the AI recommendations against them.",
+    "npk_probe_title": "Soil Probe Reading",
+    "npk_probe_hint": "Enter your handheld probe's soil moisture and N-P-K readings here — temperature, humidity and rain keep updating live from your hardware.",
     "submit_reading": "Save reading",
     "reading_saved": "Saved — recommendations will now use these values.",
     "schemes_title": "Government Schemes for Your Farm",

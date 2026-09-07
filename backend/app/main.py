@@ -42,7 +42,10 @@ app.add_middleware(
     allow_origin_regex=r"http://(192\.168|10\.\d{1,3}|172\.(1[6-9]|2\d|3[0-1]))\.\d{1,3}\.\d{1,3}:5173",
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "PATCH", "OPTIONS"],
-    allow_headers=["Authorization", "Content-Type"],
+    # ngrok-skip-browser-warning: the deployed frontend sends this on every
+    # request to bypass ngrok's free-tier HTML interstitial when the
+    # backend is reached through a tunnel (see frontend/src/lib/api.ts).
+    allow_headers=["Authorization", "Content-Type", "ngrok-skip-browser-warning"],
 )
 
 app.include_router(auth.router)

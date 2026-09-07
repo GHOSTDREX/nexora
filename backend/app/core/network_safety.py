@@ -1,7 +1,7 @@
 """
 AgriNova Backend — SSRF guard for farmer-configured hardware addresses.
 
-Farm.sensor_node_host / robot_host / camera_host are LAN addresses (mDNS
+Farm.robot_host / camera_host are LAN addresses (mDNS
 hostnames or IPs) a farmer types into Settings for their own ESP32 devices,
 then the backend makes outbound HTTP requests to them (hardware_poller.py,
 routers/robot.py, routers/camera.py). Because the target host is

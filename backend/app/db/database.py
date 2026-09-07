@@ -74,10 +74,22 @@ def _migrate_additive_columns():
         if "whatsapp_number" not in cols:
             conn.exec_driver_sql("ALTER TABLE farms ADD COLUMN whatsapp_number VARCHAR(32) DEFAULT ''")
             conn.commit()
+        if "sensor_node_host" in cols:
+            # Motors, DHT22 and rain sensor were consolidated onto the one
+            # robot board's firmware — sensor_node_host is no longer a
+            # distinct hardware address (see Farm.robot_host's comment).
+            conn.exec_driver_sql("ALTER TABLE farms DROP COLUMN sensor_node_host")
+            conn.commit()
 
         state_cols = {row[1] for row in conn.exec_driver_sql("PRAGMA table_info(farm_state)")}
         if "motor_speed" not in state_cols:
             conn.exec_driver_sql("ALTER TABLE farm_state ADD COLUMN motor_speed INTEGER DEFAULT 100")
+            conn.commit()
+        if "last_soil_moisture" not in state_cols:
+            conn.exec_driver_sql("ALTER TABLE farm_state ADD COLUMN last_soil_moisture REAL DEFAULT 0.0")
+            conn.exec_driver_sql("ALTER TABLE farm_state ADD COLUMN last_nitrogen REAL DEFAULT 0.0")
+            conn.exec_driver_sql("ALTER TABLE farm_state ADD COLUMN last_phosphorus REAL DEFAULT 0.0")
+            conn.exec_driver_sql("ALTER TABLE farm_state ADD COLUMN last_potassium REAL DEFAULT 0.0")
             conn.commit()
         if "lid_open" in state_cols:
             # Column removed from the ORM model when the rainwater-harvesting

@@ -37,3 +37,13 @@ class ManualSensorReadingIn(BaseModel):
     potassium: float = Field(ge=0, le=200)
     wind_speed: float = Field(ge=0, le=150)
     rain_detected: bool = False
+
+
+class ManualNpkIn(BaseModel):
+    """The farmer's handheld NPK/soil-moisture probe reading — unlike
+    ManualSensorReadingIn, this works regardless of sensor_mode, since it's
+    meant to run alongside live hardware temp/humidity/rain, not replace it."""
+    soil_moisture: float = Field(ge=0, le=100)
+    nitrogen: float = Field(ge=0, le=200)
+    phosphorus: float = Field(ge=0, le=150)
+    potassium: float = Field(ge=0, le=200)

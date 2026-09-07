@@ -11,6 +11,7 @@ import { useAuth } from '@/context/AuthContext'
 import { useFarmData } from '@/context/FarmDataContext'
 import { StatCard } from '@/components/StatCard'
 import { ManualSensorForm } from '@/components/ManualSensorForm'
+import { ManualNpkForm } from '@/components/ManualNpkForm'
 import { Card, CardHeader } from '@/components/ui/Card'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
@@ -145,6 +146,8 @@ export default function Dashboard() {
           <StatCard icon={<Clock size={18} aria-hidden="true" />} label={t('sensors.last_updated')} value={lastSeen ?? '—'} tone="neutral" live />
         </motion.div>
       )}
+
+      {farm?.hardware_enabled && farm.sensor_mode !== 'Manual' && <ManualNpkForm initial={latestReading} />}
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
         <Card interactive className="lg:col-span-1">

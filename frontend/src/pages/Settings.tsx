@@ -163,10 +163,6 @@ export default function Settings() {
 
           <div />
 
-          <FieldGroup label={t('settings.sensor_node_host')}>
-            <Input placeholder={t('settings.hardware_host_placeholder')} value={form.sensor_node_host} onChange={(e) => update('sensor_node_host', e.target.value)} />
-          </FieldGroup>
-
           <FieldGroup label={t('settings.robot_host')}>
             <Input placeholder={t('settings.hardware_host_placeholder')} value={form.robot_host} onChange={(e) => update('robot_host', e.target.value)} />
           </FieldGroup>

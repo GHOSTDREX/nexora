@@ -6,7 +6,7 @@ from starlette.concurrency import run_in_threadpool
 from app.db.database import get_db
 from app.db.models import Farm, FarmState, SensorReading
 from app.deps import get_current_farm
-from app.schemas.sensor import ManualSensorReadingIn, SensorHistoryOut, SensorReadingOut
+from app.schemas.sensor import ManualNpkIn, ManualSensorReadingIn, SensorHistoryOut, SensorReadingOut
 from app.services.connection_manager import build_sensor_update_message, manager
 
 router = APIRouter(prefix="/api/sensors", tags=["sensors"])
@@ -96,6 +96,63 @@ async def submit_manual_reading(
         reading,
         state.pump_on if state else False,
         state.robot_connected if state else True,
+    ))
+
+    return reading
+
+
+@router.post("/manual-npk", response_model=SensorReadingOut, status_code=201)
+async def submit_manual_npk(
+    payload: ManualNpkIn,
+    farm: Farm = Depends(get_current_farm),
+    db: Session = Depends(get_db),
+):
+    """NPK + soil moisture from the farmer's handheld probe. Unlike
+    /manual, this works for any farm regardless of sensor_mode — it's meant
+    to run alongside live hardware-polled temp/humidity/rain (see
+    services/hardware_poller.py), not replace the whole reading."""
+
+    def _save() -> tuple[SensorReading, FarmState]:
+        state = db.query(FarmState).filter(FarmState.farm_id == farm.id).first()
+        if state is None:
+            state = FarmState(farm_id=farm.id)
+            db.add(state)
+        state.last_soil_moisture = payload.soil_moisture
+        state.last_nitrogen = payload.nitrogen
+        state.last_phosphorus = payload.phosphorus
+        state.last_potassium = payload.potassium
+
+        last = (
+            db.query(SensorReading)
+            .filter(SensorReading.farm_id == farm.id)
+            .order_by(desc(SensorReading.id))
+            .first()
+        )
+        reading = SensorReading(
+            farm_id=farm.id,
+            device_id=last.device_id if last else "ESP32_ROBOT_01",
+            soil_moisture=payload.soil_moisture,
+            temperature=last.temperature if last else 0.0,
+            humidity=last.humidity if last else 0.0,
+            rainfall=last.rainfall if last else 0.0,
+            sunlight=last.sunlight if last else 8.0,
+            wind_speed=last.wind_speed if last else 0.0,
+            nitrogen=payload.nitrogen,
+            phosphorus=payload.phosphorus,
+            potassium=payload.potassium,
+            rain_detected=last.rain_detected if last else False,
+            status="MANUAL_NPK",
+        )
+        db.add(reading)
+        db.commit()
+        db.refresh(reading)
+        db.refresh(state)
+        return reading, state
+
+    reading, state = await run_in_threadpool(_save)
+
+    await manager.broadcast(farm.id, build_sensor_update_message(
+        reading, state.pump_on, state.robot_connected,
     ))
 
     return reading

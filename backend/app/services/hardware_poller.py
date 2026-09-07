@@ -3,17 +3,21 @@ AgriNova — Real ESP32 hardware poller.
 
 Runs alongside services/simulator.py, but only touches farms with
 hardware_enabled=True (the simulator skips those — see its farm loop).
-Instead of generating random values, it polls the real "sensors" ESP32-S3's
-/sensors HTTP endpoint over the LAN every tick, writes the reading through
+Instead of generating random values, it polls the robot controller board's
+/status HTTP endpoint over the LAN every tick, writes the reading through
 the exact same SensorReading table + WebSocket broadcast path the simulator
 uses (see connection_manager.build_sensor_update_message), and forwards the
-same irrigation-automation decision to the real "motor controller" ESP32-S3
-via its /command endpoint instead of only flipping an in-memory flag.
+same irrigation-automation decision to the same board's /command endpoint
+instead of only flipping an in-memory flag.
 
-sensors.ino does not report rainfall (mm), sunlight, or wind — the physical
-node has no rain gauge or anemometer, only a resistive rain sensor and DHT22.
-Those three SensorReading fields are written as 0.0 for hardware farms rather
-than fabricated.
+Motors, the DHT22 and the rain sensor all live on one consolidated ESP32-S3
+board now (motor_controls.ino) — there is no separate sensor-node board.
+/status does not report rainfall (mm), sunlight, or wind — those three
+SensorReading fields are written as 0.0 for hardware farms rather than
+fabricated. NPK and soil moisture are no longer mounted hardware at all —
+they come from the farmer's handheld probe via POST /api/sensors/manual-npk
+(see routers/sensors.py) and are carried forward from FarmState into every
+reading here until the next manual submission.
 """
 
 import asyncio
@@ -62,13 +66,13 @@ async def _send_robot_command(client: httpx.AsyncClient, robot_host: str, action
 
 
 async def _poll_farm(client: httpx.AsyncClient, db: Session, farm: Farm):
-    if not farm.sensor_node_host or not is_safe_hardware_host(farm.sensor_node_host):
+    if not farm.robot_host or not is_safe_hardware_host(farm.robot_host):
         return
 
     state = _get_state(db, farm)
 
     try:
-        resp = await client.get(f"http://{farm.sensor_node_host}/sensors", timeout=HTTP_TIMEOUT_SECONDS)
+        resp = await client.get(f"http://{farm.robot_host}/status", timeout=HTTP_TIMEOUT_SECONDS)
         resp.raise_for_status()
         payload = resp.json()
     except (httpx.HTTPError, ValueError):
@@ -85,7 +89,9 @@ async def _poll_farm(client: httpx.AsyncClient, db: Session, farm: Farm):
         state.robot_connected = True
         new_alerts.append(Alert(farm_id=farm.id, code="robot_reconnected", severity="info", params={}))
 
-    soil_moisture = float(payload.get("soil_moisture", 0.0))
+    # Carried forward from the last handheld-probe submission — the robot
+    # board itself no longer reports these (see module docstring).
+    soil_moisture = state.last_soil_moisture
 
     if "battery_pct" in payload:
         state.robot_battery_pct = round(float(payload["battery_pct"]), 1)
@@ -110,17 +116,17 @@ async def _poll_farm(client: httpx.AsyncClient, db: Session, farm: Farm):
 
     reading = SensorReading(
         farm_id=farm.id,
-        device_id=str(payload.get("device", "ESP32_SENSOR_NODE")),
+        device_id="ESP32_ROBOT_01",
         soil_moisture=soil_moisture,
-        temperature=float(payload.get("temperature", 0.0)),
-        humidity=float(payload.get("humidity", 0.0)),
+        temperature=float(payload.get("temp", 0.0)),
+        humidity=float(payload.get("hum", 0.0)),
         rainfall=0.0,
         sunlight=0.0,
         wind_speed=0.0,
-        nitrogen=float(payload.get("nitrogen", 0.0)),
-        phosphorus=float(payload.get("phosphorus", 0.0)),
-        potassium=float(payload.get("potassium", 0.0)),
-        rain_detected=bool(payload.get("rain_detected", False)),
+        nitrogen=state.last_nitrogen,
+        phosphorus=state.last_phosphorus,
+        potassium=state.last_potassium,
+        rain_detected=bool(payload.get("rain", False)),
         status="LIVE",
     )
     db.add(reading)

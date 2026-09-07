@@ -24,7 +24,6 @@ export interface Farm {
   irrigation_mode: 'Auto' | 'Manual'
   sensor_mode: 'Auto' | 'Manual'
   hardware_enabled: boolean
-  sensor_node_host: string
   robot_host: string
   camera_host: string
   whatsapp_number: string
@@ -56,6 +55,13 @@ export interface ManualSensorReadingIn {
   potassium: number
   wind_speed: number
   rain_detected: boolean
+}
+
+export interface ManualNpkIn {
+  soil_moisture: number
+  nitrogen: number
+  phosphorus: number
+  potassium: number
 }
 
 export interface IrrigationPrediction {

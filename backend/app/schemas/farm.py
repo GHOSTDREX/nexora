@@ -17,7 +17,6 @@ class FarmCreate(BaseModel):
     season: str = "Rabi"
     mulching_used: str = "No"
     hardware_enabled: bool = False
-    sensor_node_host: str = ""
     robot_host: str = ""
     camera_host: str = ""
     whatsapp_number: str = ""

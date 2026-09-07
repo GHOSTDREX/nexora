@@ -62,12 +62,14 @@ class Farm(Base):
     sensor_mode: Mapped[str] = mapped_column(String(16), default="Auto")  # Auto | Manual
 
     # Real ESP32 hardware, LAN-reachable (mDNS hostname or IP), no scheme/port —
-    # e.g. "agrinova-sensors.local". When hardware_enabled, the hardware_poller
-    # service polls sensor_node_host instead of the simulator, and robot/camera
-    # commands are forwarded to robot_host/camera_host instead of only being
-    # recorded against simulated state.
+    # e.g. "agrinova-robot.local". When hardware_enabled, the hardware_poller
+    # service polls robot_host's /status endpoint instead of the simulator
+    # (motors, DHT22 and rain sensor all live on the one consolidated board),
+    # and robot/camera commands are forwarded to robot_host/camera_host
+    # instead of only being recorded against simulated state. NPK and soil
+    # moisture are no longer mounted hardware — see FarmState.last_nitrogen
+    # etc. and routers/sensors.py's /manual-npk endpoint.
     hardware_enabled: Mapped[bool] = mapped_column(Boolean, default=False)
-    sensor_node_host: Mapped[str] = mapped_column(String(128), default="")
     robot_host: Mapped[str] = mapped_column(String(128), default="")
     camera_host: Mapped[str] = mapped_column(String(128), default="")
 
@@ -97,6 +99,15 @@ class FarmState(Base):
 
     camera_pan_deg: Mapped[int] = mapped_column(Integer, default=0)
     camera_tilt_deg: Mapped[int] = mapped_column(Integer, default=0)
+
+    # NPK + soil moisture from the farmer's handheld probe — no longer
+    # mounted hardware (see Farm.robot_host's comment) — carried forward
+    # into every new hardware-driven SensorReading until the next manual
+    # submission via POST /api/sensors/manual-npk.
+    last_soil_moisture: Mapped[float] = mapped_column(Float, default=0.0)
+    last_nitrogen: Mapped[float] = mapped_column(Float, default=0.0)
+    last_phosphorus: Mapped[float] = mapped_column(Float, default=0.0)
+    last_potassium: Mapped[float] = mapped_column(Float, default=0.0)
 
     rng_seed: Mapped[int] = mapped_column(Integer, default=0)
     sim_baseline: Mapped[dict] = mapped_column(JSON, default=dict)

@@ -32,6 +32,9 @@ Thumbs.db
 # SQLite journal files
 backend/data/*.db-journal
 
+# One-off camera-snapshot exports pulled from the local DB for manual review
+backend/snapshots_export/
+
 # Reference source repo for the paddy disease model (3.9GB, not app source —
 # see backend/app/ml/disease_detection/ for the ported production pipeline)
 Smart-Farming-AI/
