@@ -23,7 +23,7 @@ export const staggerItem: Variants = {
 /** Card hover-lift — transform/opacity only, stays on the compositor thread.
  * Used by StatCard; Card's own `interactive` prop deliberately stays a
  * lighter, CSS-only lift since it's applied to dozens of larger panels. */
-export const cardHover = {
+export const cardHover: Variants = {
   rest: { y: 0, scale: 1, boxShadow: '0 1px 2px rgba(15,61,34,0.04)' },
   hover: {
     y: -4,
