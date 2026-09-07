@@ -24,6 +24,7 @@ export interface Farm {
   irrigation_mode: 'Auto' | 'Manual'
   sensor_mode: 'Auto' | 'Manual'
   hardware_enabled: boolean
+  sensor_node_host: string
   robot_host: string
   camera_host: string
   whatsapp_number: string

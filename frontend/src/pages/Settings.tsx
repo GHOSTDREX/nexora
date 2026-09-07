@@ -167,6 +167,10 @@ export default function Settings() {
             <Input placeholder={t('settings.hardware_host_placeholder')} value={form.robot_host} onChange={(e) => update('robot_host', e.target.value)} />
           </FieldGroup>
 
+          <FieldGroup label={t('settings.sensor_node_host')}>
+            <Input placeholder={t('settings.hardware_host_placeholder')} value={form.sensor_node_host} onChange={(e) => update('sensor_node_host', e.target.value)} />
+          </FieldGroup>
+
           <FieldGroup label={t('settings.camera_host')}>
             <Input placeholder={t('settings.hardware_host_placeholder')} value={form.camera_host} onChange={(e) => update('camera_host', e.target.value)} />
           </FieldGroup>

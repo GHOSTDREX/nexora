@@ -63,13 +63,20 @@ class Farm(Base):
 
     # Real ESP32 hardware, LAN-reachable (mDNS hostname or IP), no scheme/port —
     # e.g. "agrinova-robot.local". When hardware_enabled, the hardware_poller
-    # service polls robot_host's /status endpoint instead of the simulator
-    # (motors, DHT22 and rain sensor all live on the one consolidated board),
-    # and robot/camera commands are forwarded to robot_host/camera_host
-    # instead of only being recorded against simulated state. NPK and soil
-    # moisture are no longer mounted hardware — see FarmState.last_nitrogen
-    # etc. and routers/sensors.py's /manual-npk endpoint.
+    # service polls robot_host's /status endpoint (motors, DHT22 and rain
+    # sensor all live on that one consolidated board) instead of the
+    # simulator, and robot/camera commands are forwarded to robot_host/
+    # camera_host instead of only being recorded against simulated state.
+    #
+    # sensor_node_host is a second, separate standalone board carrying only
+    # the soil-moisture probe + RS485 NPK sensor — deliberately off the
+    # robot chassis so it can be walked to a spot in the field. When set and
+    # reachable, hardware_poller polls its /sensors endpoint the same way;
+    # when blank/unreachable, FarmState.last_nitrogen etc. (see that model
+    # and routers/sensors.py's /manual-npk endpoint) carry the last known
+    # values forward instead of zeroing them out.
     hardware_enabled: Mapped[bool] = mapped_column(Boolean, default=False)
+    sensor_node_host: Mapped[str] = mapped_column(String(128), default="")
     robot_host: Mapped[str] = mapped_column(String(128), default="")
     camera_host: Mapped[str] = mapped_column(String(128), default="")
 

@@ -11,13 +11,20 @@ same irrigation-automation decision to the same board's /command endpoint
 instead of only flipping an in-memory flag.
 
 Motors, the DHT22 and the rain sensor all live on one consolidated ESP32-S3
-board now (motor_controls.ino) — there is no separate sensor-node board.
-/status does not report rainfall (mm), sunlight, or wind — those three
-SensorReading fields are written as 0.0 for hardware farms rather than
-fabricated. NPK and soil moisture are no longer mounted hardware at all —
-they come from the farmer's handheld probe via POST /api/sensors/manual-npk
-(see routers/sensors.py) and are carried forward from FarmState into every
-reading here until the next manual submission.
+board now (motor_controls.ino) — /status does not report rainfall (mm),
+sunlight, or wind, so those three SensorReading fields are written as 0.0
+for hardware farms rather than fabricated.
+
+Soil moisture and NPK come from a second, separate standalone board
+(Farm.sensor_node_host) carrying only a soil-moisture probe and an RS485
+NPK sensor — deliberately off the robot chassis so it can be walked to a
+spot in the field. When that host is set and reachable, this module polls
+its /sensors endpoint the same way it polls the robot's /status, and
+writes the result into FarmState.last_nitrogen etc. When it's unset or
+unreachable, those FarmState fields simply keep whatever value they last
+had — from an earlier successful poll, or a manual submission via
+POST /api/sensors/manual-npk (see routers/sensors.py) — carried forward
+into every reading here rather than zeroed out.
 """
 
 import asyncio
@@ -65,6 +72,23 @@ async def _send_robot_command(client: httpx.AsyncClient, robot_host: str, action
         return False
 
 
+async def _poll_soil_probe(client: httpx.AsyncClient, state: FarmState, sensor_node_host: str):
+    """Best-effort — a missing or unreachable probe just means FarmState
+    keeps whatever soil/NPK values it already had (see module docstring)."""
+    if not sensor_node_host or not is_safe_hardware_host(sensor_node_host):
+        return
+    try:
+        resp = await client.get(f"http://{sensor_node_host}/sensors", timeout=HTTP_TIMEOUT_SECONDS)
+        resp.raise_for_status()
+        payload = resp.json()
+    except (httpx.HTTPError, ValueError):
+        return
+    state.last_soil_moisture = float(payload.get("soil_moisture", state.last_soil_moisture))
+    state.last_nitrogen = float(payload.get("nitrogen", state.last_nitrogen))
+    state.last_phosphorus = float(payload.get("phosphorus", state.last_phosphorus))
+    state.last_potassium = float(payload.get("potassium", state.last_potassium))
+
+
 async def _poll_farm(client: httpx.AsyncClient, db: Session, farm: Farm):
     if not farm.robot_host or not is_safe_hardware_host(farm.robot_host):
         return
@@ -89,8 +113,10 @@ async def _poll_farm(client: httpx.AsyncClient, db: Session, farm: Farm):
         state.robot_connected = True
         new_alerts.append(Alert(farm_id=farm.id, code="robot_reconnected", severity="info", params={}))
 
-    # Carried forward from the last handheld-probe submission — the robot
-    # board itself no longer reports these (see module docstring).
+    # Live from the separate soil/NPK probe board when configured and
+    # reachable; otherwise these FarmState fields keep their last known
+    # value (see module docstring).
+    await _poll_soil_probe(client, state, farm.sensor_node_host)
     soil_moisture = state.last_soil_moisture
 
     if "battery_pct" in payload:

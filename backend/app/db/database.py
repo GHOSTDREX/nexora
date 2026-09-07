@@ -74,11 +74,12 @@ def _migrate_additive_columns():
         if "whatsapp_number" not in cols:
             conn.exec_driver_sql("ALTER TABLE farms ADD COLUMN whatsapp_number VARCHAR(32) DEFAULT ''")
             conn.commit()
-        if "sensor_node_host" in cols:
-            # Motors, DHT22 and rain sensor were consolidated onto the one
-            # robot board's firmware — sensor_node_host is no longer a
-            # distinct hardware address (see Farm.robot_host's comment).
-            conn.exec_driver_sql("ALTER TABLE farms DROP COLUMN sensor_node_host")
+        if "sensor_node_host" not in cols:
+            # Re-added as a dedicated standalone soil-moisture/NPK probe
+            # board, separate from the robot chassis (see Farm.sensor_node_host's
+            # comment) — a DB created during the brief window it was removed
+            # needs it patched back in.
+            conn.exec_driver_sql("ALTER TABLE farms ADD COLUMN sensor_node_host VARCHAR(128) DEFAULT ''")
             conn.commit()
 
         state_cols = {row[1] for row in conn.exec_driver_sql("PRAGMA table_info(farm_state)")}

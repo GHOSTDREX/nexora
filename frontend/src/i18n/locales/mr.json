@@ -337,7 +337,7 @@
     "hardware_settings": "रोबोट हार्डवेअर",
     "hardware_hint": "तुमचा खरा ESP32-S3 सेन्सर नोड, ESP32-S3 मोटर कंट्रोलर आणि AI-Thinker कॅमेरा जोडा. सक्षम केल्यावर, लाइव्ह सेन्सर रीडिंग, रोबोट कमांड आणि कॅमेरा फीड सिम्युलेटरऐवजी या डिव्हाइसेसमधून येतील.",
     "hardware_enabled": "खरे हार्डवेअर वापरा",
-    "sensor_node_host": "सेन्सर नोड पत्ता",
+    "sensor_node_host": "माती व NPK प्रोब पत्ता",
     "robot_host": "मोटर कंट्रोलर पत्ता",
     "camera_host": "कॅमेरा पत्ता",
     "hardware_host_placeholder": "उदा. agrinova-sensors.local किंवा 192.168.1.42",

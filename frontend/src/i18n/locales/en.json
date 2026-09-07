@@ -337,7 +337,7 @@
     "hardware_settings": "Robot Hardware",
     "hardware_hint": "Connect your real ESP32-S3 sensor node, ESP32-S3 motor controller and AI-Thinker camera. When enabled, live sensor readings, robot commands and the camera feed come from these devices instead of the simulator.",
     "hardware_enabled": "Use real hardware",
-    "sensor_node_host": "Sensor node address",
+    "sensor_node_host": "Soil & NPK probe address",
     "robot_host": "Motor controller address",
     "camera_host": "Camera address",
     "hardware_host_placeholder": "e.g. agrinova-sensors.local or 192.168.1.42",
