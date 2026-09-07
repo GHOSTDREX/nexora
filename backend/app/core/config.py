@@ -41,9 +41,19 @@ WHATSAPP_ACCESS_TOKEN = os.getenv("WHATSAPP_ACCESS_TOKEN", "").strip()
 WHATSAPP_PHONE_NUMBER_ID = os.getenv("WHATSAPP_PHONE_NUMBER_ID", "").strip()
 
 # --- Database ---
-DB_PATH = os.getenv("DB_PATH", str(BACKEND_DIR / "data" / "agrinova.db"))
-os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
-DATABASE_URL = f"sqlite:///{DB_PATH}"
+# Render (and Heroku-style platforms) inject DATABASE_URL for an attached
+# Postgres instance automatically — using it when present, and falling back
+# to a local SQLite file otherwise, means the same code runs unmodified in
+# both dev and production.
+_env_database_url = os.getenv("DATABASE_URL", "").strip()
+if _env_database_url:
+    # Those platforms hand out the legacy "postgres://" scheme; SQLAlchemy
+    # 2.0 + psycopg2 require "postgresql://".
+    DATABASE_URL = _env_database_url.replace("postgres://", "postgresql://", 1)
+else:
+    DB_PATH = os.getenv("DB_PATH", str(BACKEND_DIR / "data" / "agrinova.db"))
+    os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
+    DATABASE_URL = f"sqlite:///{DB_PATH}"
 
 # --- CORS ---
 CORS_ORIGINS = os.getenv(

@@ -12,9 +12,13 @@ class Base(DeclarativeBase):
     pass
 
 
+# check_same_thread only exists for SQLite's driver — Postgres (psycopg2)
+# rejects unknown connect_args.
+_connect_args = {"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
+
 engine = create_engine(
     DATABASE_URL,
-    connect_args={"check_same_thread": False},
+    connect_args=_connect_args,
     pool_pre_ping=True,
 )
 
@@ -39,7 +43,14 @@ def _migrate_additive_columns():
     """create_all() only creates missing tables — it never ALTERs existing
     ones. New nullable/defaulted columns on tables that already exist in a
     deployed DB must be patched in by hand here, guarded so re-running is a
-    no-op."""
+    no-op.
+
+    SQLite only: this uses SQLite's PRAGMA introspection and DDL quirks
+    (DROP COLUMN support, dynamic typing) directly. A fresh Postgres database
+    has no pre-existing tables to patch — create_all() above already builds
+    the complete, current schema from the ORM models in one shot."""
+    if engine.dialect.name != "sqlite":
+        return
     with engine.connect() as conn:
         user_cols = {row[1] for row in conn.exec_driver_sql("PRAGMA table_info(users)")}
         if "failed_login_attempts" not in user_cols:
