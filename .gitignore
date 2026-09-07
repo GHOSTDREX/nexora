@@ -39,6 +39,17 @@ backend/snapshots_export/
 # see backend/app/ml/disease_detection/ for the ported production pipeline)
 Smart-Farming-AI/
 
+# Reference delivery package for the pest detection model (not app source —
+# see backend/app/ml/pest_detection/ + agricultural_advisory/ for the
+# ported production pipeline, and app/routers/pest.py for its API)
+AGRINOVA_PEST_INTEGRATION/
+
+# Runtime-generated, not source: the advisory engine's append-only trend
+# history (creates its file fresh on first write) and temp annotated-image
+# results from /api/pest/detect/annotated.
+backend/app/ml/agricultural_advisory/data/
+backend/app/ml/pest_detection/inference_results/
+
 # Local ngrok tunnel logs
 ngrok.log
 

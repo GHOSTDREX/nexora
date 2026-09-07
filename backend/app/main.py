@@ -2,13 +2,15 @@ import asyncio
 import logging
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import CORS_ORIGINS
 from app.core.security_headers import BodySizeLimitMiddleware, SecurityHeadersMiddleware
 from app.db.database import init_db
-from app.routers import alerts, auth, camera, chat, crop, disease, farms, fertilizer, irrigation, market, robot, schemes, sensors, sms, soil_health, weather, whatsapp, ws, yield_prediction
+from app.deps import get_current_farm
+from app.ml.agricultural_advisory.api import router as advisory_router
+from app.routers import alerts, auth, camera, chat, crop, disease, farms, fertilizer, irrigation, market, pest, robot, schemes, sensors, sms, soil_health, weather, whatsapp, ws, yield_prediction
 from app.services.hardware_poller import run_hardware_poller_loop
 from app.services.simulator import run_simulator_loop
 
@@ -66,6 +68,11 @@ app.include_router(schemes.router)
 app.include_router(market.router)
 app.include_router(disease.router)
 app.include_router(whatsapp.router)
+app.include_router(pest.router)
+# Ported from AGRINOVA_PEST_INTEGRATION/agricultural_advisory/api.py unmodified —
+# dependencies=[...] adds the same auth gate every other route here uses
+# without touching that file.
+app.include_router(advisory_router, dependencies=[Depends(get_current_farm)])
 app.include_router(ws.router)
 
 

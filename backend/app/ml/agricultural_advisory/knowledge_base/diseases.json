@@ -1,0 +1,19 @@
+{
+  "version": "1.0.0",
+  "last_reviewed": "2026-09-05",
+  "status": "no_disease_model_integrated",
+  "note": "No disease-detection model currently ships in this repository (no models/paddy_mobilenetv3_best.pth or calibration.json was found in the project). This file defines the intended knowledge-base shape for the 10 Paddy Doctor classes referenced in the project specification, so the disease Observation/risk/safety-gate pipeline can be built and tested against the documented interface today. It intentionally contains NO disease-specific treatment rules: per this project's source-grounding requirement, a rule is only added once it has been researched and verified against an authoritative source, which has not been done for disease treatment guidance in this session. Populate `diseases` with the same shape as knowledge_base/pests.json (one entry per disease, each action carrying verified source_ids) once the disease model is integrated and the corresponding literature review is complete.",
+  "expected_classes": [
+    "bacterial_leaf_blight",
+    "bacterial_leaf_streak",
+    "bacterial_panicle_blight",
+    "blast",
+    "brown_spot",
+    "dead_heart",
+    "downy_mildew",
+    "hispa",
+    "normal",
+    "tungro"
+  ],
+  "diseases": []
+}

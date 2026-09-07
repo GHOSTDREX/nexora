@@ -20,6 +20,7 @@ import YieldPrediction from '@/pages/YieldPrediction'
 import Schemes from '@/pages/Schemes'
 import MarketPrice from '@/pages/MarketPrice'
 import DiseaseDetection from '@/pages/DiseaseDetection'
+import PestDetection from '@/pages/PestDetection'
 import AIAssistant from '@/pages/AIAssistant'
 import Alerts from '@/pages/Alerts'
 import Settings from '@/pages/Settings'
@@ -50,6 +51,7 @@ export default function App() {
                 <Route path="/schemes" element={<Schemes />} />
                 <Route path="/market" element={<MarketPrice />} />
                 <Route path="/disease-detection" element={<DiseaseDetection />} />
+                <Route path="/pest-detection" element={<PestDetection />} />
                 <Route path="/assistant" element={<AIAssistant />} />
                 <Route path="/alerts" element={<Alerts />} />
                 <Route path="/settings" element={<Settings />} />

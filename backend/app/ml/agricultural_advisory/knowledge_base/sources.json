@@ -1,0 +1,125 @@
+{
+  "version": "1.0.0",
+  "last_reviewed": "2026-09-05",
+  "sources": [
+    {
+      "id": "irri_planthopper",
+      "organization": "International Rice Research Institute (IRRI)",
+      "title": "Rice Knowledge Bank — Planthopper fact sheet",
+      "url": "http://www.knowledgebank.irri.org/training/fact-sheets/pest-management/insects/item/planthopper",
+      "reference_type": "extension_fact_sheet"
+    },
+    {
+      "id": "irri_leaffolder",
+      "organization": "International Rice Research Institute (IRRI)",
+      "title": "Rice Knowledge Bank — Rice leaffolder fact sheet",
+      "url": "http://www.knowledgebank.irri.org/training/fact-sheets/pest-management/insects/item/rice-leaffolder",
+      "reference_type": "extension_fact_sheet"
+    },
+    {
+      "id": "irri_stemborer",
+      "organization": "International Rice Research Institute (IRRI)",
+      "title": "Rice Knowledge Bank — Stem borer fact sheet",
+      "url": "http://www.knowledgebank.irri.org/training/fact-sheets/pest-management/insects/item/stem-borer",
+      "reference_type": "extension_fact_sheet"
+    },
+    {
+      "id": "irri_armyworm",
+      "organization": "International Rice Research Institute (IRRI)",
+      "title": "Rice Knowledge Bank — Armyworm fact sheet",
+      "url": "http://www.knowledgebank.irri.org/training/fact-sheets/pest-management/insects/item/armyworms",
+      "reference_type": "extension_fact_sheet"
+    },
+    {
+      "id": "irri_root_aphids",
+      "organization": "International Rice Research Institute (IRRI)",
+      "title": "Rice Knowledge Bank — Root aphids fact sheet",
+      "url": "http://www.knowledgebank.irri.org/training/fact-sheets/pest-management/insects/item/root-aphids",
+      "reference_type": "extension_fact_sheet"
+    },
+    {
+      "id": "fao_rice_ipm",
+      "organization": "Food and Agriculture Organization of the United Nations (FAO)",
+      "title": "Integrated pest management in rice",
+      "url": "https://www.fao.org/4/y6159t/y6159t02.htm",
+      "reference_type": "extension_publication"
+    },
+    {
+      "id": "niphm_rice_ipm",
+      "organization": "National Institute of Plant Health Management (NIPHM), India",
+      "title": "Integrated Pest Management Package for Rice",
+      "url": "https://niphm.gov.in/IPMPackages/Rice.pdf",
+      "reference_type": "government_extension_publication"
+    },
+    {
+      "id": "ucipm_rice_water_weevil",
+      "organization": "UC Statewide Integrated Pest Management Program (UC IPM)",
+      "title": "Rice Water Weevil — Rice Pest Management Guidelines",
+      "url": "https://ipm.ucanr.edu/agriculture/rice/rice-water-weevil/",
+      "reference_type": "extension_publication"
+    },
+    {
+      "id": "ucipm_flea_beetle",
+      "organization": "UC Statewide Integrated Pest Management Program (UC IPM)",
+      "title": "Flea Beetles — Cole Crops Pest Management Guidelines",
+      "url": "https://ipm.ucanr.edu/agriculture/cole-crops/flea-beetles/",
+      "reference_type": "extension_publication"
+    },
+    {
+      "id": "ucipm_beet_armyworm",
+      "organization": "UC Statewide Integrated Pest Management Program (UC IPM)",
+      "title": "Beet Armyworm — Cole Crops Pest Management Guidelines",
+      "url": "https://ipm.ucanr.edu/agriculture/cole-crops/beet-armyworm/",
+      "reference_type": "extension_publication"
+    },
+    {
+      "id": "ucipm_lygus_bug",
+      "organization": "UC Statewide Integrated Pest Management Program (UC IPM)",
+      "title": "Lygus Bug (Western Tarnished Plant Bug) — Cole Crops Pest Management Guidelines",
+      "url": "https://ipm.ucanr.edu/agriculture/cole-crops/lygus-bug-western-tarnished-plant-bug/",
+      "reference_type": "extension_publication"
+    },
+    {
+      "id": "ncbi_tarnished_plant_bug",
+      "organization": "National Center for Biotechnology Information (NCBI/PMC)",
+      "title": "Biology, Ecology, and Pest Management of the Tarnished Plant Bug, Lygus lineolaris, in Southern Row Crops",
+      "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8465932/",
+      "reference_type": "peer_reviewed_review"
+    },
+    {
+      "id": "lucid_asian_corn_borer",
+      "organization": "Plantwise Knowledge Bank / Lucid (CABI-affiliated identification tool)",
+      "title": "Maize Asian corn borer (Ostrinia furnacalis) fact sheet",
+      "url": "https://apps.lucidcentral.org/pppw_v10/text/web_full/entities/maize_asian_corn_borer_115.htm",
+      "reference_type": "extension_fact_sheet"
+    },
+    {
+      "id": "eje_cabbage_moth",
+      "organization": "European Journal of Entomology",
+      "title": "The cabbage moth Mamestra brassicae (Linnaeus, 1758): biology and monitoring",
+      "url": "https://www.eje.cz/pdfs/eje/2014/03/18.pdf",
+      "reference_type": "peer_reviewed_journal"
+    },
+    {
+      "id": "jaab_spodoptera_litura",
+      "organization": "Journal of Agriculture and Applied Biology",
+      "title": "Biology and integrated management of tobacco caterpillar, Spodoptera litura Fab.: A systematic review",
+      "url": "https://www.researchgate.net/publication/361552803_Biology_and_integrated_management_of_tobacco_caterpillar_Spodoptera_litura_Fab_A_systematic_review",
+      "reference_type": "peer_reviewed_review"
+    },
+    {
+      "id": "pmc_spodoptera_litura_trap_crops",
+      "organization": "National Center for Biotechnology Information (NCBI/PMC)",
+      "title": "Potential of Trap Crops for Integrated Management of the Tropical Armyworm, Spodoptera litura, in Tobacco",
+      "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3016987/",
+      "reference_type": "peer_reviewed_study"
+    },
+    {
+      "id": "system_policy",
+      "organization": "Smart Farming Assistant (this system)",
+      "title": "Advisory engine safety policy: verification, escalation, and irrigation-guidance procedures",
+      "url": "",
+      "reference_type": "system_policy"
+    }
+  ]
+}

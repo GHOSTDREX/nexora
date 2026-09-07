@@ -1,0 +1,27 @@
+{
+  "version": "1.0.0",
+  "last_reviewed": "2026-09-05",
+  "note": "Growth-stage labels are coarse and generic, used only to flag when a pest's escalation criteria (knowledge_base/pests.json) mention stage-specific vulnerability. They are not a full crop calendar.",
+  "crops": [
+    {
+      "id": "rice",
+      "aliases": ["paddy"],
+      "growth_stages": ["seedling", "vegetative", "tillering", "reproductive", "ripening"]
+    },
+    {
+      "id": "maize",
+      "aliases": ["corn"],
+      "growth_stages": ["seedling", "vegetative", "tasseling", "silking", "grain_fill", "maturity"]
+    },
+    {
+      "id": "cabbage",
+      "aliases": ["cole_crops", "brassica"],
+      "growth_stages": ["seedling", "vegetative", "head_formation", "maturity"]
+    },
+    {
+      "id": "vegetable_general",
+      "aliases": ["general", "vegetable crops", "row crops"],
+      "growth_stages": ["seedling", "vegetative", "flowering", "fruiting", "maturity"]
+    }
+  ]
+}

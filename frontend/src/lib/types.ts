@@ -257,3 +257,88 @@ export interface DiseasePrediction {
   inference_time_ms: number
   recommendation: DiseaseRecommendation | null
 }
+
+export interface PestBoundingBox {
+  x1: number
+  y1: number
+  x2: number
+  y2: number
+  width: number
+  height: number
+  area: number
+  center_x: number
+  center_y: number
+}
+
+export interface PestDetectionItem {
+  class_id: number
+  name: string
+  confidence: number
+  bbox: PestBoundingBox
+}
+
+export interface PestSpeciesSummary {
+  name: string
+  count: number
+  average_confidence: number
+  max_confidence: number
+  min_confidence: number
+}
+
+export interface PestSeverity {
+  level: 'LOW' | 'MODERATE' | 'HIGH' | 'NONE'
+  score: number
+  type: string
+  note: string
+}
+
+export interface PestDetectionResult {
+  status: 'detections_found' | 'no_pest_detected' | 'invalid_image' | 'image_quality_warning' | 'inference_error'
+  image: { filename: string; width: number; height: number } | null
+  detections: PestDetectionItem[]
+  summary: {
+    total_pests: number
+    species_count: number
+    highest_confidence: number | null
+    average_confidence: number | null
+    minimum_confidence: number | null
+  }
+  species: PestSpeciesSummary[]
+  severity: PestSeverity | null
+  message?: string
+}
+
+export interface AdvisoryRiskAssessment {
+  category: string
+  level: string
+  scope: string
+  confidence: string
+  score: number
+  note: string
+}
+
+export interface AdvisoryRecommendation {
+  rule_id: string
+  priority: string
+  type: string
+  action: string
+  evidence: Record<string, unknown>
+  source_ids: string[]
+}
+
+export interface AdvisorySource {
+  id: string
+  organization: string
+  title: string
+  url: string
+  reference_type: string
+}
+
+export interface AdvisoryResult {
+  status: string
+  risk_assessments: AdvisoryRiskAssessment[]
+  recommendations: AdvisoryRecommendation[]
+  explanations: string[]
+  sources: AdvisorySource[]
+  message: string | null
+}

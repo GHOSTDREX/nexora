@@ -27,3 +27,9 @@ python-multipart==0.0.20
 --extra-index-url https://download.pytorch.org/whl/cpu
 torch==2.13.0
 torchvision==0.28.0
+
+# Pest detection (app/ml/pest_detection) — frozen YOLOv8n, models/best.pt.
+# opencv-python-headless (not opencv-python) since this runs on a server
+# with no display; avoids pulling GUI/Qt system libraries it'll never use.
+ultralytics==8.4.140
+opencv-python-headless==5.0.0.93

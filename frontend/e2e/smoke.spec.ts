@@ -7,7 +7,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 // Every nav destination that requires an authenticated + onboarded farm.
 const NAV_PAGES = [
   '/dashboard', '/robot', '/monitoring', '/irrigation', '/crop-recommendation',
-  '/fertilizer', '/soil-health', '/disease-detection', '/yield-prediction', '/schemes', '/market', '/assistant', '/alerts', '/settings',
+  '/fertilizer', '/soil-health', '/disease-detection', '/pest-detection', '/yield-prediction', '/schemes', '/market', '/assistant', '/alerts', '/settings',
 ]
 
 // Two categories of expected, correctly-handled network "errors" that the
@@ -186,6 +186,26 @@ test.describe('AgriNova smoke suite', () => {
 
     await expect(page.getByText(/confidence/i).first()).toBeVisible({ timeout: 20_000 })
     expect(errors, `console errors on disease detection page: ${errors.join('\n')}`).toHaveLength(0)
+  })
+
+  test('pest detection page detects and identifies pests in an uploaded photo', async ({ page }) => {
+    // Cold YOLO model load on first inference after backend startup —
+    // same rationale as the disease-detection test's extended budget.
+    test.setTimeout(60_000)
+    const errors = trackConsoleErrors(page)
+    await page.goto('/pest-detection')
+    await page.waitForLoadState('networkidle')
+
+    const fileInput = page.locator('input[type="file"]')
+    await fileInput.setInputFiles(path.join(__dirname, 'fixtures', 'sample-pest.jpg'))
+
+    await Promise.all([
+      page.waitForResponse((r) => r.url().includes('/api/pest/detect') && r.request().method() === 'POST', { timeout: 30_000 }),
+      page.getByRole('button', { name: /^analyze$/i }).click(),
+    ])
+
+    await expect(page.getByText(/species detected/i).first()).toBeVisible({ timeout: 20_000 })
+    expect(errors, `console errors on pest detection page: ${errors.join('\n')}`).toHaveLength(0)
   })
 
   test('schemes page shows matched government schemes for the farm profile', async ({ page }) => {

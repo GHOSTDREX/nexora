@@ -1,0 +1,460 @@
+{
+  "version": "1.0.0",
+  "last_reviewed": "2026-09-05",
+  "pests": [
+    {
+      "id": "brown_plant_hopper",
+      "class_name": "brown plant hopper",
+      "common_name": "Brown Planthopper",
+      "scientific_name": "Nilaparvata lugens",
+      "supported_crops": ["rice"],
+      "symptoms": "Feeding at the base of tillers causes leaves to turn orange-yellow then brown and dry (\"hopperburn\"), which can kill the plant. Can also transmit rice ragged stunt and rice grassy stunt viruses.",
+      "risk_factors": [
+        "Overuse of broad-spectrum insecticides, which kills natural predators and causes hopper population resurgence.",
+        "Dense planting and excessive nitrogen fertilization.",
+        "Continuous flooded conditions favor hopper survival."
+      ],
+      "escalation_criteria": "More than 3-5 insects per tiller is considered high and warrants closer inspection and possible intervention.",
+      "actions": [
+        {
+          "rule_id": "BPH_RICE_MONITOR_001",
+          "type": "MONITOR",
+          "base_priority": "MODERATE",
+          "action": "Inspect surrounding plants and nearby field areas for additional hopper activity at the base of tillers.",
+          "source_ids": ["irri_planthopper"]
+        },
+        {
+          "rule_id": "BPH_RICE_CULTURAL_001",
+          "type": "CULTURAL_CONTROL",
+          "base_priority": "MODERATE",
+          "action": "Avoid excessive nitrogen fertilization and overly dense planting, both of which favor hopper buildup.",
+          "source_ids": ["irri_planthopper"]
+        },
+        {
+          "rule_id": "BPH_RICE_BIOLOGICAL_001",
+          "type": "BIOLOGICAL_CONTROL",
+          "base_priority": "LOW",
+          "action": "Avoid unnecessary broad-spectrum insecticide use; it removes natural predators and parasites and can trigger a larger hopper resurgence.",
+          "source_ids": ["irri_planthopper"]
+        },
+        {
+          "rule_id": "BPH_RICE_RECHECK_001",
+          "type": "RECHECK",
+          "base_priority": "LOW",
+          "action": "Capture another field observation within the next monitoring interval to confirm whether hopper activity is spreading.",
+          "source_ids": ["irri_planthopper"]
+        }
+      ]
+    },
+    {
+      "id": "rice_leaf_roller",
+      "class_name": "rice leaf roller",
+      "common_name": "Rice Leaf Roller (Leaffolder)",
+      "scientific_name": "Cnaphalocrocis medinalis (leaffolder complex)",
+      "supported_crops": ["rice"],
+      "symptoms": "Larvae fold a leaf around themselves, webbing the margins together with silk, and feed inside, producing longitudinal white/transparent streaks on the blade.",
+      "risk_factors": [
+        "Dense planting and excessive nitrogen fertilization.",
+        "Presence of grassy weeds in and around the field.",
+        "Early-season insecticide use that disrupts natural biological control."
+      ],
+      "escalation_criteria": "Widespread leaf folding across many hills during active tillering/vegetative stage warrants closer inspection.",
+      "actions": [
+        {
+          "rule_id": "RLR_RICE_MONITOR_001",
+          "type": "MONITOR",
+          "base_priority": "MODERATE",
+          "action": "Inspect nearby hills for folded leaves and check whether damage is spreading across the field.",
+          "source_ids": ["irri_leaffolder"]
+        },
+        {
+          "rule_id": "RLR_RICE_CULTURAL_001",
+          "type": "CULTURAL_CONTROL",
+          "base_priority": "MODERATE",
+          "action": "Reduce planting density, use balanced fertilizer rates, and remove grassy weeds from the field and borders.",
+          "source_ids": ["irri_leaffolder"]
+        },
+        {
+          "rule_id": "RLR_RICE_INFO_001",
+          "type": "INFORMATION",
+          "base_priority": "INFO",
+          "action": "Early-season insecticide use against leaffolder is generally discouraged: it has little economic benefit at this stage and can disrupt natural pest control, favoring secondary pests such as planthoppers.",
+          "source_ids": ["irri_leaffolder"]
+        },
+        {
+          "rule_id": "RLR_RICE_RECHECK_001",
+          "type": "RECHECK",
+          "base_priority": "LOW",
+          "action": "Capture another field observation within the next monitoring interval to track whether damage is increasing.",
+          "source_ids": ["irri_leaffolder"]
+        }
+      ]
+    },
+    {
+      "id": "asiatic_rice_borer",
+      "class_name": "asiatic rice borer",
+      "common_name": "Asiatic Rice Borer (Striped Stem Borer)",
+      "scientific_name": "Chilo suppressalis",
+      "supported_crops": ["rice"],
+      "symptoms": "Larvae bore into tillers, causing \"deadhearts\" (drying of the central shoot) during the vegetative stage and \"whiteheads\" (unfilled, bleached panicles) during the reproductive stage.",
+      "risk_factors": [
+        "One of the most damaging insect pests of rice in Asia; damage can be severe under favorable conditions.",
+        "Continuous rice cropping without a fallow/rotation period."
+      ],
+      "escalation_criteria": "Visible deadhearts in the vegetative stage or whiteheads at the reproductive stage warrant field-level inspection and, if extensive, expert consultation.",
+      "actions": [
+        {
+          "rule_id": "ARB_RICE_MONITOR_001",
+          "type": "MONITOR",
+          "base_priority": "MODERATE",
+          "action": "Visually inspect the crop for deadhearts (vegetative stage) or whiteheads (reproductive stage); dissect a few affected stems to confirm larvae or pupae are present.",
+          "source_ids": ["irri_stemborer"]
+        },
+        {
+          "rule_id": "ARB_RICE_CULTURAL_001",
+          "type": "CULTURAL_CONTROL",
+          "base_priority": "MODERATE",
+          "action": "Where feasible, follow rice with a different crop or a fallow period rather than continuous rice cropping to break the borer's life cycle.",
+          "source_ids": ["irri_stemborer"]
+        },
+        {
+          "rule_id": "ARB_RICE_RECHECK_001",
+          "type": "RECHECK",
+          "base_priority": "LOW",
+          "action": "Capture another field observation within the next monitoring interval, focusing on tiller and panicle symptoms.",
+          "source_ids": ["irri_stemborer"]
+        }
+      ]
+    },
+    {
+      "id": "corn_borer",
+      "class_name": "corn borer",
+      "common_name": "Asian Corn Borer",
+      "scientific_name": "Ostrinia furnacalis",
+      "supported_crops": ["maize", "corn"],
+      "symptoms": "Larvae bore into stalks, tassels, and ears, weakening stalks and reducing yield.",
+      "risk_factors": [
+        "Continuous maize cropping without resistant varieties.",
+        "Use of broad-spectrum insecticides that disrupt egg parasitoids (e.g. Trichogramma species)."
+      ],
+      "escalation_criteria": "Multiple larvae per plant or extensive stalk/ear tunneling across the field warrants closer inspection.",
+      "actions": [
+        {
+          "rule_id": "ACB_MAIZE_MONITOR_001",
+          "type": "MONITOR",
+          "base_priority": "MODERATE",
+          "action": "Scout nearby plants for the number of caterpillars per plant and check stalks/tassels/ears for tunneling.",
+          "source_ids": ["lucid_asian_corn_borer"]
+        },
+        {
+          "rule_id": "ACB_MAIZE_PHYSICAL_001",
+          "type": "PHYSICAL_CONTROL",
+          "base_priority": "LOW",
+          "action": "Mechanical removal of tassels has been reported to reduce borer populations; consider this where practical and locally recommended.",
+          "source_ids": ["lucid_asian_corn_borer"]
+        },
+        {
+          "rule_id": "ACB_MAIZE_BIOLOGICAL_001",
+          "type": "BIOLOGICAL_CONTROL",
+          "base_priority": "LOW",
+          "action": "Avoid unnecessary synthetic insecticide applications, as they can interfere with natural egg parasitoids (e.g. Trichogramma) that help suppress this pest.",
+          "source_ids": ["lucid_asian_corn_borer"]
+        }
+      ]
+    },
+    {
+      "id": "army_worm",
+      "class_name": "army worm",
+      "common_name": "Armyworm",
+      "scientific_name": "Mythimna spp. (rice/maize armyworm complex)",
+      "supported_crops": ["rice", "maize"],
+      "symptoms": "Caterpillars feed on leaf tips and margins and, at high populations, can strip whole leaves down to the midrib. Outbreaks can move in large groups between fields.",
+      "risk_factors": [
+        "High populations can build up quickly and move between fields during outbreaks.",
+        "Larvae are nocturnal, often feeding at night or on cloudy days, making early detection harder."
+      ],
+      "escalation_criteria": "Rapidly increasing counts across successive observations, or visible leaf-stripping across many plants, warrant urgent inspection given this pest's outbreak/migratory behavior.",
+      "actions": [
+        {
+          "rule_id": "AW_MONITOR_001",
+          "type": "MONITOR",
+          "base_priority": "HIGH",
+          "action": "Inspect nearby plants and field borders for additional armyworm activity; outbreaks can move quickly between fields.",
+          "source_ids": ["irri_armyworm"]
+        },
+        {
+          "rule_id": "AW_CULTURAL_001",
+          "type": "CULTURAL_CONTROL",
+          "base_priority": "MODERATE",
+          "action": "Where applicable at the seedbed stage, flooding is reported as an effective defensive measure against armyworm buildup.",
+          "source_ids": ["irri_armyworm"]
+        },
+        {
+          "rule_id": "AW_RECHECK_001",
+          "type": "RECHECK",
+          "base_priority": "MODERATE",
+          "action": "Recheck the field within a short interval, as armyworm populations can increase and spread rapidly during an outbreak.",
+          "source_ids": ["irri_armyworm"]
+        }
+      ]
+    },
+    {
+      "id": "aphids",
+      "class_name": "aphids",
+      "common_name": "Aphids",
+      "scientific_name": "Aphididae (species-dependent; includes rice root aphid)",
+      "supported_crops": ["rice", "general"],
+      "symptoms": "Sap-feeding insects that cluster on leaves, stems, or roots; heavy infestations can weaken plants, though aphids are generally a minor, localized pest in rice.",
+      "risk_factors": [
+        "Loss of natural enemies (predators, parasitoids) due to broad-spectrum insecticide use."
+      ],
+      "escalation_criteria": "Aphids are typically minor and localized; escalate only if colonies are large, spreading rapidly, or found alongside disease symptoms (aphids can vector some plant viruses).",
+      "actions": [
+        {
+          "rule_id": "APHID_MONITOR_001",
+          "type": "MONITOR",
+          "base_priority": "LOW",
+          "action": "Check nearby plants for aphid colonies and note whether natural enemies (e.g. lady beetles, parasitic wasps) are already present.",
+          "source_ids": ["irri_root_aphids"]
+        },
+        {
+          "rule_id": "APHID_BIOLOGICAL_001",
+          "type": "BIOLOGICAL_CONTROL",
+          "base_priority": "LOW",
+          "action": "Favor conserving natural enemies (lady beetles, parasitic wasps, predatory insects) over broad-spectrum insecticide use, since aphids are usually kept in check biologically.",
+          "source_ids": ["irri_root_aphids", "fao_rice_ipm"]
+        },
+        {
+          "rule_id": "APHID_RECHECK_001",
+          "type": "RECHECK",
+          "base_priority": "LOW",
+          "action": "Recheck the area at the next monitoring interval to confirm whether the aphid colony is spreading.",
+          "source_ids": ["irri_root_aphids"]
+        }
+      ]
+    },
+    {
+      "id": "flea_beetle",
+      "class_name": "flea beetle",
+      "common_name": "Flea Beetle",
+      "scientific_name": "Chrysomelidae (Alticini)",
+      "supported_crops": ["vegetable crops", "cole crops"],
+      "symptoms": "Adults chew small, rounded \"shot-hole\" perforations in leaves, most damaging to seedlings and young transplants.",
+      "risk_factors": [
+        "Newly emerged seedlings and young transplants are most vulnerable.",
+        "Weedy field margins and crop residue can harbor overwintering populations."
+      ],
+      "escalation_criteria": "Heavy shot-hole damage on seedlings/young transplants warrants closer, more frequent monitoring since this stage is most vulnerable.",
+      "actions": [
+        {
+          "rule_id": "FLEA_MONITOR_001",
+          "type": "MONITOR",
+          "base_priority": "MODERATE",
+          "action": "Check seedlings and young transplants twice weekly for flea beetle damage until plants are well established.",
+          "source_ids": ["ucipm_flea_beetle"]
+        },
+        {
+          "rule_id": "FLEA_CULTURAL_001",
+          "type": "CULTURAL_CONTROL",
+          "base_priority": "MODERATE",
+          "action": "Remove weeds along field margins and manage crop residue after harvest; consider adjusting planting time to avoid peak adult activity where practical.",
+          "source_ids": ["ucipm_flea_beetle"]
+        },
+        {
+          "rule_id": "FLEA_RECHECK_001",
+          "type": "RECHECK",
+          "base_priority": "LOW",
+          "action": "Recheck seedlings within a few days, since flea beetle damage is most critical during early plant establishment.",
+          "source_ids": ["ucipm_flea_beetle"]
+        }
+      ]
+    },
+    {
+      "id": "cabbage_army_worm",
+      "class_name": "cabbage army worm",
+      "common_name": "Cabbage Moth (Cabbage Armyworm)",
+      "scientific_name": "Mamestra brassicae",
+      "supported_crops": ["cabbage", "cole crops", "brassica vegetables"],
+      "symptoms": "Larvae feed on foliage of brassica crops (cabbage, broccoli, cauliflower and relatives) and contaminate heads with frass.",
+      "risk_factors": [
+        "Monocropped brassica fields without intercropping tend to see higher pest pressure.",
+        "Adults are attracted to light, so light traps can indicate local moth activity."
+      ],
+      "escalation_criteria": "Extensive foliar feeding or frass contamination on marketable heads warrants closer inspection.",
+      "actions": [
+        {
+          "rule_id": "CAW_MONITOR_001",
+          "type": "MONITOR",
+          "base_priority": "MODERATE",
+          "action": "Check nearby plants for larvae and frass contamination; pheromone/light traps can help time monitoring visits.",
+          "source_ids": ["eje_cabbage_moth"]
+        },
+        {
+          "rule_id": "CAW_CULTURAL_001",
+          "type": "CULTURAL_CONTROL",
+          "base_priority": "LOW",
+          "action": "Intercropping brassica plantings (rather than large monocrop blocks) has been associated with reduced egg-laying and larval populations of this pest.",
+          "source_ids": ["eje_cabbage_moth"]
+        },
+        {
+          "rule_id": "CAW_BIOLOGICAL_001",
+          "type": "BIOLOGICAL_CONTROL",
+          "base_priority": "LOW",
+          "action": "Conserve natural enemies where present (parasitic wasps such as Trichogramma and Microplitis species, and parasitic flies), which contribute to control of this pest.",
+          "source_ids": ["eje_cabbage_moth"]
+        }
+      ]
+    },
+    {
+      "id": "beet_army_worm",
+      "class_name": "beet army worm",
+      "common_name": "Beet Armyworm",
+      "scientific_name": "Spodoptera exigua",
+      "supported_crops": ["vegetable crops", "cole crops"],
+      "symptoms": "Larvae feed on foliage, and at high densities can cause significant defoliation.",
+      "risk_factors": [
+        "Weedy fields attract egg-laying adult moths.",
+        "Overuse of broad-spectrum insecticides can reduce naturally occurring parasitoids and predators."
+      ],
+      "escalation_criteria": "Escalate if defoliation is extensive or natural biological control is clearly failing to limit population growth.",
+      "actions": [
+        {
+          "rule_id": "BAW_MONITOR_001",
+          "type": "MONITOR",
+          "base_priority": "MODERATE",
+          "action": "Inspect surrounding plants for larvae and defoliation; treat only if natural (biological) suppression is not keeping populations in check.",
+          "source_ids": ["ucipm_beet_armyworm"]
+        },
+        {
+          "rule_id": "BAW_CULTURAL_001",
+          "type": "CULTURAL_CONTROL",
+          "base_priority": "LOW",
+          "action": "Maintain good weed control, since adult moths are attracted to weeds for egg-laying.",
+          "source_ids": ["ucipm_beet_armyworm"]
+        },
+        {
+          "rule_id": "BAW_BIOLOGICAL_001",
+          "type": "BIOLOGICAL_CONTROL",
+          "base_priority": "LOW",
+          "action": "Naturally occurring parasitoid wasps, a tachinid fly, and viral diseases often keep this pest at low levels; conserve these natural enemies where possible.",
+          "source_ids": ["ucipm_beet_armyworm"]
+        }
+      ]
+    },
+    {
+      "id": "tarnished_plant_bug",
+      "class_name": "tarnished plant bug",
+      "common_name": "Tarnished Plant Bug",
+      "scientific_name": "Lygus lineolaris",
+      "supported_crops": ["vegetable crops", "row crops"],
+      "symptoms": "Nymphs and adults feed on buds, flowers, and developing fruit/seed structures, which can cause deformed growth or fruit/seed loss.",
+      "risk_factors": [
+        "Weedy field borders, roadways, and ditches support overwintering and spring buildup of this pest.",
+        "Flowering cover crops or legumes near the field can drive adult migration into the crop as they senesce."
+      ],
+      "escalation_criteria": "Escalate if adult migration into the field is observed during early crop stages, since this is the period of greatest susceptibility.",
+      "actions": [
+        {
+          "rule_id": "TPB_MONITOR_001",
+          "type": "MONITOR",
+          "base_priority": "MODERATE",
+          "action": "Scout for adult and nymph activity, especially during early crop growth stages when migration into the field is most likely.",
+          "source_ids": ["ucipm_lygus_bug", "ncbi_tarnished_plant_bug"]
+        },
+        {
+          "rule_id": "TPB_CULTURAL_001",
+          "type": "CULTURAL_CONTROL",
+          "base_priority": "MODERATE",
+          "action": "Manage weeds along roadways, ditches, and field borders, and mow or disc cover crops/legumes before they flower, to reduce spring buildup and migration into the field.",
+          "source_ids": ["ucipm_lygus_bug"]
+        },
+        {
+          "rule_id": "TPB_BIOLOGICAL_001",
+          "type": "BIOLOGICAL_CONTROL",
+          "base_priority": "LOW",
+          "action": "Conserve natural enemies (egg and nymphal parasitoids, big-eyed bugs, damsel bugs, minute pirate bugs, spiders), which provide partial control.",
+          "source_ids": ["ncbi_tarnished_plant_bug"]
+        }
+      ]
+    },
+    {
+      "id": "prodenia_litura",
+      "class_name": "Prodenia litura",
+      "common_name": "Tobacco Cutworm",
+      "scientific_name": "Spodoptera litura (synonym: Prodenia litura)",
+      "supported_crops": ["general", "vegetable crops", "tobacco"],
+      "symptoms": "A highly polyphagous caterpillar pest; larvae feed on foliage across many crops and can cause substantial defoliation at high densities.",
+      "risk_factors": [
+        "Broad host range allows populations to persist across multiple crops/seasons in an area.",
+        "Documented resistance development to multiple insecticide classes (organophosphates, carbamates, pyrethroids) from repeated chemical use."
+      ],
+      "escalation_criteria": "Escalate if larvae are in later instars (4th-5th) across many plants, as these are harder to control and cause the most feeding damage.",
+      "actions": [
+        {
+          "rule_id": "PL_MONITOR_001",
+          "type": "MONITOR",
+          "base_priority": "MODERATE",
+          "action": "Scout for eggs and early-instar larvae on nearby plants; pheromone traps can help detect adult activity early.",
+          "source_ids": ["jaab_spodoptera_litura"]
+        },
+        {
+          "rule_id": "PL_CULTURAL_001",
+          "type": "CULTURAL_CONTROL",
+          "base_priority": "LOW",
+          "action": "Trap crops (e.g. castor or taro, where locally appropriate) have been shown to draw this pest away from the main crop.",
+          "source_ids": ["pmc_spodoptera_litura_trap_crops"]
+        },
+        {
+          "rule_id": "PL_PHYSICAL_001",
+          "type": "PHYSICAL_CONTROL",
+          "base_priority": "LOW",
+          "action": "Handpicking is reported as effective specifically against later-instar (4th-5th) larvae, which are otherwise harder to control chemically.",
+          "source_ids": ["jaab_spodoptera_litura"]
+        },
+        {
+          "rule_id": "PL_INFO_001",
+          "type": "INFORMATION",
+          "base_priority": "INFO",
+          "action": "This pest has documented resistance to several common insecticide classes; repeated chemical treatment without rotation is discouraged.",
+          "source_ids": ["jaab_spodoptera_litura"]
+        }
+      ]
+    },
+    {
+      "id": "rice_water_weevil",
+      "class_name": "rice water weevil",
+      "common_name": "Rice Water Weevil",
+      "scientific_name": "Lissorhoptrus oryzophilus",
+      "supported_crops": ["rice"],
+      "symptoms": "Adults chew narrow longitudinal feeding scars on leaves; larvae feed on roots underwater, which can reduce root mass and yield.",
+      "risk_factors": [
+        "Weedy vegetation on levees and field edges near the time of seeding.",
+        "Adults concentrate near levees and field edges early in the season."
+      ],
+      "escalation_criteria": "This pest has one generation per year in most systems, so timing of any intervention relative to the adult activity window is critical; escalate if adult scarring is widespread near field edges early in the season.",
+      "actions": [
+        {
+          "rule_id": "RWW_MONITOR_001",
+          "type": "MONITOR",
+          "base_priority": "MODERATE",
+          "action": "Check field edges and levee-adjacent areas for adult feeding scars, since adults concentrate there early in the season.",
+          "source_ids": ["ucipm_rice_water_weevil"]
+        },
+        {
+          "rule_id": "RWW_CULTURAL_001",
+          "type": "CULTURAL_CONTROL",
+          "base_priority": "MODERATE",
+          "action": "Control weedy vegetation on levees and field edges around the time of seeding to reduce infestation pressure.",
+          "source_ids": ["ucipm_rice_water_weevil"]
+        },
+        {
+          "rule_id": "RWW_RECHECK_001",
+          "type": "RECHECK",
+          "base_priority": "LOW",
+          "action": "Recheck field edges at the next monitoring interval; timing matters since this pest typically has only one generation per season.",
+          "source_ids": ["ucipm_rice_water_weevil"]
+        }
+      ]
+    }
+  ]
+}

@@ -18,6 +18,7 @@ import {
   Landmark,
   Store,
   Bug,
+  ShieldAlert,
 } from 'lucide-react'
 
 const items = [
@@ -29,6 +30,7 @@ const items = [
   { to: '/fertilizer', icon: Beaker, key: 'fertilizer' },
   { to: '/soil-health', icon: HeartPulse, key: 'soil_health' },
   { to: '/disease-detection', icon: Bug, key: 'disease_detection' },
+  { to: '/pest-detection', icon: ShieldAlert, key: 'pest_detection' },
   { to: '/yield-prediction', icon: TrendingUp, key: 'yield_prediction' },
   { to: '/schemes', icon: Landmark, key: 'schemes' },
   { to: '/market', icon: Store, key: 'market' },
