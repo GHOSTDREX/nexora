@@ -122,22 +122,28 @@ void setMotors(int leftFwd, int leftRev, int rightFwd, int rightRev) {
 // command — called after every move command and after every set_speed
 // change, so adjusting the slider while the robot is already moving takes
 // effect immediately instead of waiting for the next move command.
+// Direction patterns were previously assigned to the wrong labels — Forward/
+// Back drove an asymmetric pivot (as Left/Right should) while Left/Right
+// drove both wheels the same way (as Forward/Back should). Fixed by
+// swapping which pattern each label produces, based on the exact observed
+// behavior (clicking Forward visibly turned the robot the way Left now
+// correctly does, etc.) rather than guessing from wiring polarity.
 void applyDirection() {
 
   if (lastDirection == "move_forward") {
-    setMotors(0, motorSpeed, motorSpeed, 0);
-  }
-
-  else if (lastDirection == "move_back") {
-    setMotors(motorSpeed, 0, 0, motorSpeed);
-  }
-
-  else if (lastDirection == "move_left") {
     setMotors(motorSpeed, 0, motorSpeed, 0);
   }
 
-  else if (lastDirection == "move_right") {
+  else if (lastDirection == "move_back") {
     setMotors(0, motorSpeed, 0, motorSpeed);
+  }
+
+  else if (lastDirection == "move_left") {
+    setMotors(0, motorSpeed, motorSpeed, 0);
+  }
+
+  else if (lastDirection == "move_right") {
+    setMotors(motorSpeed, 0, 0, motorSpeed);
   }
 
   else {
