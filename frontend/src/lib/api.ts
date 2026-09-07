@@ -21,7 +21,14 @@ export function clearToken() {
   localStorage.removeItem(TOKEN_KEY)
 }
 
-export const api = axios.create({ baseURL: API_URL })
+export const api = axios.create({
+  baseURL: API_URL,
+  // Free ngrok tunnels serve an HTML interstitial (ERR_NGROK_6024) instead
+  // of the real response to any request that looks like it's from a
+  // browser, unless this header is present — harmless against a
+  // non-tunneled backend, so it's sent unconditionally.
+  headers: { 'ngrok-skip-browser-warning': 'true' },
+})
 
 api.interceptors.request.use((config) => {
   const token = getToken()
