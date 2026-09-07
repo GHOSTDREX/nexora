@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { AlertTriangle, Info, XCircle } from 'lucide-react'
 import clsx from 'clsx'
+import { parseUtc } from '@/lib/dates'
 import type { AlertItem } from '@/lib/types'
 
 const severityIcon = { info: Info, warning: AlertTriangle, critical: XCircle }
@@ -14,7 +15,7 @@ export function AlertRow({ alert }: { alert: AlertItem }) {
   const { t, i18n } = useTranslation()
   const Icon = severityIcon[alert.severity] ?? Info
 
-  const time = new Date(alert.created_at).toLocaleTimeString(i18n.language, {
+  const time = parseUtc(alert.created_at).toLocaleTimeString(i18n.language, {
     hour: '2-digit',
     minute: '2-digit',
   })

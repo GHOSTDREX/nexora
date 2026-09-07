@@ -16,6 +16,7 @@ import { Skeleton } from '@/components/ui/Skeleton'
 import { IconBadge } from '@/components/ui/IconBadge'
 import { staggerContainer, staggerItem } from '@/lib/motion'
 import { useTimeAgo } from '@/lib/useTimeAgo'
+import { parseUtc } from '@/lib/dates'
 import type { CameraSnapshot, RobotStatus } from '@/lib/types'
 
 export default function RobotPage() {
@@ -321,9 +322,9 @@ export default function RobotPage() {
                   transition={{ duration: 0.2 }}
                   className="overflow-hidden rounded-xl border border-[var(--border-subtle)]"
                 >
-                  <img src={s.image_data_url} alt={`Field snapshot captured ${new Date(s.timestamp).toLocaleString()}`} className="aspect-video w-full object-cover" />
+                  <img src={s.image_data_url} alt={`Field snapshot captured ${parseUtc(s.timestamp).toLocaleString()}`} className="aspect-video w-full object-cover" />
                   <p className="px-2 py-1.5 text-[11px] text-[var(--text-secondary)]">
-                    {new Date(s.timestamp).toLocaleString()}
+                    {parseUtc(s.timestamp).toLocaleString()}
                   </p>
                 </motion.div>
               ))}

@@ -5,6 +5,7 @@ import clsx from 'clsx'
 import { Sprout, FlaskConical, Thermometer, Droplet, CloudRain, Wind } from 'lucide-react'
 import { Area, AreaChart, Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { api } from '@/lib/api'
+import { parseUtc } from '@/lib/dates'
 import { Card, CardHeader } from '@/components/ui/Card'
 import { Skeleton } from '@/components/ui/Skeleton'
 import { IconBadge } from '@/components/ui/IconBadge'
@@ -42,7 +43,7 @@ export default function MonitoringPage() {
   const chartData = useMemo(
     () =>
       history.map((r) => ({
-        time: new Date(r.timestamp).toLocaleTimeString(i18n.language, { hour: '2-digit', minute: '2-digit' }),
+        time: parseUtc(r.timestamp).toLocaleTimeString(i18n.language, { hour: '2-digit', minute: '2-digit' }),
         soil_moisture: r.soil_moisture,
         temperature: r.temperature,
         humidity: r.humidity,
