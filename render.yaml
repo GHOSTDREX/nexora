@@ -1,17 +1,28 @@
-# Render Blueprint — deploys AgriNova's backend, frontend, and a managed
-# Postgres database together. In the Render dashboard: New -> Blueprint,
-# point it at this repo, and it provisions all three services below in one
-# pass instead of configuring each by hand.
+# Render Blueprint — AgriNova's cloud pieces: a managed Postgres database
+# and the frontend static site. In the Render dashboard: New -> Blueprint,
+# point it at this repo, and it provisions both in one pass.
 #
-# Service names below (agrinova-backend / agrinova-frontend) become
-# subdomains: https://agrinova-backend.onrender.com, etc. If those names are
-# already taken on Render, it appends a random suffix instead — if that
-# happens, update CORS_ORIGINS, VITE_API_URL and VITE_WS_URL below (or in
-# the dashboard after first deploy) to match the actual assigned hostnames.
+# There is deliberately NO backend web service here. AgriNova's ESP32
+# hardware only sits on your local WiFi — a cloud server can't dial into a
+# board behind your home router's NAT, so the backend has to keep running
+# where the hardware is (see backend/app/routers/robot.py, camera.py). The
+# real setup is: your local backend process (same DATABASE_URL as below, so
+# its data lands in this same cloud DB) tunneled to a public HTTPS URL
+# (e.g. ngrok), with THIS frontend pointed at that tunnel URL instead of a
+# Render-hosted backend. Running a second backend here against the same
+# database would just double-write simulator ticks with no hardware access
+# to show for it.
 #
-# Secrets marked `sync: false` are NOT stored in this file — set them once
-# in the Render dashboard after the first deploy (Environment tab on the
-# backend service). Never commit real API keys here.
+# After deploying this blueprint:
+#   1. Databases -> agrinova-db -> Connect -> copy the External Database URL.
+#   2. Put it in your local backend/.env as DATABASE_URL=... and restart the
+#      local backend — it now writes to this same cloud Postgres instead of
+#      the local SQLite file.
+#   3. Update VITE_API_URL / VITE_WS_URL below to your actual tunnel host,
+#      then redeploy this blueprint (or edit them in the frontend service's
+#      Environment tab directly — no redeploy needed for env-var-only edits
+#      on a static site... actually a rebuild IS required since Vite bakes
+#      these in at build time, so trigger a manual deploy after editing).
 
 databases:
   - name: agrinova-db
@@ -21,36 +32,6 @@ databases:
 
 services:
   - type: web
-    name: agrinova-backend
-    runtime: python
-    plan: free
-    rootDir: backend
-    buildCommand: pip install -r requirements.txt
-    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
-    envVars:
-      - key: DATABASE_URL
-        fromDatabase:
-          name: agrinova-db
-          property: connectionString
-      - key: JWT_SECRET
-        generateValue: true
-      - key: CORS_ORIGINS
-        value: https://agrinova-frontend.onrender.com
-      # Set these in the Render dashboard once you have them — the app
-      # degrades gracefully (rule-based chat, "not configured" badges)
-      # when any of them are left blank, so none are required to deploy.
-      - key: ANTHROPIC_API_KEY
-        sync: false
-      - key: AGMARKNET_API_KEY
-        sync: false
-      - key: WHATSAPP_VERIFY_TOKEN
-        sync: false
-      - key: WHATSAPP_ACCESS_TOKEN
-        sync: false
-      - key: WHATSAPP_PHONE_NUMBER_ID
-        sync: false
-
-  - type: web
     name: agrinova-frontend
     runtime: static
     plan: free
@@ -58,10 +39,12 @@ services:
     buildCommand: npm install && npm run build
     staticPublishPath: dist
     envVars:
+      # Replace with your own tunnel host if it ever changes (a paid ngrok
+      # domain or a fresh reserved domain won't, a free ephemeral one will).
       - key: VITE_API_URL
-        value: https://agrinova-backend.onrender.com
+        value: https://gratified-harbor-rabid.ngrok-free.dev
       - key: VITE_WS_URL
-        value: wss://agrinova-backend.onrender.com
+        value: wss://gratified-harbor-rabid.ngrok-free.dev
     routes:
       # SPA fallback — React Router routes like /dashboard must all resolve
       # to index.html client-side, not 404 from the static file server.
