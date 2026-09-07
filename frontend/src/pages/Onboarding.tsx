@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
-import { Sprout } from 'lucide-react'
+import { Sprout, MapPin } from 'lucide-react'
 import { useAuth } from '@/context/AuthContext'
 import { api, apiErrorMessage } from '@/lib/api'
 import { Button } from '@/components/ui/Button'
@@ -10,6 +10,7 @@ import { FieldGroup, Input, Select } from '@/components/ui/Field'
 import { LanguageDropdown } from '@/components/LanguageDropdown'
 import { ThemeToggle } from '@/components/ThemeToggle'
 import { REGIONS, SOIL_TYPES, CROP_TYPES, GROWTH_STAGES, SEASONS } from '@/lib/farmOptions'
+import { detectLocation, matchKnownState, regionForState } from '@/lib/stateRegion'
 import type { Farm, YieldOptions } from '@/lib/types'
 
 export default function Onboarding() {
@@ -19,12 +20,7 @@ export default function Onboarding() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const [states, setStates] = useState<string[]>(['Maharashtra'])
-
-  useEffect(() => {
-    api.get<YieldOptions>('/api/yield/options').then(({ data }) => {
-      if (data.states.length) setStates(data.states)
-    }).catch(() => {})
-  }, [])
+  const [locationStatus, setLocationStatus] = useState<'idle' | 'detecting' | 'detected' | 'unavailable'>('idle')
 
   const [form, setForm] = useState({
     name: 'My Farm',
@@ -46,6 +42,31 @@ export default function Onboarding() {
   function update<K extends keyof typeof form>(key: K, value: (typeof form)[K]) {
     setForm((f) => ({ ...f, [key]: value }))
   }
+
+  useEffect(() => {
+    api.get<YieldOptions>('/api/yield/options').then(({ data }) => {
+      if (data.states.length) setStates(data.states)
+    }).catch(() => {})
+  }, [])
+
+  useEffect(() => {
+    if (states.length <= 1) return // wait for the real state list before matching
+    setLocationStatus('detecting')
+    detectLocation()
+      .then(({ latitude, longitude, state }) => {
+        update('latitude', Number(latitude.toFixed(4)))
+        update('longitude', Number(longitude.toFixed(4)))
+        const matched = state ? matchKnownState(state, states) : null
+        if (matched) {
+          update('state', matched)
+          const region = regionForState(matched)
+          if (region) update('region', region)
+        }
+        setLocationStatus('detected')
+      })
+      .catch(() => setLocationStatus('unavailable'))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [states])
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -106,6 +127,15 @@ export default function Onboarding() {
               ))}
             </Select>
           </FieldGroup>
+
+          {locationStatus !== 'idle' && (
+            <p className="flex items-center gap-1.5 text-xs text-[var(--text-secondary)] sm:col-span-2">
+              <MapPin size={12} aria-hidden="true" />
+              {locationStatus === 'detecting' && t('onboarding.location_detecting')}
+              {locationStatus === 'detected' && t('onboarding.location_detected')}
+              {locationStatus === 'unavailable' && t('onboarding.location_unavailable')}
+            </p>
+          )}
 
           <FieldGroup label={t('onboarding.field_area')}>
             <Input

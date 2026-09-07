@@ -53,7 +53,10 @@
     "season": "Season",
     "mulching_used": "Mulching used",
     "complete": "Complete setup",
-    "submitting": "Setting up your farm…"
+    "submitting": "Setting up your farm…",
+    "location_detecting": "Detecting your location…",
+    "location_detected": "Region and state filled in from your location — change them if needed.",
+    "location_unavailable": "Couldn't detect your location — pick your region and state manually."
   },
   "options": {
     "region": { "North": "North", "South": "South", "East": "East", "West": "West", "Central": "Central" },
